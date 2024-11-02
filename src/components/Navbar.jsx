@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ConnectButton from './Metamask/ConnectButton';
 
 const Navbar = () => {
   return (
@@ -29,6 +30,9 @@ const Navbar = () => {
             </Link>
             <Link to="/register">
               <button className="px-4 py-1 rounded-md bg-gray-900 text-white hover:bg-gray-800">Регистрация</button>
+            </Link>
+            <Link to="/connect">
+              <ConnectButton/>
             </Link>
           </div>
         </div>
