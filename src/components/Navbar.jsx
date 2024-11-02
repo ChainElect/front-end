@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
@@ -13,18 +14,22 @@ const Navbar = () => {
 
           {/* Menu Links */}
           <div className="hidden md:flex space-x-8 items-center">
-            <a href="#" className="text-gray-700 hover:text-purple-600">Products</a>
-            <a href="#" className="text-gray-700 hover:text-purple-600">Solutions</a>
-            <a href="#" className="text-gray-700 hover:text-purple-600">Community</a>
-            <a href="#" className="text-gray-700 hover:text-purple-600">Resources</a>
-            <a href="#" className="text-gray-700 hover:text-purple-600">Pricing</a>
-            <a href="#" className="text-gray-700 hover:text-purple-600">Contact</a>
+            <Link to="/" className="text-gray-700 hover:text-purple-600">Products</Link>
+            <Link to="/" className="text-gray-700 hover:text-purple-600">Solutions</Link>
+            <Link to="/" className="text-gray-700 hover:text-purple-600">Community</Link>
+            <Link to="/" className="text-gray-700 hover:text-purple-600">Resources</Link>
+            <Link to="/" className="text-gray-700 hover:text-purple-600">Pricing</Link>
+            <Link to="/" className="text-gray-700 hover:text-purple-600">Contact</Link>
           </div>
 
           {/* Action Buttons */}
           <div className="flex space-x-4 items-center">
-            <button className="px-4 py-1 rounded-md border border-gray-400 text-gray-700 hover:bg-gray-100">Вход</button>
-            <button className="px-4 py-1 rounded-md bg-gray-900 text-white hover:bg-gray-800">Регистрация</button>
+            <Link to="/login">
+              <button className="px-4 py-1 rounded-md border border-gray-400 text-gray-700 hover:bg-gray-100">Вход</button>
+            </Link>
+            <Link to="/register">
+              <button className="px-4 py-1 rounded-md bg-gray-900 text-white hover:bg-gray-800">Регистрация</button>
+            </Link>
           </div>
         </div>
       </div>

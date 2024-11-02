@@ -1,20 +1,22 @@
-import './App.css';
-import FeatureSection from './components/FeatureSection';
-import Footer from './components/Footer';
-import HeroSection from './components/HeroSection';
-import InfoSection from './components/InfoSection';
-import Navbar from './components/Navbar';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginScreen from './components/Auth/Login';
+import RegistrationForm from './components/Auth/Register';
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
-const App = () => {
-
+function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <HeroSection />
-      <FeatureSection />
-      <InfoSection />
-      <Footer />
-    </div>
+    <Router>
+      <Navbar/>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Routes>
+          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/register" element={<RegistrationForm />} />
+        </Routes>
+      </div>
+      <Footer/>
+    </Router>
   );
 }
 
