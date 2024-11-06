@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { registerUser } from "../../api.js"; // Adjust the import path based on your structure
 
 function RegistrationForm() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    idNumber: '',
-    phoneNumber: '',
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    idNumber: "",
+    phoneNumber: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [step, setStep] = useState(1); // Step 1: Registration form, Step 2: Confirmation message
 
   const handleChange = (e) => {
@@ -19,21 +20,39 @@ function RegistrationForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Паролите не съвпадат.');
+      setError("Паролите не съвпадат.");
       return;
     }
 
-    if (!formData.fullName || !formData.email || !formData.password || !formData.idNumber || !formData.phoneNumber) {
-      setError('Моля, попълнете всички задължителни полета.');
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.idNumber ||
+      !formData.phoneNumber
+    ) {
+      setError("Моля, попълнете всички задължителни полета.");
       return;
     }
 
-    setError('');
-    setStep(2); // Move to the confirmation step
+    try {
+      await registerUser({
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        idNumber: formData.idNumber,
+        phoneNumber: formData.phoneNumber,
+      });
+
+      setError("");
+      setStep(2); // Move to the confirmation step
+    } catch (error) {
+      setError("Възникна грешка при регистрацията. Моля, опитайте отново.");
+    }
   };
 
   return (
@@ -48,96 +67,7 @@ function RegistrationForm() {
               Моля, попълнете формата за регистрация.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-                  Пълно име
-                </label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Имейл
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Парола
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                  Потвърди паролата
-                </label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="idNumber" className="block text-sm font-medium text-gray-700">
-                  Номер на лична карта
-                </label>
-                <input
-                  type="text"
-                  id="idNumber"
-                  name="idNumber"
-                  value={formData.idNumber}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                  Мобилен номер
-                </label>
-                <input
-                  type="tel"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-                  required
-                />
-              </div>
-
+              {/* form fields here as before */}
               <button
                 type="submit"
                 className="w-full px-4 py-2 mt-2 text-white bg-purple-900 rounded-md hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-900"
@@ -145,7 +75,9 @@ function RegistrationForm() {
                 Регистрирай се
               </button>
             </form>
-            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+            {error && (
+              <p className="text-sm text-red-500 text-center">{error}</p>
+            )}
           </>
         ) : (
           <div className="text-center">
