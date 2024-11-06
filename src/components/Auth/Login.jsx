@@ -1,26 +1,23 @@
-import React, { useState } from "react";
-import { loginUser } from "../../api.js"; // Adjust the import path based on your structure
+// src/components/Login.js
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext.js";
+import { loginUser } from "../../api.js"; // Adjust the import path based on your structure
 
-function LoginScreen() {
+const Login = () => {
   const [idNumber, setIdNumber] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     if (idNumber && password) {
-      console.log(idNumber, password);
-
       try {
         const response = await loginUser({ idNumber, password });
         const token = response.data.token;
-
-        // Save token to local storage or session storage
-        localStorage.setItem("token", token);
-
-        navigate("./user");
-        alert("Успешен вход!");
+        login(token); // Trigger login by setting the token
+        navigate("/user"); // Redirect to user page
       } catch (error) {
         setError("Невалиден номер на лична карта или парола.");
       }
@@ -95,6 +92,6 @@ function LoginScreen() {
       </div>
     </div>
   );
-}
+};
 
-export default LoginScreen;
+export default Login;
