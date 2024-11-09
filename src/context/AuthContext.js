@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { ERROR_MESSAGES } from "../utilities/messages";
 // Create the AuthContext
 const AuthContext = createContext();
 
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         setIsAdmin(decoded.isAdmin || false);
       } catch (error) {
-        console.error("Failed to decode token", error);
+        console.error(ERROR_MESSAGES.FAILED_JTW_DECODING, error);
         setIsLoggedIn(false);
         setIsAdmin(false);
       }

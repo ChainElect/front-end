@@ -1,5 +1,5 @@
-import FeatureSection from "../FeatureSection";
-import InfoSection from "../InfoSection";
+import FeatureSection from "../Layouts/FeatureSection";
+import InfoSection from "../Layouts/InfoSection";
 
 export const MainPage = () => {
   return (

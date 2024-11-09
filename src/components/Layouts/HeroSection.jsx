@@ -1,5 +1,5 @@
 import React from "react";
-import votingBox from "../images/votingBox.png";
+import votingBox from "../../assets/images/votingBox.png";
 const HeroSection = () => {
   return (
     <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-20">

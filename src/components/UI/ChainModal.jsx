@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import "./ChainModal.css";
+import "../../assets/styles/ChainModal.css";
 import { useSetChain } from "@web3-onboard/react";
 
 const ChainModal = ({ onDisconnect }) => {
@@ -48,11 +48,11 @@ const ChainModal = ({ onDisconnect }) => {
   return (
     <>
       {isVisible && (
-        <div className='modal-overlay'>
-          <div className='modal-content'>
+        <div className="modal-overlay">
+          <div className="modal-content">
             <h2>Wrong Chain ID</h2>
             <p>Please select the correct chain ID.</p>
-            <div className='modal-buttons'>
+            <div className="modal-buttons">
               {settingChain ? (
                 <p>Switching...</p>
               ) : (

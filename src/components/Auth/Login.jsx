@@ -2,8 +2,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext.js";
-import { loginUser } from "../../api.js"; // Adjust the import path based on your structure
-
+import { loginUser } from "../../api/api.js"; // Adjust the import path based on your structure
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../utilities/messages.js";
 const Login = () => {
   const [idNumber, setIdNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -19,10 +19,10 @@ const Login = () => {
         login(token); // Trigger login by setting the token
         navigate("/user"); // Redirect to user page
       } catch (error) {
-        setError("Невалиден номер на лична карта или парола.");
+        setError(ERROR_MESSAGES.LOGIN_FAILED);
       }
     } else {
-      setError("Моля, попълнете и номер на лична карта, и парола.");
+      setError(ERROR_MESSAGES.MISSING_FIELDS);
     }
   };
 

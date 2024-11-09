@@ -1,8 +1,8 @@
 // src/components/Navbar.js
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
-import ConnectButton from "./Metamask/ConnectButton";
+import AuthContext from "../../context/AuthContext";
+import ConnectButton from "../UI/ConnectButton";
 
 const Navbar = () => {
   const { isLoggedIn, isAdmin, logout } = useContext(AuthContext);
@@ -27,7 +27,7 @@ const Navbar = () => {
           {/* Menu Links */}
           <div className="hidden md:flex space-x-8 items-center">
             <Link to="/main" className="text-gray-700 hover:text-purple-600">
-              Главна страница
+              Начало
             </Link>
             {isAdmin && (
               <Link to="/admin" className="text-gray-700 hover:text-purple-600">
