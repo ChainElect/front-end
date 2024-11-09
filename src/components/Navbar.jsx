@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthContext";
 import ConnectButton from "./Metamask/ConnectButton";
 
 const Navbar = () => {
-  const { isLoggedIn, logout } = useContext(AuthContext);
+  const { isLoggedIn, isAdmin, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -29,9 +29,11 @@ const Navbar = () => {
             <Link to="/main" className="text-gray-700 hover:text-purple-600">
               Главна страница
             </Link>
-            <Link to="/admin" className="text-gray-700 hover:text-purple-600">
-              Админ
-            </Link>
+            {isAdmin && (
+              <Link to="/admin" className="text-gray-700 hover:text-purple-600">
+                Админ
+              </Link>
+            )}
             <Link to="/user" className="text-gray-700 hover:text-purple-600">
               User
             </Link>

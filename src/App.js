@@ -13,7 +13,6 @@ import injectedModule from "@web3-onboard/injected-wallets";
 import { ethers } from "ethers";
 import injectedModules from "@web3-onboard/injected-wallets";
 import ElectionResults from "./components/Pages/ElectionResults";
-import { AuthProvider } from "./context/AuthContext";
 
 const API_KEY = "89jSnaKWM_MxViGgmQyrTyS4xHMzXukz";
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
@@ -37,24 +36,22 @@ init({
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Navbar />
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center min-w-80">
-          <Routes>
-            <Route path="/login" element={<LoginScreen />} />
-            <Route path="/register" element={<RegistrationForm />} />
-            <Route path="/connect" element={<RegistrationForm />} />
-            <Route path="/main" element={<MainPage />} />
-            <Route path="/hero" element={<HeroSection />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/user" element={<UserDashboard />} />
-            <Route path="/results" element={<ElectionResults />} />
-          </Routes>
-        </div>
-        <Footer />
-      </Router>
-    </AuthProvider>
+    <Router>
+      <Navbar />
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center min-w-80">
+        <Routes>
+          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/register" element={<RegistrationForm />} />
+          <Route path="/connect" element={<RegistrationForm />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/hero" element={<HeroSection />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/user" element={<UserDashboard />} />
+          <Route path="/results" element={<ElectionResults />} />
+        </Routes>
+      </div>
+      <Footer />
+    </Router>
   );
 }
 
