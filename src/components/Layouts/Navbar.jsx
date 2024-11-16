@@ -19,32 +19,37 @@ const Navbar = () => {
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <span className="ml-2 font-bold text-xl text-purple-600">
-              ChainElect
-            </span>
+            <Link to="/" className="flex items-center">
+              <span className="ml-2 font-bold text-xl text-purple-600">
+                ChainElect
+              </span>
+            </Link>
           </div>
 
           {/* Menu Links */}
           <div className="hidden md:flex space-x-8 items-center">
-            <Link to="/main" className="text-gray-700 hover:text-purple-600">
+            <Link to="/home" className="text-gray-700 hover:text-purple-600">
               Начало
+            </Link>
+            <Link to="/voting" className="text-gray-700 hover:text-purple-600">
+              Гласуване
+            </Link>
+            <Link to="/results" className="text-gray-700 hover:text-purple-600">
+              Резултати
             </Link>
             {isAdmin && (
               <Link to="/admin" className="text-gray-700 hover:text-purple-600">
                 Админ
               </Link>
             )}
-            <Link to="/user" className="text-gray-700 hover:text-purple-600">
-              User
+            <Link
+              to="/resources"
+              className="text-gray-700 hover:text-purple-600"
+            >
+              Ресурси
             </Link>
-            <Link to="/" className="text-gray-700 hover:text-purple-600">
-              Resources
-            </Link>
-            <Link to="/results" className="text-gray-700 hover:text-purple-600">
-              Резултати
-            </Link>
-            <Link to="/hero" className="text-gray-700 hover:text-purple-600">
-              Hero
+            <Link to="/about" className="text-gray-700 hover:text-purple-600">
+              За нас
             </Link>
           </div>
 
@@ -52,12 +57,28 @@ const Navbar = () => {
           <div className="flex space-x-4 items-center">
             {isLoggedIn ? (
               <>
+                {/* Profile Dropdown (if needed) */}
+                <div className="relative">
+                  <button className="text-gray-700 hover:text-purple-600">
+                    Профил
+                  </button>
+                  {/* Dropdown example - add logic for toggle */}
+                  {/* <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg">
+                    <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                      My Profile
+                    </Link>
+                  </div> */}
+                </div>
+
+                {/* Logout Button */}
                 <button
                   onClick={handleLogout}
                   className="px-4 py-1 rounded-md bg-red-600 text-white hover:bg-red-500"
                 >
                   Изход
                 </button>
+
+                {/* Blockchain Connect Button */}
                 <Link to="/connect">
                   <ConnectButton />
                 </Link>
