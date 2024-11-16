@@ -13,7 +13,14 @@ import injectedModule from "@web3-onboard/injected-wallets";
 import { ethers } from "ethers";
 import injectedModules from "@web3-onboard/injected-wallets";
 import ElectionResults from "./components/Pages/ElectionResults";
-
+import About from "./components/Pages/About";
+import Resources from "./components/Pages/Resourses";
+import Home from "./components/Pages/Home";
+import VotingPage from "./components/Pages/VotingPage";
+import FAQ from "./components/Pages/FAQ";
+import ContactUs from "./components/Pages/ContactUs";
+import PrivacyPolicy from "./components/Pages/Privacy";
+import TermsOfUse from "./components/Pages/TermsOfUse";
 const API_KEY = "89jSnaKWM_MxViGgmQyrTyS4xHMzXukz";
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
@@ -48,6 +55,14 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/user" element={<UserDashboard />} />
           <Route path="/results" element={<ElectionResults />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/voting" element={<VotingPage />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfUse />} />
         </Routes>
       </div>
       <Footer />
