@@ -1,31 +1,28 @@
-import React, { useState } from "react";
-import { loginUser } from "../../api.js"; // Adjust the import path based on your structure
+// src/components/Login.js
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
-function LoginScreen() {
+import AuthContext from "../../context/AuthContext.js";
+import { loginUser } from "../../api/api.js"; // Adjust the import path based on your structure
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../utilities/messages.js";
+const Login = () => {
   const [idNumber, setIdNumber] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     if (idNumber && password) {
-      console.log(idNumber, password);
-
       try {
         const response = await loginUser({ idNumber, password });
         const token = response.data.token;
-
-        // Save token to local storage or session storage
-        localStorage.setItem("token", token);
-
-        navigate("./user");
-        alert("Успешен вход!");
+        login(token); // Trigger login by setting the token
+        navigate("/user"); // Redirect to user page
       } catch (error) {
-        setError("Невалиден номер на лична карта или парола.");
+        setError(ERROR_MESSAGES.LOGIN_FAILED);
       }
     } else {
-      setError("Моля, попълнете и номер на лична карта, и парола.");
+      setError(ERROR_MESSAGES.MISSING_FIELDS);
     }
   };
 
@@ -95,6 +92,6 @@ function LoginScreen() {
       </div>
     </div>
   );
-}
+};
 
-export default LoginScreen;
+export default Login;

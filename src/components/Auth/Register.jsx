@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { registerUser } from "../../api.js"; // Adjust the import path based on your structure
+import { registerUser } from "../../api/api.js"; // Adjust the import path based on your structure
+import { ERROR_MESSAGES } from "../../utilities/messages.js";
 
 function RegistrationForm() {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ function RegistrationForm() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Паролите не съвпадат.");
+      setError(ERROR_MESSAGES.PASSWORDS_NOT_MATCHING);
       return;
     }
 
@@ -35,7 +36,7 @@ function RegistrationForm() {
       !formData.idNumber ||
       !formData.phoneNumber
     ) {
-      setError("Моля, попълнете всички задължителни полета.");
+      setError(ERROR_MESSAGES.MISSING_FIELDS);
       return;
     }
 
@@ -51,7 +52,7 @@ function RegistrationForm() {
       setError("");
       setStep(2); // Move to the confirmation step
     } catch (error) {
-      setError("Възникна грешка при регистрацията. Моля, опитайте отново.");
+      setError(ERROR_MESSAGES.REGISTRATION_FAILED);
     }
   };
 
