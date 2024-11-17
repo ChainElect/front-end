@@ -18,9 +18,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     const injectedProvider = connectedWallets[0].provider;
     console.log(injectedProvider);
-    //const provider = new ethers.Web3Provider(injectedProvider); 
     const provider = new ethers.providers.Web3Provider(injectedProvider);
-    //const provider = new ethers.JsonRpcProvider(injectedProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
@@ -39,11 +37,7 @@ const AdminDashboard = () => {
     e.preventDefault();
 
     const injectedProvider = connectedWallets[0].provider;
-    
-   // const provider = new ethers.Web3Provider(injectedProvider); 
-   // const provider = new ethers.JsonRpcProvider(injectedProvider);
-   const provider = new ethers.providers.Web3Provider(injectedProvider);
-
+    const provider = new ethers.providers.Web3Provider(injectedProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
     const startTime = Math.floor(new Date(electionStart).getTime() / 1000);
@@ -158,6 +152,7 @@ const AdminDashboard = () => {
           </ul>
         </div>
       </div>
+      {/*Get Admin*/}
     </div>
   );
 };

@@ -45,6 +45,9 @@ const Navbar = () => {
             <Link to="/admin" className="text-gray-700 hover:text-purple-600">
                 Админ
               </Link>
+              <Link to="/adminFunc" className="text-gray-700 hover:text-purple-600">
+              Адми Фунции
+            </Link>
             <Link
               to="/resources"
               className="text-gray-700 hover:text-purple-600"

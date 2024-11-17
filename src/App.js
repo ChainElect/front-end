@@ -21,6 +21,7 @@ import FAQ from "./components/Pages/FAQ";
 import ContactUs from "./components/Pages/ContactUs";
 import PrivacyPolicy from "./components/Pages/Privacy";
 import TermsOfUse from "./components/Pages/TermsOfUse";
+import AdminFunc from "./components/Pages/AdminFunc"
 const API_KEY = "89jSnaKWM_MxViGgmQyrTyS4xHMzXukz";
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
@@ -63,6 +64,7 @@ function App() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfUse />} />
+          <Route path="/adminfunc" element={<AdminFunc />} />
         </Routes>
       </div>
       <Footer />
