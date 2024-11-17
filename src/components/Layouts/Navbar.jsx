@@ -42,6 +42,9 @@ const Navbar = () => {
                 Админ
               </Link>
             )}
+            <Link to="/admin" className="text-gray-700 hover:text-purple-600">
+                Админ
+              </Link>
             <Link
               to="/resources"
               className="text-gray-700 hover:text-purple-600"
@@ -95,6 +98,9 @@ const Navbar = () => {
                     Регистрация
                   </button>
                 </Link>
+                <Link to="/connect">
+                  <ConnectButton />
+                </Link>s
               </>
             )}
           </div>
