@@ -24,6 +24,9 @@ import TermsOfUse from "./components/Pages/TermsOfUse";
 import AdminFunc from "./components/Pages/AdminFunc"
 import Results from "./components/Pages/Results";
 import Vote from "./components/Pages/Vote";
+import VotingGuide from "./components/Pages/Guide/VotingGuide";
+import ConnectWalletGuide from "./components/Pages/Guide/ConnectWallet";
+import ResultsGuide from "./components/Pages/Guide/ResultsGuide";
 const API_KEY = "89jSnaKWM_MxViGgmQyrTyS4xHMzXukz";
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
@@ -69,7 +72,12 @@ function App() {
           <Route path="/adminfunc" element={<AdminFunc />} />
           <Route path="/resultsFromVoting" element={<Results />} />
           <Route path="/vote" element={<Vote />} />
-
+          <Route path="/guide/voting" element={<VotingGuide />} />
+          <Route
+            path="/guide/connect-wallet"
+            element={<ConnectWalletGuide />}
+          />
+          <Route path="/guide/results" element={<ResultsGuide />} />
         </Routes>
       </div>
       <Footer />

@@ -1,5 +1,4 @@
-// src/components/Navbar.js
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import ConnectButton from "../UI/ConnectButton";
@@ -7,10 +6,15 @@ import ConnectButton from "../UI/ConnectButton";
 const Navbar = () => {
   const { isLoggedIn, isAdmin, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate("/login"); // Redirect to login page after logout
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -26,7 +30,47 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Menu Links */}
+          {/* Hamburger Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={toggleMenu}
+              className="text-gray-700 focus:outline-none focus:text-purple-600"
+            >
+              {isMenuOpen ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16m-7 6h7"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+
+          {/* Desktop Menu */}
           <div className="hidden md:flex space-x-8 items-center">
             <Link to="/home" className="text-gray-700 hover:text-purple-600">
               Начало
@@ -64,48 +108,95 @@ const Navbar = () => {
               За нас
             </Link>
           </div>
+        </div>
 
-          {/* Action Buttons */}
-          <div className="flex space-x-4 items-center">
+        {/* Mobile Menu */}
+        <div
+          className={`transform transition-all duration-300 ease-in-out ${
+            isMenuOpen
+              ? "max-h-screen opacity-100 visible"
+              : "max-h-0 opacity-0 invisible"
+          } overflow-hidden md:hidden`}
+        >
+          <div className="space-y-4 pt-4 pb-4 px-2">
+            <Link
+              to="/home"
+              className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+              onClick={toggleMenu}
+            >
+              Начало
+            </Link>
+            <Link
+              to="/voting"
+              className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+              onClick={toggleMenu}
+            >
+              Гласуване
+            </Link>
+            <Link
+              to="/results"
+              className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+              onClick={toggleMenu}
+            >
+              Резултати
+            </Link>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+                onClick={toggleMenu}
+              >
+                Админ
+              </Link>
+            )}
+            <Link
+              to="/resources"
+              className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+              onClick={toggleMenu}
+            >
+              Ресурси
+            </Link>
+            <Link
+              to="/about"
+              className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+              onClick={toggleMenu}
+            >
+              За нас
+            </Link>
             {isLoggedIn ? (
               <>
-                {/* Profile Dropdown (if needed) */}
-                <div className="relative">
-                  <button className="text-gray-700 hover:text-purple-600">
-                    Профил
-                  </button>
-                  {/* Dropdown example - add logic for toggle */}
-                  {/* <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg">
-                    <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                      My Profile
-                    </Link>
-                  </div> */}
-                </div>
-
-                {/* Logout Button */}
+                <Link
+                  to="/profile"
+                  className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+                  onClick={toggleMenu}
+                >
+                  Профил
+                </Link>
                 <button
-                  onClick={handleLogout}
-                  className="px-4 py-1 rounded-md bg-red-600 text-white hover:bg-red-500"
+                  onClick={() => {
+                    handleLogout();
+                    toggleMenu();
+                  }}
+                  className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
                 >
                   Изход
                 </button>
-
-                {/* Blockchain Connect Button */}
-                <Link to="/connect">
-                  <ConnectButton />
-                </Link>
               </>
             ) : (
               <>
-                <Link to="/login">
-                  <button className="px-4 py-1 rounded-md border border-gray-400 text-gray-700 hover:bg-gray-100">
-                    Вход
-                  </button>
+                <Link
+                  to="/login"
+                  className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+                  onClick={toggleMenu}
+                >
+                  Вход
                 </Link>
-                <Link to="/register">
-                  <button className="px-4 py-1 rounded-md bg-gray-900 text-white hover:bg-gray-800">
-                    Регистрация
-                  </button>
+                <Link
+                  to="/register"
+                  className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+                  onClick={toggleMenu}
+                >
+                  Регистрация
                 </Link>
                 <Link to="/connect">
                   <ConnectButton />
