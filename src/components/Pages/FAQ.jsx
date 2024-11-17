@@ -65,7 +65,16 @@ const FAQ = () => {
                 </span>
               </div>
               {openQuestion === index && (
-                <p className="mt-4 text-gray-700">{q.answer}</p>
+                <p
+                  className="mt-4 text-gray-700 break-words"
+                  style={{
+                    maxWidth: "600px", // Limits the width of the answer content
+                    wordWrap: "break-word", // Ensures long words break within the container
+                    overflowWrap: "break-word", // Similar to wordWrap, ensures proper wrapping
+                  }}
+                >
+                  {q.answer}
+                </p>
               )}
             </div>
           ))}
