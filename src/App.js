@@ -8,9 +8,7 @@ import HeroSection from "./components/Layouts/HeroSection";
 import { MainPage } from "./components/Pages/MainPage";
 import AdminDashboard from "./components/Pages/AdminDashboard";
 import UserDashboard from "./components/Pages/UserDashboard";
-import { init, useConnectWallet } from "@web3-onboard/react";
-import injectedModule from "@web3-onboard/injected-wallets";
-import { ethers } from "ethers";
+import { init } from "@web3-onboard/react";
 import injectedModules from "@web3-onboard/injected-wallets";
 import ElectionResults from "./components/Pages/ElectionResults";
 import About from "./components/Pages/About";
@@ -27,6 +25,8 @@ import Vote from "./components/Pages/Vote";
 import VotingGuide from "./components/Pages/Guide/VotingGuide";
 import ConnectWalletGuide from "./components/Pages/Guide/ConnectWallet";
 import ResultsGuide from "./components/Pages/Guide/ResultsGuide";
+import OngoingElections from "./components/Pages/OnGoingElections";
+// change from env file
 const API_KEY = "89jSnaKWM_MxViGgmQyrTyS4xHMzXukz";
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
@@ -72,6 +72,7 @@ function App() {
           <Route path="/adminfunc" element={<AdminFunc />} />
           <Route path="/resultsFromVoting" element={<Results />} />
           <Route path="/vote" element={<Vote />} />
+          <Route path="/onGoingElections" element={<OngoingElections />} />
           <Route path="/guide/voting" element={<VotingGuide />} />
           <Route
             path="/guide/connect-wallet"

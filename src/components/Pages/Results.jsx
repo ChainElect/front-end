@@ -6,6 +6,7 @@ import { ERC20_ABI, ERC20_ADDRESS } from '../../constants/index.js';
 const ElectionResults = () => {
   const [electionId, setElectionId] = useState('');
   const [results, setResults] = useState('');
+  const [electionName, setElectionName] = useState('');
   const connectedWallets = useWallets();
 
   const handleGetResults = async () => {
@@ -22,14 +23,18 @@ const ElectionResults = () => {
     try {
       // Fetching the results
       const electionResults = await contract.getResults(electionId);
+      const electionDetails = await contract.elections(electionId);
+
+      const electionName = electionDetails.name;
 
       // Format results based on the structure
+      
       const formattedResults = electionResults.map((party) => (
         <div key={party.id}>
           <strong>{party.name}</strong>: {ethers.utils.formatUnits(party.voteCount, 0)} votes
         </div>
       ));
-      
+      setElectionName(electionName);
       setResults(formattedResults);
     } catch (err) {
       console.log('Error fetching results:', err);
@@ -52,8 +57,10 @@ const ElectionResults = () => {
         }}
       />
       <button onClick={handleGetResults}>Get Results</button>
-      
-      <div>
+      <div className="electionName">
+        {electionName? electionName : 'Election name will appear here.'}
+      </div>
+      <div>        
         {results ? results : 'Election results will appear here.'}
       </div>
     </div>
