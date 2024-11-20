@@ -98,6 +98,9 @@ const Navbar = () => {
             <Link to="/vote" className="text-gray-700 hover:text-purple-600">
               Vote
             </Link>
+            <Link to="/onGoingElections" className="text-gray-700 hover:text-purple-600">
+              On Going Elections
+            </Link>
             <Link
               to="/resources"
               className="text-gray-700 hover:text-purple-600"
