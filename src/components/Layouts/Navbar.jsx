@@ -20,11 +20,11 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+        <div className="flex justify-center h-16 items-center">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="ml-2 font-bold text-xl text-purple-600">
+              <span className="ml-2 mr-10 font-bold text-xl text-purple-600">
                 ChainElect
               </span>
             </Link>
@@ -87,20 +87,26 @@ const Navbar = () => {
               </Link>
             )}
             <Link to="/admin" className="text-gray-700 hover:text-purple-600">
-                Админ
-              </Link>
-              <Link to="/adminFunc" className="text-gray-700 hover:text-purple-600">
+              Админ
+            </Link>
+            {/* <Link to="/adminFunc" className="text-gray-700 hover:text-purple-600">
               Адми Фунции
-            </Link>
-            <Link to="/resultsFromVoting" className="text-gray-700 hover:text-purple-600">
+            </Link> */}
+            {/* <Link
+              to="/resultsFromVoting"
+              className="text-gray-700 hover:text-purple-600"
+            >
               Резултати от изборите
-            </Link>
-            <Link to="/vote" className="text-gray-700 hover:text-purple-600">
+            </Link> */}
+            {/* <Link to="/vote" className="text-gray-700 hover:text-purple-600">
               Vote
             </Link>
-            <Link to="/onGoingElections" className="text-gray-700 hover:text-purple-600">
+            <Link
+              to="/onGoingElections"
+              className="text-gray-700 hover:text-purple-600"
+            >
               On Going Elections
-            </Link>
+            </Link> */}
             <Link
               to="/resources"
               className="text-gray-700 hover:text-purple-600"
@@ -203,7 +209,8 @@ const Navbar = () => {
                 </Link>
                 <Link to="/connect">
                   <ConnectButton />
-                </Link>s
+                </Link>
+                s
               </>
             )}
           </div>

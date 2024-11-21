@@ -19,7 +19,7 @@ import FAQ from "./components/Pages/FAQ";
 import ContactUs from "./components/Pages/ContactUs";
 import PrivacyPolicy from "./components/Pages/Privacy";
 import TermsOfUse from "./components/Pages/TermsOfUse";
-import AdminFunc from "./components/Pages/AdminFunc"
+import AdminFunc from "./components/Pages/AdminFunc";
 import Results from "./components/Pages/Results";
 import Vote from "./components/Pages/Vote";
 import VotingGuide from "./components/Pages/Guide/VotingGuide";
@@ -63,6 +63,7 @@ function App() {
           <Route path="/results" element={<ElectionResults />} />
           <Route path="/about" element={<About />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/voting" element={<VotingPage />} />
           <Route path="/faq" element={<FAQ />} />

@@ -1,39 +1,39 @@
 import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { useWallets } from "@web3-onboard/react";
+import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
 
 const VotingPage = () => {
-  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [parties, setParties] = useState([]); // Dynamic parties list
+  const [selectedParty, setSelectedParty] = useState(null);
   const [voteSubmitted, setVoteSubmitted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null); // For countdown timer
+  const connectedWallets = useWallets(); // Wallet connection logic
 
-  const candidates = [
-    {
-      id: 1,
-      name: "Иван Иванов",
-      party: "Партия A",
-      description: "Кандидат с визия за икономическа стабилност и развитие.",
-      photo: "https://via.placeholder.com/150", // Replace with real photo URL
-    },
-    {
-      id: 2,
-      name: "Мария Петрова",
-      party: "Партия B",
-      description: "Фокус върху образованието и социалната справедливост.",
-      photo: "https://via.placeholder.com/150", // Replace with real photo URL
-    },
-    {
-      id: 3,
-      name: "Георги Георгиев",
-      party: "Партия C",
-      description: "Работа за устойчиво развитие и защита на околната среда.",
-      photo: "https://via.placeholder.com/150", // Replace with real photo URL
-    },
-  ];
+  // Fetch parties from the backend
+  const fetchParties = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/parties");
+      debugger;
+      if (response.ok) {
+        const data = await response.json();
+        setParties(data);
+      } else {
+        console.error("Failed to fetch parties.");
+      }
+    } catch (error) {
+      console.error("Error fetching parties:", error);
+    }
+  };
 
-  // Voting end time (set your desired end date/time here)
-  const votingEndTime = new Date("2024-11-20T23:59:59").getTime();
+  useEffect(() => {
+    fetchParties(); // Fetch parties when the component mounts
+  }, []);
 
   // Countdown Timer Logic
+  const votingEndTime = new Date("2024-11-20T23:59:59").getTime();
+
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -55,21 +55,40 @@ const VotingPage = () => {
     return () => clearInterval(timer); // Cleanup on unmount
   }, []);
 
-  const handleVote = () => {
-    if (selectedCandidate) {
-      console.log(`Vote submitted for: ${selectedCandidate.name}`);
+  const handleVote = async () => {
+    if (!selectedParty) {
+      alert("Моля, изберете партия преди да гласувате!");
+      return;
+    }
+
+    const { id: partyId } = selectedParty;
+    const injectedProvider = connectedWallets[0]?.provider;
+
+    if (!injectedProvider) {
+      alert("Моля, свържете портфейла си преди да гласувате!");
+      return;
+    }
+
+    const provider = new ethers.providers.Web3Provider(injectedProvider);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
+
+    try {
+      const tx = await contract.vote("1", partyId); // Assuming "1" is the election ID
+      await tx.wait();
       setVoteSubmitted(true);
-      setShowConfirmation(false);
-    } else {
-      alert("Моля, изберете кандидат преди да гласувате!");
+      alert("Благодарим ви за вашия глас!");
+    } catch (err) {
+      console.error(err);
+      alert("Възникна грешка при подаването на гласа. Опитайте отново.");
     }
   };
 
   const openConfirmation = () => {
-    if (selectedCandidate) {
+    if (selectedParty) {
       setShowConfirmation(true);
     } else {
-      alert("Моля, изберете кандидат преди да гласувате!");
+      alert("Моля, изберете партия преди да гласувате!");
     }
   };
 
@@ -80,7 +99,7 @@ const VotingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-bold">Гласуване</h1>
           <p className="mt-4 text-lg">
-            Изберете вашия кандидат и подайте своя глас сега.
+            Изберете вашата партия и подайте своя глас сега.
           </p>
           <div className="mt-4">
             <span className="text-xl font-bold">Оставащо време:</span>{" "}
@@ -89,61 +108,47 @@ const VotingPage = () => {
         </div>
       </header>
 
-      {/* Progress Bar */}
-      <div className="bg-white shadow-md py-4">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className={`h-2 rounded-full ${
-                voteSubmitted ? "bg-green-500" : "bg-purple-600"
-              }`}
-              style={{ width: voteSubmitted ? "100%" : "50%" }}
-            ></div>
-          </div>
-          <p className="text-center mt-2 text-gray-600">
-            {voteSubmitted
-              ? "Гласуването е завършено."
-              : "Избиране на кандидат..."}
-          </p>
-        </div>
-      </div>
-
       {/* Main Content */}
       <main className="py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {!voteSubmitted ? (
             <>
               <h2 className="text-2xl font-bold text-purple-600 text-center">
-                Кандидати
+                Партии
               </h2>
               <p className="text-center text-gray-700 mt-4">
-                Изберете кандидат, за който искате да гласувате.
+                Изберете партия, за която искате да гласувате.
               </p>
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-                {candidates.map((candidate) => (
-                  <div
-                    key={candidate.id}
-                    className={`p-6 bg-white rounded-lg shadow-md cursor-pointer transition-transform transform ${
-                      selectedCandidate?.id === candidate.id
-                        ? "border-4 border-purple-600 scale-105"
-                        : "border border-gray-200 hover:scale-105"
-                    }`}
-                    onClick={() => setSelectedCandidate(candidate)}
-                  >
-                    <img
-                      src={candidate.photo}
-                      alt={candidate.name}
-                      className="w-24 h-24 rounded-full mx-auto"
-                    />
-                    <h3 className="text-xl font-semibold text-purple-600 mt-4">
-                      {candidate.name}
-                    </h3>
-                    <p className="mt-2 text-gray-700">{candidate.party}</p>
-                    <p className="mt-4 text-sm text-gray-600">
-                      {candidate.description}
-                    </p>
-                  </div>
-                ))}
+                {parties.length > 0 ? (
+                  parties.map((party) => (
+                    <div
+                      key={party.id}
+                      className={`p-6 bg-white rounded-lg shadow-md cursor-pointer transition-transform transform ${
+                        selectedParty?.id === party.id
+                          ? "border-4 border-purple-600 scale-105"
+                          : "border border-gray-200 hover:scale-105"
+                      }`}
+                      onClick={() => setSelectedParty(party)}
+                    >
+                      <img
+                        src={party.photo || "https://via.placeholder.com/150"}
+                        alt={party.name}
+                        className="w-24 h-24 rounded-full mx-auto"
+                      />
+                      <h3 className="text-xl font-semibold text-purple-600 mt-4">
+                        {party.name}
+                      </h3>
+                      <p className="mt-4 text-sm text-gray-600">
+                        {party.description || "Описание липсва."}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500">
+                    Няма налични партии.
+                  </p>
+                )}
               </div>
               <div className="mt-12 text-center">
                 <button
@@ -183,8 +188,8 @@ const VotingPage = () => {
               Потвърдете вашия избор
             </h2>
             <p className="mt-4 text-gray-700">
-              Избраният кандидат:{" "}
-              <span className="font-semibold">{selectedCandidate.name}</span>
+              Избраната партия:{" "}
+              <span className="font-semibold">{selectedParty.name}</span>
             </p>
             <div className="mt-6 flex justify-end space-x-4">
               <button

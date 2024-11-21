@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useWallets } from "@web3-onboard/react";
-import {ERC20_ABI, ERC20_ADDRESS} from '../../constants/index.js'
+import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
 
 const AdminDashboard = () => {
   const [partyName, setPartyName] = useState("");
@@ -9,62 +9,130 @@ const AdminDashboard = () => {
   const [electionName, setElectionName] = useState("");
   const [electionStart, setElectionStart] = useState("");
   const [electionEnd, setElectionEnd] = useState("");
-  const [parties] = useState([]);
+  const [parties, setParties] = useState([]);
   const [elections] = useState([]);
   const connectedWallets = useWallets();
 
+  // Fetch existing parties
+  const fetchParties = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/parties", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setParties(data);
+      } else {
+        const error = await response.json();
+        console.error("Error fetching parties:", error);
+      }
+    } catch (err) {
+      console.error("Error fetching parties:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchParties();
+  }, []);
+
   // Function to add a new party
-  const handleAddParty = (e) => {
+  const handleAddParty = async (e) => {
     e.preventDefault();
-    const injectedProvider = connectedWallets[0].provider;
-    console.log(injectedProvider);
+
+    if (!electionId || !partyName) {
+      alert("Моля, попълнете всички полета!");
+      return;
+    }
+
+    const injectedProvider = connectedWallets[0]?.provider;
+    if (!injectedProvider) {
+      alert("Моля, свържете портфейла си!");
+      return;
+    }
+
     const provider = new ethers.providers.Web3Provider(injectedProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-    contract
-      .addParty(electionId, partyName)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
+    try {
+      // Add the party to the blockchain
+      const tx = await contract.addParty(electionId, partyName);
+      await tx.wait();
+
+      // Add the party to the database
+      const response = await fetch("http://localhost:5000/add-party", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include the auth token
+        },
+        body: JSON.stringify({ electionId, partyName }),
       });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Party added successfully:", result);
+        alert("Партията беше успешно добавена!");
+        fetchParties(); // Refresh the list of parties
+      } else {
+        const error = await response.json();
+        alert(`Грешка: ${error.error}`);
+      }
+    } catch (err) {
+      console.error("Error adding party:", err);
+      alert("Възникна грешка при добавянето на партията.");
+    }
   };
 
-  // Function to create new election
-  const handleCreateElection = (e) => {
+  // Function to create a new election
+  const handleCreateElection = async (e) => {
     e.preventDefault();
 
-    const injectedProvider = connectedWallets[0].provider;
+    if (!electionName || !electionStart || !electionEnd) {
+      alert("Моля, попълнете всички полета!");
+      return;
+    }
+
+    const injectedProvider = connectedWallets[0]?.provider;
+    if (!injectedProvider) {
+      alert("Моля, свържете портфейла си!");
+      return;
+    }
+
     const provider = new ethers.providers.Web3Provider(injectedProvider);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
     const startTime = Math.floor(new Date(electionStart).getTime() / 1000);
     const endTime = Math.floor(new Date(electionEnd).getTime() / 1000);
 
-    contract
-      .createElection(electionName, startTime, endTime)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    try {
+      const tx = await contract.createElection(
+        electionName,
+        startTime,
+        endTime
+      );
+      await tx.wait();
+
+      alert("Изборите бяха успешно създадени на блокчейна!");
+    } catch (err) {
+      console.error("Error creating election:", err);
+      alert("Възникна грешка при създаването на изборите.");
+    }
   };
 
   return (
     <div className="min-h-screen min-w-80 bg-gray-100 p-10 w-full flex justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full">
         <h1 className="text-2xl font-bold text-center text-purple-900 mb-6">
-          Admin Dashboard
+          Администраторски портал
         </h1>
 
         {/* Create Party Form */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Create Party
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-800">Създай партия</h2>
           <form
             onSubmit={handleAddParty}
             className="flex flex-col space-y-4 mt-4"
@@ -73,7 +141,7 @@ const AdminDashboard = () => {
               type="text"
               value={electionId}
               onChange={(e) => setPartyId(e.target.value)}
-              placeholder="Electionid ID"
+              placeholder="Номер на изборите"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
             />
@@ -81,7 +149,7 @@ const AdminDashboard = () => {
               type="text"
               value={partyName}
               onChange={(e) => setPartyName(e.target.value)}
-              placeholder="Party Name"
+              placeholder="Име на партия"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
             />
@@ -89,13 +157,13 @@ const AdminDashboard = () => {
               type="submit"
               className="px-4 py-2 bg-purple-900 text-white rounded-md hover:bg-purple-800"
             >
-              Add Party
+              Добави партия
             </button>
           </form>
           <ul className="mt-4 space-y-2">
-            {parties.map((party, index) => (
-              <li key={index} className="text-gray-700">
-                {`ID: ${party.id}, Name: ${party.name}`}
+            {parties.map((party) => (
+              <li key={party.id} className="text-gray-700">
+                {`ID: ${party.id}, Election ID: ${party.election_id}, Name: ${party.name}`}
               </li>
             ))}
           </ul>
@@ -104,7 +172,7 @@ const AdminDashboard = () => {
         {/* Create Election Form */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800">
-            Create Election
+            Създай нови избори
           </h2>
           <form
             onSubmit={handleCreateElection}
@@ -114,7 +182,7 @@ const AdminDashboard = () => {
               type="text"
               value={electionName}
               onChange={(e) => setElectionName(e.target.value)}
-              placeholder="Election Name"
+              placeholder="Име на изборите"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
             />
@@ -123,7 +191,7 @@ const AdminDashboard = () => {
                 type="datetime-local"
                 value={electionStart}
                 onChange={(e) => setElectionStart(e.target.value)}
-                placeholder="Start Time"
+                placeholder="Начална дата и час"
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
                 required
               />
@@ -131,7 +199,7 @@ const AdminDashboard = () => {
                 type="datetime-local"
                 value={electionEnd}
                 onChange={(e) => setElectionEnd(e.target.value)}
-                placeholder="End Time"
+                placeholder="Крайна дата и час"
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
                 required
               />
@@ -140,7 +208,7 @@ const AdminDashboard = () => {
               type="submit"
               className="px-4 py-2 bg-purple-900 text-white rounded-md hover:bg-purple-800"
             >
-              Create Election
+              Добави нови избори
             </button>
           </form>
           <ul className="mt-4 space-y-2">
@@ -152,7 +220,6 @@ const AdminDashboard = () => {
           </ul>
         </div>
       </div>
-      {/*Get Admin*/}
     </div>
   );
 };
