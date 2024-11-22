@@ -10,7 +10,7 @@ const VotingPage = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const connectedWallets = useWallets();
-
+  let votingEndTime = 0;
   // Fetch parties from the backend
   const fetchParties = async () => {
     try {
@@ -22,6 +22,12 @@ const VotingPage = () => {
       const provider = new ethers.providers.Web3Provider(injectedProvider);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
+
+      const electionId = await contract.electionCount();
+      const electionDetails = await contract.elections(electionId);
+      const endTime = electionDetails.endTime;
+      console.log("endtime: "+ endTime)
+      votingEndTime = (endTime * 1000);
 
       const fetchedParties = await contract.getElectionParties();
       // Assuming fetchedParties is an array of objects like { id, name, description, photo }
@@ -42,13 +48,15 @@ const VotingPage = () => {
     fetchParties();
   }, []);
 
-  const votingEndTime = new Date("2024-11-20T23:59:59").getTime();
-
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
-      const distance = votingEndTime - now;
 
+
+      const distance = votingEndTime - now;
+      console.log("end Time voting :" + votingEndTime)
+      console.log("Now" + now)
+      console.log("Diff: " +distance)
       if (distance <= 0) {
         clearInterval(timer);
         setTimeLeft("Гласуването е приключило!");
@@ -124,11 +132,10 @@ const VotingPage = () => {
                   parties.map((party) => (
                     <div
                       key={party.id}
-                      className={`p-6 bg-white rounded-lg shadow-md cursor-pointer transition-transform transform ${
-                        selectedParty?.id === party.id
-                          ? "border-4 border-purple-600 scale-105"
-                          : "border border-gray-200 hover:scale-105"
-                      }`}
+                      className={`p-6 bg-white rounded-lg shadow-md cursor-pointer transition-transform transform ${selectedParty?.id === party.id
+                        ? "border-4 border-purple-600 scale-105"
+                        : "border border-gray-200 hover:scale-105"
+                        }`}
                       onClick={() => setSelectedParty(party)}
                     >
                       <img
