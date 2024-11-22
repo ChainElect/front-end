@@ -116,6 +116,38 @@ const Navbar = () => {
             <Link to="/about" className="text-gray-700 hover:text-purple-600">
               За нас
             </Link>
+            {isLoggedIn ? (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  toggleMenu();
+                }}
+                className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+              >
+                Изход
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+                  onClick={toggleMenu}
+                >
+                  Вход
+                </Link>
+                <Link
+                  to="/register"
+                  className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+                  onClick={toggleMenu}
+                >
+                  Регистрация
+                </Link>
+                <Link to="/connect">
+                  <ConnectButton />
+                </Link>
+                s
+              </>
+            )}
           </div>
         </div>
 

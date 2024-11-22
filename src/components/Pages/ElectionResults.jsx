@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
+import { useWallets } from "@web3-onboard/react";
 
 const ResultsPage = () => {
   const [parties, setParties] = useState([]);
   const [totalVotes, setTotalVotes] = useState(0);
   const [voterTurnout, setVoterTurnout] = useState(0); // Percentage
+  const connectedWallets = useWallets();
   const totalEligibleVoters = 150000; // Hardcoded total eligible voters
 
   const fetchResults = async () => {
     try {
-      // Initialize ethers provider and contract
-      const provider = new ethers.providers.JsonRpcProvider(
-        "http://localhost:8545"
-      ); // Replace with your RPC provider
-      const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, provider);
+      const injectedProvider = connectedWallets[0].provider;
+      const provider = new ethers.providers.Web3Provider(injectedProvider);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
+
+      const electionCount = await contract.electionCount();
 
       // Fetch election results using the getResults function
-      const electionResults = await contract.getResults();
+      const electionResults = await contract.getResults(electionCount);
 
       // Map the results and calculate total votes
       let calculatedTotalVotes = 0;
