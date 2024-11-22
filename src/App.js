@@ -27,7 +27,7 @@ import ConnectWalletGuide from "./components/Pages/Guide/ConnectWallet";
 import ResultsGuide from "./components/Pages/Guide/ResultsGuide";
 import OngoingElections from "./components/Pages/OnGoingElections";
 // change from env file
-const API_KEY = "89jSnaKWM_MxViGgmQyrTyS4xHMzXukz";
+const API_KEY = process.env.API_KEY;
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
 const injected = injectedModules();

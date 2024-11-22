@@ -13,13 +13,13 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "electionId",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "_partyName",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "_partyName",
+						"name": "description",
 						"type": "string"
 					}
 				],
@@ -130,6 +130,41 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "getElectionParties",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "voteCount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							}
+						],
+						"internalType": "struct VotingSystem.Party[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -155,6 +190,11 @@
 								"internalType": "uint256",
 								"name": "voteCount",
 								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
 							}
 						],
 						"internalType": "struct VotingSystem.Party[]",
@@ -191,11 +231,6 @@
 			},
 			{
 				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "electionId",
-						"type": "uint256"
-					},
 					{
 						"internalType": "uint256",
 						"name": "partyId",
@@ -260,11 +295,11 @@
 	},
 	"sources": {
 		"contracts/VotingSystem.sol": {
-			"keccak256": "0x0e5d2a50230fcf690e9ababd2321aad523c8305d1e7c857a09d9dedd14ea0e5a",
+			"keccak256": "0x146ed2d046f7ab492621111c11a11e8776bff591bb7fa0dc7eba74d9bf3c915e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dfa45e3a7278d31016867dbcd5adb5dd9ee8d71405f2ebcf65c9793a07bdb31f",
-				"dweb:/ipfs/QmR1HPnuxoybLxQszcjaE4DDGbRprYa58BM4wVAeGKPWB5"
+				"bzz-raw://8b76d45a1f074670b6d9277f1f45b1e5995b0d3dd4a448fe8eecfbb7de45cdea",
+				"dweb:/ipfs/QmfHZUGT7U37FwPkusBRu5DHFbBzMca3mdorV5unLYjLBX"
 			]
 		}
 	},

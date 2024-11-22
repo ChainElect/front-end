@@ -5,7 +5,7 @@ import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
 
 const AdminDashboard = () => {
   const [partyName, setPartyName] = useState("");
-  const [electionId, setPartyId] = useState("");
+  const [partyDescription, setPartyDescription] = useState("");
   const [electionName, setElectionName] = useState("");
   const [electionStart, setElectionStart] = useState("");
   const [electionEnd, setElectionEnd] = useState("");
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
   const handleAddParty = async (e) => {
     e.preventDefault();
 
-    if (!electionId || !partyName) {
+    if (!partyDescription || !partyName) {
       alert("Моля, попълнете всички полета!");
       return;
     }
@@ -58,29 +58,11 @@ const AdminDashboard = () => {
     const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
     try {
-      // Add the party to the blockchain
-      const tx = await contract.addParty(electionId, partyName);
+ 
+      const tx = await contract.addParty(partyName, partyDescription);
       await tx.wait();
-
-      // Add the party to the database
-      const response = await fetch("http://localhost:5000/add-party", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include the auth token
-        },
-        body: JSON.stringify({ electionId, partyName }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Party added successfully:", result);
-        alert("Партията беше успешно добавена!");
-        fetchParties(); // Refresh the list of parties
-      } else {
-        const error = await response.json();
-        alert(`Грешка: ${error.error}`);
-      }
+      
+      alert("Партията беше успешно добавена!");
     } catch (err) {
       console.error("Error adding party:", err);
       alert("Възникна грешка при добавянето на партията.");
@@ -139,17 +121,17 @@ const AdminDashboard = () => {
           >
             <input
               type="text"
-              value={electionId}
-              onChange={(e) => setPartyId(e.target.value)}
-              placeholder="Номер на изборите"
+              value={partyName}
+              onChange={(e) => setPartyName(e.target.value)}
+              placeholder="Име на партия"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
             />
             <input
               type="text"
-              value={partyName}
-              onChange={(e) => setPartyName(e.target.value)}
-              placeholder="Име на партия"
+              value={partyDescription}
+              onChange={(e) => setPartyDescription(e.target.value)}
+              placeholder="Информация за партията"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
             />
