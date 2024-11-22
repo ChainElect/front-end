@@ -20,8 +20,6 @@ import ContactUs from "./components/Pages/ContactUs";
 import PrivacyPolicy from "./components/Pages/Privacy";
 import TermsOfUse from "./components/Pages/TermsOfUse";
 import AdminFunc from "./components/Pages/AdminFunc";
-import Results from "./components/Pages/Results";
-import Vote from "./components/Pages/Vote";
 import VotingGuide from "./components/Pages/Guide/VotingGuide";
 import ConnectWalletGuide from "./components/Pages/Guide/ConnectWallet";
 import ResultsGuide from "./components/Pages/Guide/ResultsGuide";
@@ -71,8 +69,6 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/adminfunc" element={<AdminFunc />} />
-          <Route path="/resultsFromVoting" element={<Results />} />
-          <Route path="/vote" element={<Vote />} />
           <Route path="/onGoingElections" element={<OngoingElections />} />
           <Route path="/guide/voting" element={<VotingGuide />} />
           <Route
