@@ -57,7 +57,7 @@ function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/hero" element={<HeroSection />} />
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/user" element={<UserDashboard />} />
+          {/* <Route path="/user" element={<UserDashboard />} /> */}
           <Route path="/results" element={<ElectionResults />} />
           <Route path="/about" element={<About />} />
           <Route path="/resources" element={<Resources />} />

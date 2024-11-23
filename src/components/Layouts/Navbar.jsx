@@ -81,14 +81,6 @@ const Navbar = () => {
             <Link to="/results" className="text-gray-700 hover:text-purple-600">
               Резултати
             </Link>
-            {isAdmin && (
-              <Link to="/admin" className="text-gray-700 hover:text-purple-600">
-                Админ
-              </Link>
-            )}
-            <Link to="/admin" className="text-gray-700 hover:text-purple-600">
-              Админ
-            </Link>
             {/* <Link to="/adminFunc" className="text-gray-700 hover:text-purple-600">
               Адми Фунции
             </Link> */}
@@ -116,16 +108,28 @@ const Navbar = () => {
             <Link to="/about" className="text-gray-700 hover:text-purple-600">
               За нас
             </Link>
+
+            {isAdmin && (
+              <Link to="/admin" className="text-gray-700 hover:text-purple-600">
+                Админ
+              </Link>
+            )}
+
             {isLoggedIn ? (
-              <button
-                onClick={() => {
-                  handleLogout();
-                  toggleMenu();
-                }}
-                className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
-              >
-                Изход
-              </button>
+              <>
+                <Link to="/connect">
+                  <ConnectButton />
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    toggleMenu();
+                  }}
+                  className="block text-gray-700 hover:text-purple-600 transition-all duration-300"
+                >
+                  Изход
+                </button>
+              </>
             ) : (
               <>
                 <Link
@@ -142,10 +146,6 @@ const Navbar = () => {
                 >
                   Регистрация
                 </Link>
-                <Link to="/connect">
-                  <ConnectButton />
-                </Link>
-                s
               </>
             )}
           </div>

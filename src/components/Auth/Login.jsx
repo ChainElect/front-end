@@ -17,7 +17,7 @@ const Login = () => {
         const response = await loginUser({ idNumber, password });
         const token = response.data.token;
         login(token); // Trigger login by setting the token
-        navigate("/user"); // Redirect to user page
+        navigate("/"); // Redirect to user page
       } catch (error) {
         setError(ERROR_MESSAGES.LOGIN_FAILED);
       }
