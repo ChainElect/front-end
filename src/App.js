@@ -20,14 +20,12 @@ import ContactUs from "./components/Pages/ContactUs";
 import PrivacyPolicy from "./components/Pages/Privacy";
 import TermsOfUse from "./components/Pages/TermsOfUse";
 import AdminFunc from "./components/Pages/AdminFunc";
-import Results from "./components/Pages/Results";
-import Vote from "./components/Pages/Vote";
 import VotingGuide from "./components/Pages/Guide/VotingGuide";
 import ConnectWalletGuide from "./components/Pages/Guide/ConnectWallet";
 import ResultsGuide from "./components/Pages/Guide/ResultsGuide";
 import OngoingElections from "./components/Pages/OnGoingElections";
 // change from env file
-const API_KEY = "89jSnaKWM_MxViGgmQyrTyS4xHMzXukz";
+const API_KEY = process.env.API_KEY;
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
 const injected = injectedModules();
@@ -71,8 +69,6 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/adminfunc" element={<AdminFunc />} />
-          <Route path="/resultsFromVoting" element={<Results />} />
-          <Route path="/vote" element={<Vote />} />
           <Route path="/onGoingElections" element={<OngoingElections />} />
           <Route path="/guide/voting" element={<VotingGuide />} />
           <Route
