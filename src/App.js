@@ -58,12 +58,12 @@ function App() {
           <Route path="/hero" element={<HeroSection />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* <Route path="/user" element={<UserDashboard />} /> */}
-          <Route path="/results" element={<ElectionResults />} />
+          <Route path="/results/:id" element={<ElectionResults />} />
           <Route path="/about" element={<About />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/voting" element={<VotingPage />} />
+          <Route path="/voting/:id" element={<VotingPage />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />

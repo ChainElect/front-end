@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
 import { useWallets } from "@web3-onboard/react";
+import { useParams } from "react-router-dom";
+
 
 const ResultsPage = () => {
+  const { id } = useParams(); // Get election ID from URL
   const [parties, setParties] = useState([]);
   const [totalVotes, setTotalVotes] = useState(0);
   const [voterTurnout, setVoterTurnout] = useState(0); // Percentage
@@ -17,10 +20,8 @@ const ResultsPage = () => {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-      const electionCount = await contract.electionCount();
-
       // Fetch election results using the getResults function
-      const electionResults = await contract.getResults(electionCount);
+      const electionResults = await contract.getResults(id);
 
       // Map the results and calculate total votes
       let calculatedTotalVotes = 0;
