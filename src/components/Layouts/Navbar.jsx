@@ -75,11 +75,8 @@ const Navbar = () => {
             <Link to="/home" className="text-gray-700 hover:text-purple-600">
               Начало
             </Link>
-            <Link to="/voting" className="text-gray-700 hover:text-purple-600">
-              Гласуване
-            </Link>
-            <Link to="/results" className="text-gray-700 hover:text-purple-600">
-              Резултати
+            <Link to="/onGoingElections" className="text-gray-700 hover:text-purple-600">
+              Активни Избори
             </Link>
             {/* <Link to="/adminFunc" className="text-gray-700 hover:text-purple-600">
               Адми Фунции
@@ -145,6 +142,9 @@ const Navbar = () => {
                   onClick={toggleMenu}
                 >
                   Регистрация
+                </Link>
+                <Link to="/connect">
+                  <ConnectButton />
                 </Link>
               </>
             )}

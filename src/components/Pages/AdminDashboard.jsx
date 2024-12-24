@@ -13,31 +13,6 @@ const AdminDashboard = () => {
   const [elections] = useState([]);
   const connectedWallets = useWallets();
 
-  // Fetch existing parties
-  const fetchParties = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/parties", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include auth token
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setParties(data);
-      } else {
-        const error = await response.json();
-        console.error("Error fetching parties:", error);
-      }
-    } catch (err) {
-      console.error("Error fetching parties:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchParties();
-  }, []);
-
   // Function to add a new party
   const handleAddParty = async (e) => {
     e.preventDefault();
@@ -58,10 +33,10 @@ const AdminDashboard = () => {
     const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
     try {
- 
-      const tx = await contract.addParty(partyName, partyDescription);
+      const electionId = await contract.electionCount();
+      const tx = await contract.addParty(electionId, partyName, partyDescription);
       await tx.wait();
-      
+
       alert("Партията беше успешно добавена!");
     } catch (err) {
       console.error("Error adding party:", err);

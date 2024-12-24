@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useWallets } from "@web3-onboard/react";
+import { useParams } from "react-router-dom";
 import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
 
 const VotingPage = () => {
+  const { id } = useParams(); // Get election ID from URL
   const [parties, setParties] = useState([]);
   const [selectedParty, setSelectedParty] = useState(null);
   const [voteSubmitted, setVoteSubmitted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
+  const [votingEndTime, setVotingEndTime] = useState(null);
   const connectedWallets = useWallets();
-  let votingEndTime = 0;
-  // Fetch parties from the backend
   const fetchParties = async () => {
     try {
       const injectedProvider = connectedWallets[0]?.provider;
@@ -19,44 +20,40 @@ const VotingPage = () => {
         console.error("No provider connected.");
         return;
       }
+  
       const provider = new ethers.providers.Web3Provider(injectedProvider);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
-
-      const electionId = await contract.electionCount();
-      const electionDetails = await contract.elections(electionId);
-      const endTime = electionDetails.endTime;
-      console.log("endtime: "+ endTime)
-      votingEndTime = (endTime * 1000);
-
-      const fetchedParties = await contract.getElectionParties();
-      // Assuming fetchedParties is an array of objects like { id, name, description, photo }
+  
+      // Fetch election details
+      const electionDetails = await contract.getElectionDetails(id); // Fetch details using election ID
+      setVotingEndTime(electionDetails.endTime.toNumber() * 1000);
+  
+      // Fetch parties
+      const fetchedParties = await contract.getElectionParties(id);
       setParties(
         fetchedParties.map((party) => ({
           id: party.id.toString(),
           name: party.name,
           description: party.description,
-          photo: party.photo,
         }))
       );
     } catch (error) {
-      console.error("Error fetching parties:", error);
+      console.error("Error fetching election details and parties:", error);
     }
   };
 
   useEffect(() => {
-    fetchParties();
-  }, []);
+    if (id) fetchParties();
+  }, [id, connectedWallets]);
 
   useEffect(() => {
+    if (!votingEndTime) return;
+
     const timer = setInterval(() => {
-      const now = new Date().getTime();
-
-
+      const now = Date.now();
       const distance = votingEndTime - now;
-      console.log("end Time voting :" + votingEndTime)
-      console.log("Now" + now)
-      console.log("Diff: " +distance)
+
       if (distance <= 0) {
         clearInterval(timer);
         setTimeLeft("Гласуването е приключило!");
@@ -69,7 +66,7 @@ const VotingPage = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [votingEndTime]);
 
   const handleVote = async () => {
     if (!selectedParty) {
@@ -88,7 +85,7 @@ const VotingPage = () => {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-      const tx = await contract.vote(selectedParty.id); // Assuming "1" is the election ID
+      const tx = await contract.vote(id, selectedParty.id); // Pass election ID and party ID
       await tx.wait();
       setVoteSubmitted(true);
       alert("Благодарим ви за вашия глас!");
