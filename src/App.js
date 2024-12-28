@@ -1,31 +1,32 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginScreen from "./components/Auth/Login";
-import RegistrationForm from "./components/Auth/Register";
-import Navbar from "./components/Layouts/Navbar";
-import Footer from "./components/Layouts/Footer";
-import HeroSection from "./components/Layouts/HeroSection";
-import { MainPage } from "./components/Pages/MainPage";
-import AdminDashboard from "./components/Pages/AdminDashboard";
-import UserDashboard from "./components/Pages/UserDashboard";
 import { init } from "@web3-onboard/react";
 import injectedModules from "@web3-onboard/injected-wallets";
-import ElectionResults from "./components/Pages/ElectionResults";
-import About from "./components/Pages/About";
-import Resources from "./components/Pages/Resourses";
-import Home from "./components/Pages/Home";
-import VotingPage from "./components/Pages/VotingPage";
-import FAQ from "./components/Pages/FAQ";
-import ContactUs from "./components/Pages/ContactUs";
-import PrivacyPolicy from "./components/Pages/Privacy";
-import TermsOfUse from "./components/Pages/TermsOfUse";
-import AdminFunc from "./components/Pages/AdminFunc";
-import VotingGuide from "./components/Pages/Guide/VotingGuide";
-import ConnectWalletGuide from "./components/Pages/Guide/ConnectWallet";
-import ResultsGuide from "./components/Pages/Guide/ResultsGuide";
-import OngoingElections from "./components/Pages/OnGoingElections";
+
+import { LoginForm } from "./features/auth/LoginForm";
+import { RegisterForm } from "./features/auth/RegisterForm";
+import { Navbar } from "./components/sections/Navbar";
+import { Footer } from "./components/sections/Footer";
+import { HeroSection } from "./components/sections/HeroSection";
+import { MainPage } from "./pages/MainPage";
+import { AdminDashboard } from "./pages/AdminDashboard";
+import { ElectionResults } from "./pages/ElectionResults";
+import { About } from "./pages/About";
+import { Resources } from "./pages/Resourses";
+import { Home } from "./pages/Home";
+import { VotingPage } from "./pages/VotingPage";
+import { FAQ } from "./pages/FAQ";
+import { ContactUs } from "./pages/ContactUs";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { TermsOfUse } from "./pages/TermsOfUse";
+import { AdminFunc } from "./pages/AdminFunc";
+import { VotingGuide } from "./pages/guide/VotingGuide";
+import { ConnectWalletGuide } from "./pages/guide/ConnectWallet";
+import { ResultsGuide } from "./pages/guide/ResultsGuide";
+import { OngoingElections } from "./pages/OnGoingElections";
+
 // change from env file
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.REACT_APP_ALCHEMY_API_KEY;
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
 const injected = injectedModules();
@@ -45,15 +46,15 @@ init({
   ],
 });
 
-function App() {
+export const App = () => {
   return (
     <Router>
       <Navbar />
       <div className="min-h-screen bg-gray-100 flex items-center justify-center min-w-80">
         <Routes>
-          <Route path="/login" element={<LoginScreen />} />
-          <Route path="/register" element={<RegistrationForm />} />
-          <Route path="/connect" element={<RegistrationForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/connect" element={<RegisterForm />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/hero" element={<HeroSection />} />
           <Route path="/admin" element={<AdminDashboard />} />
@@ -81,6 +82,4 @@ function App() {
       <Footer />
     </Router>
   );
-}
-
-export default App;
+};

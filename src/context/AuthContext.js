@@ -1,8 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { ERROR_MESSAGES } from "../utilities/messages";
-// Create the AuthContext
-const AuthContext = createContext();
+import * as Sentry from "@sentry/react";
+import Proptypes from "prop-types";
+
+import { ERROR_MESSAGES } from "../utilities/messages/errorMessages";
+
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +21,12 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         setIsAdmin(decoded.isAdmin || false);
       } catch (error) {
-        console.error(ERROR_MESSAGES.FAILED_JTW_DECODING, error);
+        Sentry.captureException(error, {
+          extra: {
+            errorCode: ERROR_MESSAGES.FAILED_JTW_DECODING.code,
+            errorMessage: ERROR_MESSAGES.FAILED_JTW_DECODING.message,
+          },
+        });
         setIsLoggedIn(false);
         setIsAdmin(false);
       }
@@ -49,4 +57,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export default AuthContext;
+AuthProvider.propTypes = {
+  children: Proptypes.node,
+};
