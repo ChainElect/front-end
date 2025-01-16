@@ -232,6 +232,46 @@ export const ERC20_ABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getClosedElection",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "partyCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct VotingSystem.SimpleElectionDetails[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -427,4 +467,4 @@ export const ERC20_ABI = [
   }
 ];
 
-export const ERC20_ADDRESS = '0x15c1ed45c253b0560ab3bf0b71fa986bd31b5533';
+export const ERC20_ADDRESS = '0xe0443A87105bbc3D7e0AF985BA5f35d2902Bfb38';

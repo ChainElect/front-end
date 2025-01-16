@@ -78,6 +78,10 @@ const Navbar = () => {
             <Link to="/onGoingElections" className="text-gray-700 hover:text-purple-600">
               Активни Избори
             </Link>
+            <Link to="/finishedElection" className="text-gray-700 hover:text-purple-600">
+              Резултати
+            </Link>
+            
             {/* <Link to="/adminFunc" className="text-gray-700 hover:text-purple-600">
               Адми Фунции
             </Link> */}

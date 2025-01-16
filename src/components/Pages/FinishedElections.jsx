@@ -4,14 +4,14 @@ import { useWallets } from "@web3-onboard/react";
 import { useNavigate } from "react-router-dom"; // Corrected import
 import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
 
-const OnGoingElection = () => {
-  const navigate = useNavigate(); // Correctly use useNavigate
+const FinishedElections = () => {
+  const navigate = useNavigate(); 
   const [elections, setElections] = useState([]);
   const [voteSubmitted, setVoteSubmitted] = useState(false);
   const connectedWallets = useWallets();
 
   const handleButtonClick = (id) => {
-    navigate(`/voting/${id}`); // Redirect to the details page with the ID
+    navigate(`/results/${id}`); 
   };
 
   // Fetch elections and parties from the backend
@@ -31,8 +31,8 @@ const OnGoingElection = () => {
       const provider = new ethers.providers.Web3Provider(injectedProvider);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
-
-      const ongoingElections = await contract.getAllOngoingElections();
+      
+      const ongoingElections = await contract.getClosedElection();
       const electionsWithParties = await Promise.all(
         ongoingElections.map(async (election) => {
           const parties = await contract.getElectionParties(election.id);
@@ -56,7 +56,7 @@ const OnGoingElection = () => {
     <div className="min-h-screen bg-gray-100 mt-10 mb-10">
       <main className="py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-purple-600 text-center">Текущи избори</h2>
+          <h2 className="text-2xl font-bold text-purple-600 text-center">Резултати от изминали избори</h2>
           <p className="text-center text-gray-700 mt-4">
             Изберете избори, за които искате да гласувате.
           </p>
@@ -76,7 +76,7 @@ const OnGoingElection = () => {
                       onClick={() => handleButtonClick(election.id)}
                       className="px-6 py-3 bg-purple-600 text-white font-medium rounded-md shadow-md hover:bg-purple-700 transition"
                     >
-                      Гласувай
+                      Резултати
                     </button>
                   </div>
                 </div>
@@ -91,4 +91,4 @@ const OnGoingElection = () => {
   );
 };
 
-export default OnGoingElection;
+export default FinishedElections;
