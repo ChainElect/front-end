@@ -24,6 +24,7 @@ import VotingGuide from "./components/Pages/Guide/VotingGuide";
 import ConnectWalletGuide from "./components/Pages/Guide/ConnectWallet";
 import ResultsGuide from "./components/Pages/Guide/ResultsGuide";
 import OngoingElections from "./components/Pages/OnGoingElections";
+import FinishedElections from "./components/Pages/FinishedElections";
 // change from env file
 const API_KEY = process.env.API_KEY;
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
@@ -70,6 +71,7 @@ function App() {
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/adminfunc" element={<AdminFunc />} />
           <Route path="/onGoingElections" element={<OngoingElections />} />
+          <Route path="/finishedElection" element={<FinishedElections />} />
           <Route path="/guide/voting" element={<VotingGuide />} />
           <Route
             path="/guide/connect-wallet"
