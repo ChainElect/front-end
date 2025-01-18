@@ -28,7 +28,7 @@ export const RegisterForm = () => {
       e.preventDefault();
 
       if (formData.password !== formData.confirmPassword) {
-        setError(ERROR_MESSAGES.PASSWORDS_NOT_MATCHING);
+        setError(ERROR_MESSAGES.PASSWORDS_NOT_MATCHING.error);
         return;
       }
 
@@ -39,7 +39,7 @@ export const RegisterForm = () => {
         !formData.idNumber ||
         !formData.phoneNumber
       ) {
-        setError(ERROR_MESSAGES.MISSING_FIELDS);
+        setError(ERROR_MESSAGES.MISSING_FIELDS.error);
         return;
       }
 
@@ -55,7 +55,7 @@ export const RegisterForm = () => {
         setError("");
         setStep(2); // Move to the confirmation step
       } catch (error) {
-        setError(ERROR_MESSAGES.REGISTRATION_FAILED);
+        setError(ERROR_MESSAGES.REGISTRATION_FAILED.message);
       }
     },
     [formData]

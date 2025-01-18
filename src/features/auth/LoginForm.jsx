@@ -2,7 +2,7 @@
 import React, { useState, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-import AuthContext from "../../context/AuthContext.js";
+import { AuthContext } from "../../context/AuthContext.js";
 import { AuthService } from "../../services/authService.js";
 import { ERROR_MESSAGES } from "../../utilities/messages/errorMessages.js";
 
@@ -21,10 +21,10 @@ export const LoginForm = () => {
         login(token); // Trigger login by setting the token
         navigate("/"); // Redirect to user page
       } catch (error) {
-        setError(ERROR_MESSAGES.LOGIN_FAILED);
+        setError(ERROR_MESSAGES.LOGIN_FAILED.message);
       }
     } else {
-      setError(ERROR_MESSAGES.MISSING_FIELDS);
+      setError(ERROR_MESSAGES.MISSING_FIELDS.message);
     }
   }, [idNumber, password, login, navigate]);
 

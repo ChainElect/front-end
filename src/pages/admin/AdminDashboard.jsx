@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback } from "react";
 import { useWallets } from "@web3-onboard/react";
 
-import { useParties } from "../hooks/useParties";
-import { useElections } from "../hooks/useElections";
+import { useParties } from "../../hooks/useParties";
+import { useElections } from "../../hooks/useElections";
 
 export const AdminDashboard = () => {
   // Custom hooks for managing parties and elections

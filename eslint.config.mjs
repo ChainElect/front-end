@@ -56,6 +56,7 @@ export default [
       complexity: ["warn", { max: 10 }],
       "react/jsx-props-no-spreading": "warn",
       "react/no-danger": "error",
+      "react/jsx-no-undef": "error",
       "import/order": [
         "warn",
         {

@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { ethers } from "ethers";
 import { useWallets } from "@web3-onboard/react";
 
-import { ERC20_ABI, ERC20_ADDRESS } from "../utilities/wallet/walletConstants";
+import {
+  ERC20_ABI,
+  ERC20_ADDRESS,
+} from "../../utilities/wallet/walletConstants";
 
 export const AdminFunc = () => {
   const [admin, setAdmin] = useState("");

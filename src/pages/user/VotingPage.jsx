@@ -5,7 +5,7 @@ import { useWallets } from "@web3-onboard/react";
 import {
   ERC20_ABI,
   ERC20_ADDRESS,
-} from "../utilities/wallet/walletConstants.js";
+} from "../../utilities/wallet/walletConstants.js";
 
 export const VotingPage = () => {
   const [parties, setParties] = useState([]);

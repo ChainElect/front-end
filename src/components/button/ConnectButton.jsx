@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useConnectWallet } from "@web3-onboard/react";
 import * as Sentry from "@sentry/react";
 
-import ChainModal from "./ChainModal.jsx";
+import { ChainModal } from "./ChainModal";
 
 export const ConnectButton = () => {
   const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();

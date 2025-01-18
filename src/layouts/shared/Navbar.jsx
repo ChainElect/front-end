@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import AuthContext from "../../context/AuthContext";
-import { ConnectButton } from "../button/ConnectButton";
+import { AuthContext } from "../../context/AuthContext";
+import { ConnectButton } from "../../components/button/ConnectButton";
 
 export const Navbar = () => {
   const { isLoggedIn, isAdmin, logout } = useContext(AuthContext);
