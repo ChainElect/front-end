@@ -2,5 +2,21 @@
     "welcome": "Welcome to",
     "selectLanguage": "Select your preferred language",
     "login": "Login",
-    "register": "Register your identity"
-  }
+    "register": "Register your identity",
+    "footer": {
+        "description": "Your solution for transparent and secure online elections.",
+        "linksTitle": "Links",
+        "about": "About Us",
+        "resources": "Resources",
+        "voting": "Voting",
+        "results": "Results",
+        "helpTitle": "Help",
+        "faq": "FAQ",
+        "contact": "Contact Us",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Use",
+        "followUsTitle": "Follow Us",
+        "followDescription": "Stay updated with the latest news and updates.",
+        "copyRight": "© 2024 ChainElect. All rights reserved."
+    }
+}

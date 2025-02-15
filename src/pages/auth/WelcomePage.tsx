@@ -1,12 +1,11 @@
-// src/pages/auth/WelcomePage.jsx
-import React from "react";
+import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@components/LanguageSelector/LanguageSelector";
 import { ReactComponent as Logo } from "@assets/svgs/otaku-bro.svg";
-import { ActionButton } from "@components/button/ActionButton";
-import { AnimatedButton } from "@components/button/AnimatedButton";
+import { ActionButton } from "@theme/buttons/ActionButton";
+import { AnimatedButton } from "@theme/buttons/AnimatedButton";
 
-export const WelcomePage = () => {
+export const WelcomePage: FC = () => {
   const { t } = useTranslation();
 
   return (

@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "ESNext",
+      "jsx": "react",
+      "strict": true,
+      "moduleResolution": "node",
+      "baseUrl": "src",
+      "paths": {
+        "@components/*": ["components/*"],
+        "@assets/*": ["assets/*"],
+        "@theme/*": ["theme/*"],
+      },
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "build"]
+  }

@@ -1,7 +1,6 @@
-// src/components/LoginButton.jsx
-import React from "react";
+import React, { FC } from "react";
 
-export const AnimatedButton = () => {
+export const AnimatedButton: FC = () => {
   return (
     <button
       className="
