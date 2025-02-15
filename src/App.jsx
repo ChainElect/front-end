@@ -24,6 +24,7 @@ import { VotingGuide } from "./pages/guide/VotingGuide";
 import { ConnectWalletGuide } from "./pages/guide/ConnectWallet";
 import { ResultsGuide } from "./pages/guide/ResultsGuide";
 import { Footer } from "./layouts/shared/Footer";
+import { WelcomePage } from "./pages/auth/WelcomePage";
 // change from env file
 const API_KEY = process.env.REACT_APP_ALCHEMY_API_KEY;
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
@@ -52,6 +53,7 @@ export const App = () => {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center min-w-80">
         <Routes>
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/connect" element={<RegisterForm />} />
           <Route path="/main" element={<MainPage />} />
