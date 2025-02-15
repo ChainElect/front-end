@@ -39,7 +39,7 @@ export default [
     },
     rules: {
       "no-console": "warn",
-      "react/jsx-no-bind": "warn",
+      "react/jsx-no-bind": "off",
       "react/no-array-index-key": "warn",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
