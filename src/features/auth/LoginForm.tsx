@@ -1,9 +1,11 @@
-// src/components/Login.js
 import React, { useState, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@context/AuthContext";
 import { AuthService } from "services/authService";
 import { ERROR_MESSAGES } from "@utils/messages/errorMessages";
+import { ConnectButton } from "@components/button/ConnectButton";
+import { FaEthereum, FaFingerprint, FaLock } from "react-icons/fa";
+import { useThemeColors } from "@hooks/useThemeColors";
 
 export const LoginForm = () => {
   const [idNumber, setIdNumber] = useState("");
@@ -11,14 +13,16 @@ export const LoginForm = () => {
   const [error, setError] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { primary, secondary, text, background, border, accent } =
+    useThemeColors();
 
   const handleLogin = useCallback(async () => {
     if (idNumber && password) {
       try {
         const response = await AuthService.loginUser({ idNumber, password });
         const token = response.data.token;
-        login(token); // Trigger login by setting the token
-        navigate("/"); // Redirect to user page
+        login(token);
+        navigate("/");
       } catch (error) {
         setError(ERROR_MESSAGES.LOGIN_FAILED.message);
       }
@@ -27,74 +31,123 @@ export const LoginForm = () => {
     }
   }, [idNumber, password, login, navigate]);
 
-  const handleIdNumberChange = useCallback((e: any) => {
-    setIdNumber(e.target.value);
-  }, []);
-
-  const handlePasswordChange = useCallback((e: any) => {
-    setPassword(e.target.value);
-  }, []);
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold text-center text-purple-900">
-          Вход в системата
+    <div
+      className="flex items-center justify-center min-h-screen"
+      style={{
+        background: `linear-gradient(135deg, ${background}, ${border})`,
+      }}
+    >
+      <div
+        className="w-full max-w-md p-8 space-y-6 backdrop-blur-xl shadow-xl border rounded-2xl"
+        style={{
+          background: `color-mix(in srgb, ${background} 85%, transparent)`,
+          borderColor: `color-mix(in srgb, ${border} 40%, transparent)`,
+        }}
+      >
+        {/* Title */}
+        <h2
+          className="text-2xl font-bold text-center"
+          style={{ color: primary }}
+        >
+          Вход в ChainElect
         </h2>
-        <p className="text-sm text-gray-500 text-center">
-          Моля, влезте с номер на лична карта и парола.
+        <p className="text-sm text-center opacity-80" style={{ color: text }}>
+          Влезте със своя документ за самоличност или Web3 портфейл
         </p>
 
+        {/* Form Inputs */}
         <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="idNumber"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Номер на лична карта
-            </label>
+          {/* ID Input */}
+          <div className="relative">
             <input
               type="text"
               id="idNumber"
+              placeholder="Номер на лична карта"
               value={idNumber}
-              onChange={handleIdNumberChange}
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-              required
+              onChange={(e) => setIdNumber(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
+              style={{
+                background: background,
+                borderColor: `color-mix(in srgb, ${border} 30%, transparent)`,
+                color: text,
+              }}
+            />
+            <FaFingerprint
+              className="absolute right-4 top-3"
+              style={{ color: accent }}
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Парола
-            </label>
+          {/* Password Input */}
+          <div className="relative">
             <input
               type="password"
               id="password"
+              placeholder="Парола"
               value={password}
-              onChange={handlePasswordChange}
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
-              required
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
+              style={{
+                background: background,
+                borderColor: `color-mix(in srgb, ${border} 30%, transparent)`,
+                color: text,
+              }}
+            />
+            <FaLock
+              className="absolute right-4 top-3"
+              style={{ color: accent }}
             />
           </div>
 
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+          {/* Error Message */}
+          {error && (
+            <p className="text-sm text-center" style={{ color: "red" }}>
+              {error}
+            </p>
+          )}
 
+          {/* Login Button */}
           <button
             onClick={handleLogin}
-            className="w-full px-4 py-2 mt-2 text-white bg-purple-900 rounded-md hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-900"
+            className="w-full px-4 py-3 font-semibold rounded-lg transition-all"
+            style={{
+              background: `linear-gradient(to right, ${primary}, ${secondary})`,
+              color: "white",
+            }}
           >
             Вход
           </button>
         </div>
 
-        <div className="flex items-center justify-between text-xs text-gray-500 mt-4">
-          <a href="/register" className="hover:underline">
+        {/* OR Divider */}
+        <div className="relative flex justify-center">
+          <span className="px-4 text-sm opacity-70" style={{ color: text }}>
+            или
+          </span>
+          <div className="absolute top-3 w-full border-t opacity-30" />
+        </div>
+
+        {/* Web3 Wallet Login */}
+        <ConnectButton
+          className={`w-full py-3 rounded-lg hover:opacity-90 bg-gradient-to-r from-[${primary}] to-[${secondary}] text-white`}
+          label={
+            <>
+              <FaEthereum className="inline-block mr-2" /> Вход с Web3 Wallet
+            </>
+          }
+        />
+
+        {/* Footer Links */}
+        <div className="flex items-center justify-between text-xs opacity-80">
+          <a
+            href="/register"
+            className="hover:underline"
+            style={{ color: text }}
+          >
             Нямате профил? Регистрация
           </a>
-          <a href="/faq" className="hover:underline">
+          <a href="/faq" className="hover:underline" style={{ color: text }}>
             Помощ / ЧЗВ
           </a>
         </div>

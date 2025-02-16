@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { useThemeColors } from "@hooks/useThemeColors";
 
 export const FAQ = () => {
-  const [openQuestion, setOpenQuestion] = useState(null);
+  const [openQuestion, setOpenQuestion] = useState(null); // ✅ Remove <number>
+
+  const { primary, secondary, text, background } = useThemeColors(); // ✅ Use Web3 theme colors
 
   const toggleQuestion = (index) => {
     setOpenQuestion(openQuestion === index ? null : index);
@@ -36,50 +41,74 @@ export const FAQ = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-purple-600 text-center">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -30 }}
+      transition={{ duration: 0.6 }}
+      className="min-h-screen py-16 px-6"
+      style={{ backgroundColor: background }}
+    >
+      <div className="max-w-5xl mx-auto">
+        <h1
+          className="text-4xl font-extrabold text-center bg-clip-text text-transparent"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${primary}, ${secondary})`,
+          }}
+        >
           Често задавани въпроси
         </h1>
-        <p className="text-lg text-gray-700 text-center mt-4">
+        <p
+          className="text-lg text-center opacity-90 mt-4"
+          style={{ color: text }}
+        >
           Намерете отговори на най-често задаваните въпроси относно ChainElect.
         </p>
 
         <div className="mt-12 space-y-6">
           {questions.map((q, index) => (
-            <div
+            <motion.div
               key={index}
-              className="bg-white rounded-lg shadow-md p-4 cursor-pointer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="rounded-lg border border-transparent bg-opacity-10 p-5 shadow-md cursor-pointer hover:border-primary/40 transition-all"
+              style={{
+                backgroundColor: `rgba(255, 255, 255, 0.05)`,
+                borderColor: openQuestion === index ? primary : "transparent",
+              }}
               onClick={() => toggleQuestion(index)}
             >
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-medium text-purple-600">
-                  {q.question}
-                </h3>
-                <span
-                  className={`transform transition-transform ${
-                    openQuestion === index ? "rotate-180" : "rotate-0"
-                  }`}
-                >
-                  ▼
-                </span>
-              </div>
-              {openQuestion === index && (
-                <p
-                  className="mt-4 text-gray-700 break-words"
+                <h3
+                  className="text-lg font-semibold"
                   style={{
-                    maxWidth: "600px", // Limits the width of the answer content
-                    wordWrap: "break-word", // Ensures long words break within the container
-                    overflowWrap: "break-word", // Similar to wordWrap, ensures proper wrapping
+                    color: openQuestion === index ? secondary : text,
                   }}
                 >
+                  {q.question}
+                </h3>
+                {openQuestion === index ? (
+                  <FaChevronUp className="text-secondary" />
+                ) : (
+                  <FaChevronDown className="text-primary" />
+                )}
+              </div>
+              {openQuestion === index && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-3 text-opacity-80"
+                  style={{ color: text }}
+                >
                   {q.answer}
-                </p>
+                </motion.p>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
