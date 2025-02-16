@@ -1,25 +1,26 @@
-/* Default Light Theme (Trustworthy Government Style) */
+/* Updated Color Variables */
+/* Light Theme (Government Trust) */
 :root {
-  --color-primary: #1E3A8A;      /* Deep navy blue (authoritative) */
-  --color-secondary: #2563EB;    /* Bright government blue */
-  --color-accent: #00C853;       /* Green for positive actions */
-  --color-text-light: #1E293B;    /* Dark gray for readability */
-  --color-text-dark: #F8FAFC;     /* Off-white for dark mode */
-  --color-background-light: #FFFFFF; 
-  --color-background-dark: #0F172A;
-  --color-border-light: #E2E8F0;
-  --color-border-dark: #334155;
+  --color-primary: #1A237E;       /* Deep authoritative navy */
+  --color-secondary: #1976D2;     /* Official government blue */
+  --color-accent: #2E7D32;        /* Mature green for trust */
+  --color-text-light: #263238;    /* Dark slate for readability */
+  --color-text-dark: #ECEFF1;     /* Soft off-white */
+  --color-background-light: #F5F7FA; /* Official document white */
+  --color-background-dark: #0D1117; /* Deep space blue */
+  --color-border-light: #CFD8DC;  /* Subtle gray borders */
+  --color-border-dark: #37474F;   /* Dark element separation */
 }
 
-/* Dark Mode (Web3 Style) */
+/* Dark Theme (Crypto Moon) */
 .dark {
-  --color-primary: #00A3FF;       /* Electric blue */
-  --color-secondary: #7C3AED;     /* Purple accent */
-  --color-accent: #00C853;        /* Keep green for consistency */
+  --color-primary: #6C5DD3;       /* Crypto purple */
+  --color-secondary: #00E0FF;     /* Cyber teal */
+  --color-accent: #FF6B6B;        /* Crypto coral */
   --color-text-light: #1E293B;
-  --color-text-dark: #F8FAFC;
-  --color-background-light: #0F172A; 
-  --color-background-dark: #020617;
-  --color-border-light: #334155;
-  --color-border-dark: #475569;
+  --color-text-dark: #E8F4FD;     /* Moon glow */
+  --color-background-light: #0A0F1A; /* Deep space */
+  --color-background-dark: #020617; /* Cosmic void */
+  --color-border-light: #2D3B4D;  /* Nebula borders */
+  --color-border-dark: #455A64;
 }

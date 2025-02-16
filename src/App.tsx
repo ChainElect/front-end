@@ -52,36 +52,34 @@ export const App = () => {
     <CustomThemeProvider>
       <Router>
         <Navbar />
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center min-w-80">
-          <Routes>
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/welcome" element={<WelcomePage />} />
-            <Route path="/register" element={<RegisterForm />} />
-            <Route path="/connect" element={<RegisterForm />} />
-            <Route path="/main" element={<MainPage />} />
-            <Route path="/hero" element={<HeroSection />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            {/* <Route path="/user" element={<UserDashboard />} /> */}
-            <Route path="/results" element={<ElectionResults />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/voting" element={<VotingPage />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfUse />} />
-            <Route path="/adminfunc" element={<AdminFunc />} />
-            <Route path="/onGoingElections" element={<OngoingElections />} />
-            <Route path="/guide/voting" element={<VotingGuide />} />
-            <Route
-              path="/guide/connect-wallet"
-              element={<ConnectWalletGuide />}
-            />
-            <Route path="/guide/results" element={<ResultsGuide />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/welcome" element={<WelcomePage />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/connect" element={<RegisterForm />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/hero" element={<HeroSection />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          {/* <Route path="/user" element={<UserDashboard />} /> */}
+          <Route path="/results" element={<ElectionResults />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/voting" element={<VotingPage />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfUse />} />
+          <Route path="/adminfunc" element={<AdminFunc />} />
+          <Route path="/onGoingElections" element={<OngoingElections />} />
+          <Route path="/guide/voting" element={<VotingGuide />} />
+          <Route
+            path="/guide/connect-wallet"
+            element={<ConnectWalletGuide />}
+          />
+          <Route path="/guide/results" element={<ResultsGuide />} />
+        </Routes>
         <Footer />
       </Router>
     </CustomThemeProvider>

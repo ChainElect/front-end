@@ -5,6 +5,7 @@ export const useThemeColors = () => {
 
   return {
     primary: theme.mode === "dark" ? "var(--color-primary)" : "var(--color-primary)",
+    secondary: theme.mode === "dark" ? "var(--color-secondary)" : "var(--color-secondary)",
     text: theme.mode === "dark" ? "var(--color-text-dark)" : "var(--color-text-light)",
     background: theme.mode === "dark" ? "var(--color-background-dark)" : "var(--color-background-light)",
     border: theme.mode === "dark" ? "var(--color-border-dark)" : "var(--color-border-light)",

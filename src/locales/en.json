@@ -5,18 +5,21 @@
     "register": "Register your identity",
     "footer": {
         "description": "Your solution for transparent and secure online elections.",
-        "linksTitle": "Links",
-        "about": "About Us",
+        "protocol": "Protocol",
         "resources": "Resources",
-        "voting": "Voting",
-        "results": "Results",
-        "helpTitle": "Help",
+        "community": "Community",
+        "connect": "Connect Wallet",
+        "docs": "Documentation",
+        "whitepaper": "Whitepaper",
+        "audits": "Security Audits",
+        "governance": "Governance",
+        "blog": "Blog",
+        "developers": "Developers",
         "faq": "FAQ",
         "contact": "Contact Us",
         "privacy": "Privacy Policy",
         "terms": "Terms of Use",
-        "followUsTitle": "Follow Us",
-        "followDescription": "Stay updated with the latest news and updates.",
+        "followUs": "Follow Us",
         "copyRight": "© 2024 ChainElect. All rights reserved."
     },
     "navbar": {
@@ -31,5 +34,28 @@
         "login": "Login",
         "register": "Register",
         "logout": "Logout"
-      }
+    },
+    "home": {
+        "heroTitle": "Welcome to",
+        "heroSubtitle": "Transparent, secure and trustworthy voting process through blockchain technology",
+        "ctaVote": "Vote Now",
+        "featuresTitle": "Why Choose ChainElect?",
+        "features": {
+            "transparency": {
+                "title": "Transparency",
+                "description": "Every vote is recorded on blockchain and auditable while maintaining anonymity"
+            },
+            "security": {
+                "title": "Security",
+                "description": "Blockchain ensures votes cannot be tampered with"
+            },
+            "privacy": {
+                "title": "Privacy",
+                "description": "We protect your personal data while voting"
+            }
+        },
+        "ctaTitle": "Be Part of the Change!",
+        "ctaSubtitle": "Join us and make your vote matter",
+        "ctaLearnMore": "Learn More"
+    }
 }
