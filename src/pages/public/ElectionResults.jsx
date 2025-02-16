@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useWallets } from "@web3-onboard/react";
 import { ethers } from "ethers";
-
+import { useThemeColors } from "@hooks/useThemeColors";
 import {
   ERC20_ABI,
   ERC20_ADDRESS,
 } from "../../utils/wallet/walletConstants.js";
+import { FaVoteYea, FaChartPie, FaUsers } from "react-icons/fa";
 
 export const ElectionResults = () => {
+  const { primary, secondary, text, background, border } = useThemeColors();
   const [parties, setParties] = useState([]);
   const [totalVotes, setTotalVotes] = useState(0);
-  const [voterTurnout, setVoterTurnout] = useState(0); // Percentage
+  const [voterTurnout, setVoterTurnout] = useState(0);
   const connectedWallets = useWallets();
-  const totalEligibleVoters = 150000; // Hardcoded total eligible voters
+  const totalEligibleVoters = 150000;
 
   const fetchResults = async () => {
     try {
-      const injectedProvider = connectedWallets[0].provider;
+      const injectedProvider = connectedWallets[0]?.provider;
+      if (!injectedProvider) return;
+
       const provider = new ethers.providers.Web3Provider(injectedProvider);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
       const electionCount = await contract.electionCount();
-
-      // Fetch election results using the getResults function
       const electionResults = await contract.getResults(electionCount);
 
-      // Map the results and calculate total votes
       let calculatedTotalVotes = 0;
       const formattedParties = electionResults.map((party) => {
         const votes = parseInt(party.voteCount.toString(), 10);
@@ -34,18 +35,17 @@ export const ElectionResults = () => {
 
         return {
           name: party.name,
-          votes: votes,
-          color: getPartyColor(party.name), // Assign hardcoded color based on name
+          votes,
+          color: getPartyColor(party.name),
+          icon: getPartyIcon(party.name),
         };
       });
 
-      // Calculate voter turnout
       const calculatedVoterTurnout = (
         (calculatedTotalVotes / totalEligibleVoters) *
         100
       ).toFixed(1);
 
-      // Update state
       setParties(formattedParties);
       setTotalVotes(calculatedTotalVotes);
       setVoterTurnout(calculatedVoterTurnout);
@@ -54,33 +54,62 @@ export const ElectionResults = () => {
     }
   };
 
-  // Assign hardcoded colors based on party name (fallback to gray)
   const getPartyColor = (name) => {
     const colorMapping = {
-      "Партия А": "bg-blue-500",
-      "Партия Б": "bg-red-500",
-      "Партия В": "bg-green-500",
-      "Партия Г": "bg-yellow-500",
+      "Партия А": primary,
+      "Партия Б": secondary,
+      "Партия В": "var(--color-accent)",
+      "Партия Г": "var(--color-warning)",
     };
-    return colorMapping[name] || "bg-gray-500";
+    return colorMapping[name] || "var(--color-border-light)";
+  };
+
+  const getPartyIcon = (name) => {
+    const iconMapping = {
+      "Партия А": <FaVoteYea />,
+      "Партия Б": <FaChartPie />,
+      "Партия В": <FaUsers />,
+      "Партия Г": <FaVoteYea />,
+    };
+    return iconMapping[name] || <FaUsers />;
   };
 
   useEffect(() => {
-    fetchResults(); // Load results when the component mounts
+    fetchResults();
   }, []);
 
   const renderVoteBar = (party) => {
-    const votePercentage = ((party.votes / totalVotes) * 100).toFixed(1);
+    const votePercentage = totalVotes
+      ? ((party.votes / totalVotes) * 100).toFixed(1)
+      : 0;
     return (
-      <div key={party.name} className="flex items-center space-x-2">
-        <div className="text-gray-700 font-semibold w-24">{party.name}</div>
-        <div className="flex-1 bg-gray-200 h-5 rounded-md">
+      <div
+        key={party.name}
+        className="flex items-center space-x-3 py-3 px-4 rounded-xl transition-transform hover:scale-105 shadow-md"
+        style={{
+          backgroundColor: `color-mix(in srgb, ${background} 85%, transparent)`,
+          border: `1px solid ${border}`,
+        }}
+      >
+        <div
+          className="p-2 rounded-full shadow-lg text-xl"
+          style={{ color: party.color }}
+        >
+          {party.icon}
+        </div>
+        <div className="w-24 font-semibold" style={{ color: text }}>
+          {party.name}
+        </div>
+        <div className="flex-1 bg-border-light dark:bg-border-dark h-6 rounded-lg">
           <div
-            className={`${party.color} h-5 rounded-md`}
-            style={{ width: `${votePercentage}%` }}
+            className="h-6 rounded-lg transition-all"
+            style={{
+              width: `${votePercentage}%`,
+              backgroundColor: party.color,
+            }}
           ></div>
         </div>
-        <div className="w-16 text-right text-gray-700 font-semibold">
+        <div className="w-16 text-right font-semibold" style={{ color: text }}>
           {votePercentage}%
         </div>
       </div>
@@ -88,42 +117,65 @@ export const ElectionResults = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg space-y-6">
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          Резултати от изборите: Гласове в реално време
+    <div
+      className="py-12 min-h-screen flex items-center justify-center"
+      style={{ backgroundColor: background }}
+    >
+      <div
+        className="max-w-4xl w-full p-8 rounded-2xl shadow-xl backdrop-blur-lg text-center"
+        style={{
+          backgroundColor: `rgba(255, 255, 255, 0.1)`,
+          border: `1px solid ${border}`,
+        }}
+      >
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Резултати от изборите
         </h1>
-        <p className="text-center text-gray-500">
+        <p className="opacity-80 mt-2" style={{ color: text }}>
           Последно обновяване: {new Date().toLocaleString()}
         </p>
 
-        {/* Summary for voter turnout */}
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold text-gray-800">
+        {/* Voter Turnout Section */}
+        <div
+          className="mt-6 p-6 rounded-xl shadow-lg"
+          style={{
+            backgroundColor: `color-mix(in srgb, ${background} 90%, transparent)`,
+            border: `1px solid ${border}`,
+          }}
+        >
+          <h2 className="text-2xl font-semibold" style={{ color: text }}>
             Общо гласове: {totalVotes}
           </h2>
-          <div className="flex items-center space-x-2">
-            <span className="text-gray-700">Избирателна активност:</span>
-            <div className="flex-1 bg-gray-200 h-5 rounded-md">
+          <div className="flex items-center space-x-3 mt-3">
+            <span className="text-lg" style={{ color: text }}>
+              Избирателна активност:
+            </span>
+            <div className="flex-1 bg-border-light dark:bg-border-dark h-6 rounded-lg">
               <div
-                className="bg-purple-500 h-5 rounded-md"
-                style={{ width: `${voterTurnout}%` }}
+                className="h-6 rounded-lg transition-all"
+                style={{ width: `${voterTurnout}%`, backgroundColor: primary }}
               ></div>
             </div>
-            <span className="text-gray-700">{voterTurnout}%</span>
+            <span className="text-lg font-semibold" style={{ color: text }}>
+              {voterTurnout}%
+            </span>
           </div>
         </div>
 
         {/* Votes for parties */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Гласове за партии
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold" style={{ color: text }}>
+            Разпределение на гласовете
           </h2>
-          {parties.length > 0 ? (
-            parties.map((party) => renderVoteBar(party))
-          ) : (
-            <p className="text-center text-gray-500">Няма налични партии.</p>
-          )}
+          <div className="mt-6 space-y-4">
+            {parties.length > 0 ? (
+              parties.map((party) => renderVoteBar(party))
+            ) : (
+              <p className="text-center opacity-80" style={{ color: text }}>
+                Няма налични партии.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
