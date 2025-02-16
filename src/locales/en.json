@@ -18,5 +18,18 @@
         "followUsTitle": "Follow Us",
         "followDescription": "Stay updated with the latest news and updates.",
         "copyRight": "© 2024 ChainElect. All rights reserved."
-    }
+    },
+    "navbar": {
+        "brand": "ChainElect",
+        "home": "Home",
+        "voting": "Voting",
+        "results": "Results",
+        "resources": "Resources",
+        "about": "About Us",
+        "admin": "Admin",
+        "profile": "Profile",
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout"
+      }
 }

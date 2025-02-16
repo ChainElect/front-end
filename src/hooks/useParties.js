@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 
 import { PartyService } from "../services/partyService";
-import { ERROR_MESSAGES } from "../utilities/messages/errorMessages";
+import { ERROR_MESSAGES } from "../utils/messages/errorMessages";
 
 export const useParties = () => {
   const [parties, setParties] = useState([]);

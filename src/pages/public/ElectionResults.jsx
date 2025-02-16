@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import {
   ERC20_ABI,
   ERC20_ADDRESS,
-} from "../../utilities/wallet/walletConstants.js";
+} from "../../utils/wallet/walletConstants.js";
 
 export const ElectionResults = () => {
   const [parties, setParties] = useState([]);

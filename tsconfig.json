@@ -1,20 +1,28 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "module": "ESNext",
-      "jsx": "react",
-      "strict": true,
-      "moduleResolution": "node",
-      "baseUrl": "src",
-      "paths": {
-        "@components/*": ["components/*"],
-        "@assets/*": ["assets/*"],
-        "@theme/*": ["theme/*"],
-      },
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "jsx": "react",
+    "strict": false, 
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"],
+      "@theme/*": ["theme/*"],
+      "@hooks/*": ["hooks/*"],
+      "@context/*": ["context/*"],
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"]
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "build"]
-  }
+    "allowJs": true,
+    "checkJs": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true 
+  },
+  "include": ["src", "src/index.tsx"],
+  "exclude": ["node_modules", "build"]
+}

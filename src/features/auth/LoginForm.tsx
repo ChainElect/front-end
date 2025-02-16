@@ -1,10 +1,9 @@
 // src/components/Login.js
 import React, { useState, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { AuthContext } from "../../context/AuthContext.js";
-import { AuthService } from "../../services/authService.js";
-import { ERROR_MESSAGES } from "../../utilities/messages/errorMessages.js";
+import { AuthContext } from "@context/AuthContext";
+import { AuthService } from "services/authService";
+import { ERROR_MESSAGES } from "@utils/messages/errorMessages";
 
 export const LoginForm = () => {
   const [idNumber, setIdNumber] = useState("");
@@ -28,11 +27,11 @@ export const LoginForm = () => {
     }
   }, [idNumber, password, login, navigate]);
 
-  const handleIdNumberChange = useCallback((e) => {
+  const handleIdNumberChange = useCallback((e: any) => {
     setIdNumber(e.target.value);
   }, []);
 
-  const handlePasswordChange = useCallback((e) => {
+  const handlePasswordChange = useCallback((e: any) => {
     setPassword(e.target.value);
   }, []);
 

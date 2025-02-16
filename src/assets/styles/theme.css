@@ -1,0 +1,25 @@
+/* Default Light Theme (Trustworthy Government Style) */
+:root {
+  --color-primary: #1E3A8A;      /* Deep navy blue (authoritative) */
+  --color-secondary: #2563EB;    /* Bright government blue */
+  --color-accent: #00C853;       /* Green for positive actions */
+  --color-text-light: #1E293B;    /* Dark gray for readability */
+  --color-text-dark: #F8FAFC;     /* Off-white for dark mode */
+  --color-background-light: #FFFFFF; 
+  --color-background-dark: #0F172A;
+  --color-border-light: #E2E8F0;
+  --color-border-dark: #334155;
+}
+
+/* Dark Mode (Web3 Style) */
+.dark {
+  --color-primary: #00A3FF;       /* Electric blue */
+  --color-secondary: #7C3AED;     /* Purple accent */
+  --color-accent: #00C853;        /* Keep green for consistency */
+  --color-text-light: #1E293B;
+  --color-text-dark: #F8FAFC;
+  --color-background-light: #0F172A; 
+  --color-background-dark: #020617;
+  --color-border-light: #334155;
+  --color-border-dark: #475569;
+}

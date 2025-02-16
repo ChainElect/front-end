@@ -4,34 +4,37 @@ import { LanguageSelector } from "@components/LanguageSelector/LanguageSelector"
 import { ReactComponent as Logo } from "@assets/svgs/otaku-bro.svg";
 import { ActionButton } from "@theme/buttons/ActionButton";
 import { AnimatedButton } from "@theme/buttons/AnimatedButton";
+import { useThemeColors } from "@hooks/useThemeColors";
 
 export const WelcomePage: FC = () => {
   const { t } = useTranslation();
+  const { background, text } = useThemeColors();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6 min-w-full">
-      {/* Illustration */}
-      <Logo className="w-40 h-auto mb-6" />
+    <div
+      className="flex flex-col items-center justify-center min-h-screen p-6 min-w-full"
+      style={{ backgroundColor: background }}
+    >
+      <Logo className="w-48 h-auto mb-8 text-primary" />
 
-      {/* Title */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">
+      <h1 className="text-4xl font-bold mb-4" style={{ color: text }}>
         {t("welcome")} <span className="text-primary">ChainElect</span>
       </h1>
 
-      {/* Subtitle */}
-      <p className="text-center text-gray-600 mb-6">{t("selectLanguage")}</p>
+      <p
+        className="text-center text-lg mb-8 opacity-80"
+        style={{ color: text }}
+      >
+        {t("selectLanguage")}
+      </p>
 
-      {/* Language Selector */}
-      <div className="mb-8">
+      <div className="mb-12">
         <LanguageSelector />
       </div>
 
-      {/* Auth Buttons */}
-      <div className="flex flex-col items-center w-full max-w-xs">
+      <div className="flex flex-col items-center w-full max-w-xs gap-6">
         <AnimatedButton />
-
-        <span className="text-gray-500 mb-3">Or</span>
-
+        <div className="h-px w-full bg-border-light dark:bg-border-dark" />
         <ActionButton />
       </div>
     </div>

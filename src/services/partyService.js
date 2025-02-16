@@ -2,9 +2,9 @@
 import { ethers } from "ethers";
 import * as Sentry from "@sentry/react";
 
-import { ERROR_MESSAGES } from "../utilities/messages/errorMessages";
-import { BACKEND_DATA_API_ENDPOINTS } from "../utilities/endpoints";
-import { ERC20_ABI, ERC20_ADDRESS } from "../utilities/wallet/walletConstants";
+import { ERROR_MESSAGES } from "../utils/messages/errorMessages";
+import { BACKEND_DATA_API_ENDPOINTS } from "../utils/endpoints";
+import { ERC20_ABI, ERC20_ADDRESS } from "../utils/wallet/walletConstants";
 
 export const PartyService = {
   async fetchParties() {

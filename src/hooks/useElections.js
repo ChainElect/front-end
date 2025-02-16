@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 
 import { ElectionService } from "../services/electionService";
-import { ERROR_MESSAGES } from "../utilities/messages/errorMessages";
+import { ERROR_MESSAGES } from "../utils/messages/errorMessages";
 
 export const useElections = () => {
   const [elections, setElections] = useState([]);

@@ -2,8 +2,8 @@
 import { ethers } from "ethers";
 import * as Sentry from "@sentry/react";
 
-import { ERROR_MESSAGES } from "../utilities/messages/errorMessages";
-import { ERC20_ABI, ERC20_ADDRESS } from "../utilities/wallet/walletConstants";
+import { ERROR_MESSAGES } from "../utils/messages/errorMessages";
+import { ERC20_ABI, ERC20_ADDRESS } from "../utils/wallet/walletConstants";
 
 export const ElectionService = {
   async createElection(

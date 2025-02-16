@@ -1,7 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export const ModalContent = ({
+// Define Props Interface
+interface ModalContentProps {
+  settingChain: boolean;
+  handleDisconnect: () => void;
+  handleSwitch: () => void;
+}
+
+export const ModalContent: React.FC<ModalContentProps> = ({
   settingChain,
   handleDisconnect,
   handleSwitch,
@@ -21,9 +27,3 @@ export const ModalContent = ({
     </div>
   </div>
 );
-
-ModalContent.propTypes = {
-  settingChain: PropTypes.bool.isRequired,
-  handleDisconnect: PropTypes.func.isRequired,
-  handleSwitch: PropTypes.func.isRequired,
-};

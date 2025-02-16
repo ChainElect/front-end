@@ -18,5 +18,18 @@
         "followUsTitle": "Последвайте ни",
         "followDescription": "Бъдете в течение с последните новини и актуализации.",
         "copyRight": "© 2024 ChainElect. Всички права запазени."
-    }
+    },
+    "navbar": {
+        "brand": "ChainElect",
+        "home": "Начало",
+        "voting": "Гласуване",
+        "results": "Резултати",
+        "resources": "Ресурси",
+        "about": "За нас",
+        "admin": "Админ",
+        "profile": "Профил",
+        "login": "Вход",
+        "register": "Регистрация",
+        "logout": "Изход"
+      }
 }

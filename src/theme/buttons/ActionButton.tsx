@@ -1,3 +1,4 @@
+import { useThemeColors } from "@hooks/useThemeColors";
 import React, { FC } from "react";
 
 export interface ActionButtonProps {
@@ -7,45 +8,42 @@ export interface ActionButtonProps {
 
 export const ActionButton: FC<ActionButtonProps> = ({
   text = "Register your identity",
-  onClick = () => {},
+  onClick,
 }) => {
+  const { primary } = useThemeColors();
+
   return (
     <button
       onClick={onClick}
-      aria-label={text}
-      className="
-        relative
-        inline-flex
-        items-center
-        bg-primary
-        text-white
-        rounded-full
-        px-6
-        py-3
+      className={`
+        relative overflow-hidden
+        inline-flex items-center
+        rounded-full px-8 py-4
+        font-semibold
         transition-all
         duration-300
-        ease-in-out
-        group
-        focus:outline-none
-        focus:ring-2 focus:ring-primary focus:ring-offset-2
         hover:pr-14
-      "
+        focus:outline-none focus:ring-2 focus:ring-offset-2
+        border border-transparent
+        shadow-sm
+        group
+      `}
+      style={{
+        backgroundColor: primary,
+        color: "white", // Force white text
+        borderColor: `color-mix(in srgb, ${primary} 80%, transparent)`,
+        boxShadow: `0 4px 14px color-mix(in srgb, ${primary} 30%, transparent)`,
+      }}
     >
-      <span className="transition-all duration-300 ease-in-out">{text}</span>
-      {/* Arrow icon, absolutely placed */}
+      <span className="z-10 transition-all">{text}</span>
       <span
-        className="
-          absolute
-          right-8
-          opacity-0
-          transition-opacity
-          duration-300
-          ease-in-out
-          group-hover:opacity-100
-        "
+        className="absolute right-4 opacity-0 transition-all group-hover:opacity-100 group-hover:right-6"
+        style={{ color: "white" }} // Explicit white color
       >
         →
       </span>
+      {/* Animated background */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity bg-white" />
     </button>
   );
 };

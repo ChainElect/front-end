@@ -64,7 +64,7 @@ export default [
             "builtin",
             "external",
             "internal",
-            ["parent", "sibling", "index"],
+            ["parent", "sibling", "index.tsx"],
           ],
           "newlines-between": "always",
         },
