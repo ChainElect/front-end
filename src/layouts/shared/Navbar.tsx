@@ -5,6 +5,7 @@ import { AuthContext } from "@context/AuthContext";
 import { ConnectButton } from "@components/button/ConnectButton";
 import { ThemeToggle } from "@theme/buttons/ThemeToggle";
 import { useThemeColors } from "@hooks/useThemeColors";
+import { NavbarLanguageSelector1 } from "@components/LanguageSelector/NavbarLanguageSelector1";
 
 export const Navbar: FC = () => {
   const { t } = useTranslation();
@@ -160,6 +161,7 @@ export const Navbar: FC = () => {
               </>
             )}
             <ThemeToggle />
+            <NavbarLanguageSelector1 />
           </div>
         </div>
 
