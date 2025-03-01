@@ -1,61 +1,188 @@
 {
-    "welcome": "Welcome to",
-    "selectLanguage": "Select your preferred language",
+  "welcome": "Welcome to",
+  "selectLanguage": "Select your preferred language",
+  "login": "Login",
+  "register": "Register your identity",
+  "footer": {
+    "about":"About us",
+    "description": "Your solution for transparent and secure online elections.",
+    "protocol": "Protocol",
+    "resources": "Resources",
+    "community": "Community",
+    "connect": "Connect Wallet",
+    "docs": "Documentation",
+    "whitepaper": "Whitepaper",
+    "audits": "Security Audits",
+    "governance": "Governance",
+    "blog": "Blog",
+    "developers": "Developers",
+    "faq": "FAQ",
+    "contact": "Contact Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "followUs": "Follow Us",
+    "copyRight": "© 2024 ChainElect. All rights reserved."
+  },
+  "navbar": {
+    "brand": "ChainElect",
+    "home": "Home",
+    "voting": "Voting",
+    "results": "Results",
+    "resources": "Resources",
+    "about": "About Us",
+    "admin": "Admin",
+    "profile": "Profile",
     "login": "Login",
-    "register": "Register your identity",
-    "footer": {
-        "description": "Your solution for transparent and secure online elections.",
-        "protocol": "Protocol",
-        "resources": "Resources",
-        "community": "Community",
-        "connect": "Connect Wallet",
-        "docs": "Documentation",
-        "whitepaper": "Whitepaper",
-        "audits": "Security Audits",
-        "governance": "Governance",
-        "blog": "Blog",
-        "developers": "Developers",
-        "faq": "FAQ",
-        "contact": "Contact Us",
-        "privacy": "Privacy Policy",
-        "terms": "Terms of Use",
-        "followUs": "Follow Us",
-        "copyRight": "© 2024 ChainElect. All rights reserved."
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "home": {
+    "heroTitle": "Welcome to",
+    "heroSubtitle": "Transparent, secure and trustworthy voting process through blockchain technology",
+    "ctaVote": "Vote Now",
+    "featuresTitle": "Why Choose ChainElect?",
+    "features": {
+      "transparency": {
+        "title": "Transparency",
+        "description": "Every vote is recorded on the blockchain and accessible for verification without compromising anonymity."
+      },
+      "security": {
+        "title": "Security",
+        "description": "Votes cannot be tampered with or manipulated."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "description": "We protect the personal data of all voters."
+      }
     },
-    "navbar": {
-        "brand": "ChainElect",
-        "home": "Home",
-        "voting": "Voting",
-        "results": "Results",
-        "resources": "Resources",
-        "about": "About Us",
-        "admin": "Admin",
-        "profile": "Profile",
-        "login": "Login",
-        "register": "Register",
-        "logout": "Logout"
-    },
-    "home": {
-        "heroTitle": "Welcome to",
-        "heroSubtitle": "Transparent, secure and trustworthy voting process through blockchain technology",
-        "ctaVote": "Vote Now",
-        "featuresTitle": "Why Choose ChainElect?",
-        "features": {
-            "transparency": {
-                "title": "Transparency",
-                "description": "Every vote is recorded on blockchain and auditable while maintaining anonymity"
-            },
-            "security": {
-                "title": "Security",
-                "description": "Blockchain ensures votes cannot be tampered with"
-            },
-            "privacy": {
-                "title": "Privacy",
-                "description": "We protect your personal data while voting"
-            }
-        },
-        "ctaTitle": "Be Part of the Change!",
-        "ctaSubtitle": "Join us and make your vote matter",
-        "ctaLearnMore": "Learn More"
+    "ctaTitle": "Be Part of the Change!",
+    "ctaSubtitle": "Join us and make your vote matter",
+    "ctaAboutUs": "About us",
+    "ctaDocs": "Documentation",
+    "ctaLearnMore": "Learn more"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Learn more about ChainElect and our mission",
+    "missionTitle": "Our Mission",
+    "missionDescription": "At ChainElect, we believe fair and transparent elections...",
+    "whatWeOffer": "What We Offer",
+    "teamTitle": "Our Team",
+    "teamDescription": "ChainElect is built by a team of innovators...",
+    "callToActionTitle": "Join Us",
+    "callToActionDescription": "Be part of the change! Support us in...",
+    "features": {
+      "transparency": {
+        "title": "Transparency",
+        "description": "Every vote is recorded on the blockchain..."
+      },
+      "security": {
+        "title": "Security",
+        "description": "Votes cannot be tampered with or manipulated."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "description": "We protect the personal data of all voters."
+      }
     }
+  },
+  "voting": {
+    "headerTitle": "Voting",
+    "headerSubtitle": "Select your party and cast your vote on the blockchain.",
+    "chooseParty": "Choose Party",
+    "voteButton": "Cast Your Vote",
+    "voteSubmittedMessage": "Your vote has been recorded!"
+  },
+  "electionResults": {
+    "headerTitle": "Election Results",
+    "lastUpdated": "Last updated:",
+    "loading": "Loading results...",
+    "error": "Error loading results.",
+    "totalVotes": "Total Votes: {count}",
+    "voterTurnoutLabel": "Voter Turnout:",
+    "voteDistributionTitle": "Vote Distribution",
+    "noParties": "No parties available."
+  },
+  "resources": {
+    "headerTitle": "Resources",
+    "headerSubtitle": "Useful information and guides for using ChainElect",
+    "tutorialsTitle": "User Guides",
+    "faqTitle": "Frequently Asked Questions",
+    "additionalResourcesTitle": "Additional Resources"
+  },
+  "resourcesData": {
+    "tutorials": [
+      {
+        "title": "How to vote with ChainElect",
+        "link": "/guide/voting",
+        "icon": "📘"
+      },
+      {
+        "title": "How to connect your crypto wallet",
+        "link": "/guide/connect-wallet",
+        "icon": "📘"
+      },
+      {
+        "title": "How to check election results",
+        "link": "/guide/results",
+        "icon": "📘"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How do I register on the platform?",
+        "answer": "You can register by providing your email and creating a password. Then follow the verification steps."
+      },
+      {
+        "question": "Is voting through ChainElect secure?",
+        "answer": "Yes! The platform uses blockchain technology, ensuring that votes cannot be manipulated."
+      },
+      {
+        "question": "How can I verify my vote?",
+        "answer": "After voting, you will receive a unique hash that you can use to verify your vote in the system."
+      }
+    ],
+    "additionalResources": [
+      {
+        "title": "Learn more about blockchain technology",
+        "link": "https://ethereum.org",
+        "icon": "🔗"
+      },
+      {
+        "title": "Install MetaMask",
+        "link": "https://metamask.io",
+        "icon": "🔗"
+      },
+      {
+        "title": "Contact us for more information",
+        "link": "/contact",
+        "icon": "🔗"
+      }
+    ]
+  },
+  "auth": {
+    "loginTitle": "Log in to ChainElect",
+    "loginSubtitle": "Sign in using your ID",
+    "idPlaceholder": "ID Number",
+    "passwordPlaceholder": "Password",
+    "loginButton": "Log In",
+    "orDivider": "or",
+    "web3LoginButton": "Login with Web3 Wallet",
+    "registerPrompt": "Don't have an account? Register",
+    "faqLink": "Help / FAQ",
+    "register": {
+      "title": "Register",
+      "subtitle": "Please fill out the registration form.",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "idNumber": "ID Number",
+      "phoneNumber": "Phone Number",
+      "registerButton": "Register",
+      "successTitle": "✅ Registration Successful!",
+      "successSubtitle": "You can now log in to your account.",
+      "loginLink": "Log In"
+    }
+  }
 }

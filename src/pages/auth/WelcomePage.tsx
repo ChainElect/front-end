@@ -2,8 +2,8 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@components/LanguageSelector/LanguageSelector";
 import { ReactComponent as Logo } from "@assets/svgs/otaku-bro.svg";
-import { ActionButton } from "@theme/buttons/ActionButton";
-import { AnimatedButton } from "@theme/buttons/AnimatedButton";
+import { ActionButton } from "@theme/src/components/buttons/ActionButton";
+import { AnimatedButton } from "@theme/src/components/buttons/AnimatedButton";
 import { useThemeColors } from "@hooks/useThemeColors";
 
 export const WelcomePage: FC = () => {

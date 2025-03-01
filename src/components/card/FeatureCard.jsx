@@ -1,17 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Card } from "@theme/src/components/cards/Card";
+import { Paragraph, Title } from "@theme/src/foundation/typography";
 
 export const FeatureCard = (props) => {
   const { title, description, icon } = props;
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow">
+    <Card
+      backgroundVariant="light"
+      className="hover:shadow-xl transition-shadow p-6 rounded-lg"
+    >
       <div className="flex items-center justify-center mb-4">
         <img src={icon} alt={`${title} icon`} className="h-12 w-12" />
       </div>
-      <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-    </div>
+      <Title as="h3" size="xl" className="mb-2">
+        {title}
+      </Title>
+      <Paragraph>{description}</Paragraph>
+    </Card>
   );
 };
 

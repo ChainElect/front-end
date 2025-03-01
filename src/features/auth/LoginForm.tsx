@@ -6,8 +6,10 @@ import { ERROR_MESSAGES } from "@utils/messages/errorMessages";
 import { ConnectButton } from "@components/button/ConnectButton";
 import { FaEthereum, FaFingerprint, FaLock } from "react-icons/fa";
 import { useThemeColors } from "@hooks/useThemeColors";
+import { useTranslation } from "react-i18next";
 
 export const LoginForm = () => {
+  const { t } = useTranslation();
   const [idNumber, setIdNumber] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,12 +34,7 @@ export const LoginForm = () => {
   }, [idNumber, password, login, navigate]);
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen"
-      style={{
-        background: `linear-gradient(135deg, ${background}, ${border})`,
-      }}
-    >
+    <div className="flex items-center justify-center min-h-screen">
       <div
         className="w-full max-w-md p-8 space-y-6 backdrop-blur-xl shadow-xl border rounded-2xl"
         style={{
@@ -50,10 +47,10 @@ export const LoginForm = () => {
           className="text-2xl font-bold text-center"
           style={{ color: primary }}
         >
-          Вход в ChainElect
+          {t("auth.loginTitle")}
         </h2>
         <p className="text-sm text-center opacity-80" style={{ color: text }}>
-          Влезте със своя документ за самоличност или Web3 портфейл
+          {t("auth.loginSubtitle")}
         </p>
 
         {/* Form Inputs */}
@@ -63,7 +60,7 @@ export const LoginForm = () => {
             <input
               type="text"
               id="idNumber"
-              placeholder="Номер на лична карта"
+              placeholder={t("auth.idPlaceholder")}
               value={idNumber}
               onChange={(e) => setIdNumber(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
@@ -84,7 +81,7 @@ export const LoginForm = () => {
             <input
               type="password"
               id="password"
-              placeholder="Парола"
+              placeholder={t("auth.passwordPlaceholder")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
@@ -116,27 +113,23 @@ export const LoginForm = () => {
               color: "white",
             }}
           >
-            Вход
+            {t("auth.loginButton")}
           </button>
         </div>
 
         {/* OR Divider */}
-        <div className="relative flex justify-center">
+        {/* <div className="relative flex justify-center">
           <span className="px-4 text-sm opacity-70" style={{ color: text }}>
-            или
+            {t("auth.orDivider")}
           </span>
           <div className="absolute top-3 w-full border-t opacity-30" />
-        </div>
+        </div> */}
 
         {/* Web3 Wallet Login */}
-        <ConnectButton
+        {/* <ConnectButton
           className={`w-full py-3 rounded-lg hover:opacity-90 bg-gradient-to-r from-[${primary}] to-[${secondary}] text-white`}
-          label={
-            <>
-              <FaEthereum className="inline-block mr-2" /> Вход с Web3 Wallet
-            </>
-          }
-        />
+          label={<>{t("auth.web3LoginButton")}</>}
+        /> */}
 
         {/* Footer Links */}
         <div className="flex items-center justify-between text-xs opacity-80">
@@ -145,10 +138,10 @@ export const LoginForm = () => {
             className="hover:underline"
             style={{ color: text }}
           >
-            Нямате профил? Регистрация
+            {t("auth.registerPrompt")}
           </a>
           <a href="/faq" className="hover:underline" style={{ color: text }}>
-            Помощ / ЧЗВ
+            {t("auth.faqLink")}
           </a>
         </div>
       </div>

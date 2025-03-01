@@ -2,41 +2,85 @@ import React, { Component, ReactNode } from "react";
 import { useThemeColors } from "@hooks/useThemeColors";
 import { FaExclamationTriangle } from "react-icons/fa";
 
+/**
+ * @interface ErrorBoundaryProps
+ * @description The props for the ErrorBoundary component.
+ */
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
 
+/**
+ * @interface ErrorBoundaryState
+ * @description The state for the ErrorBoundary component.
+ */
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
 }
 
+/**
+ * @class ErrorBoundary
+ * @description A React component that catches JavaScript errors anywhere in its child component tree,
+ * logs those errors, and displays a fallback UI.
+ */
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
+  /**
+   * @constructor
+   * @param {ErrorBoundaryProps} props - The component props.
+   */
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
+  /**
+   * @static
+   * @function getDerivedStateFromError
+   * @description Updates state so the next render shows the fallback UI.
+   * @param {Error} error - The error thrown.
+   * @returns {ErrorBoundaryState} The updated state with error information.
+   */
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
+  /**
+   * @function componentDidCatch
+   * @description Logs error information.
+   * @param {Error} error - The error thrown.
+   * @param {React.ErrorInfo} errorInfo - Additional error details.
+   */
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error("ErrorBoundary caught an error:", error, errorInfo);
+    // You can also log error details to an external service here.
   }
 
+  /**
+   * @function handleReload
+   * @description Reloads the current page.
+   */
   handleReload = () => {
     window.location.reload();
   };
 
+  /**
+   * @function handleGoHome
+   * @description Navigates the user to the home page.
+   */
   handleGoHome = () => {
     window.location.href = "/";
   };
 
-  render() {
+  /**
+   * @function render
+   * @description Renders the fallback UI if an error is caught, otherwise renders child components.
+   * @returns {ReactNode} The rendered component tree.
+   */
+  render(): ReactNode {
     if (this.state.hasError) {
       return (
         <ErrorFallback
@@ -49,7 +93,15 @@ export class ErrorBoundary extends Component<
   }
 }
 
-// Separate Error Fallback UI for Reusability
+/**
+ * @component ErrorFallback
+ * @description The fallback UI displayed when an error is caught.
+ *
+ * @param {Object} props - The component props.
+ * @param {() => void} props.onReload - Function to reload the page.
+ * @param {() => void} props.onGoHome - Function to navigate to the home page.
+ * @returns {JSX.Element} The fallback UI.
+ */
 const ErrorFallback: React.FC<{
   onReload: () => void;
   onGoHome: () => void;
@@ -89,3 +141,5 @@ const ErrorFallback: React.FC<{
     </div>
   );
 };
+
+export default ErrorBoundary;

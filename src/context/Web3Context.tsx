@@ -1,18 +1,40 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { init, Web3OnboardProvider } from "@web3-onboard/react"; // ✅ Ensure proper import
+import { init, Web3OnboardProvider } from "@web3-onboard/react";
 import injectedWallets from "@web3-onboard/injected-wallets";
 
 const API_KEY = process.env.REACT_APP_ALCHEMY_API_KEY;
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${API_KEY}`;
 
-const Web3Context = createContext<any>(null);
+/**
+ * @interface Web3ContextType
+ * @description Represents the structure of the Web3 context.
+ */
+interface Web3ContextType {
+  web3Onboard: any; // TODO: Replace `any` with a more specific type if available.
+  walletsAvailable: boolean;
+}
 
+/**
+ * @constant Web3Context
+ * @description React context for Web3 Onboard integration.
+ */
+const Web3Context = createContext<Web3ContextType | undefined>(undefined);
+
+/**
+ * @component Web3Provider
+ * @description Initializes and provides the Web3 Onboard instance along with wallet availability
+ * status to its children components.
+ *
+ * @param {Object} props - Component props.
+ * @param {ReactNode} props.children - Child components that require Web3 context.
+ * @returns {JSX.Element} The provider component wrapping its children with Web3 context.
+ */
 export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [web3Onboard, setWeb3Onboard] = useState<any>(null);
-  const [walletsAvailable, setWalletsAvailable] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [walletsAvailable, setWalletsAvailable] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -29,7 +51,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
 
       setWalletsAvailable(true);
 
-      // ✅ Initialize Web3 Onboard and pass it to `Web3OnboardProvider`
+      // Initialize Web3 Onboard instance
       const onboardInstance = init({
         connect: {
           autoConnectLastWallet: false,
@@ -65,4 +87,17 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useWeb3 = () => useContext(Web3Context);
+/**
+ * @function useWeb3
+ * @description Custom hook to access the Web3 context. Throws an error if used outside of a Web3Provider.
+ *
+ * @returns {Web3ContextType} The current Web3 context.
+ * @throws {Error} If the hook is used outside of the Web3Provider.
+ */
+export const useWeb3 = (): Web3ContextType => {
+  const context = useContext(Web3Context);
+  if (!context) {
+    throw new Error("useWeb3 must be used within a Web3Provider");
+  }
+  return context;
+};

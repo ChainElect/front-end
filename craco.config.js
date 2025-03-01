@@ -10,6 +10,9 @@ module.exports = {
       "@hooks": path.resolve(__dirname, "src/hooks/"),
       "@context": path.resolve(__dirname, "src/context/"),
       "@utils": path.resolve(__dirname, "src/utils/"),
+      "@config": path.resolve(__dirname, "src/config/"),
+      "@routes": path.resolve(__dirname, "src/routes/"),
+      "@layouts": path.resolve(__dirname, "src/layouts/"),
     },
   },
 };

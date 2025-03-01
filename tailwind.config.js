@@ -22,5 +22,12 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    { pattern: /text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)/ },
+    { pattern: /font-(normal|medium|semibold|bold)/ },
+    { pattern: /bg-(primary|accent|background|border)/ },
+    { pattern: /border-(primary|accent|background|border)/ },
+    { pattern: /text-(primary|accent|text|background|border)/ },
+  ],
   plugins: [],
 };
