@@ -27,7 +27,7 @@ import { VotingGuide } from "../pages/guide/VotingGuide";
 import { ConnectWalletGuide } from "../pages/guide/ConnectWallet";
 import { ResultsGuide } from "../pages/guide/ResultsGuide";
 import { WelcomePage } from "../pages/auth/WelcomePage";
-
+import { FinishedElections } from "pages/public/ElectionResults/FinishedElections";
 import { PageWrapper } from "@theme/PageWrapper";
 import { RegistrationFlow } from "features/registration/RegistrationFlow";
 
@@ -203,6 +203,14 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           }
         />
         <Route
+          path="/finishedElections"
+          element={
+            <PageWrapper>
+              <FinishedElections />
+            </PageWrapper>
+          }
+        />
+        <Route
           path="/guide/voting"
           element={
             <PageWrapper>
@@ -223,6 +231,22 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           element={
             <PageWrapper>
               <ResultsGuide />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/voting/:id"
+          element={
+            <PageWrapper>
+              <VotingPage />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/results/:id"
+          element={
+            <PageWrapper>
+              <ElectionResults />
             </PageWrapper>
           }
         />

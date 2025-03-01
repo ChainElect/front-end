@@ -1,91 +1,128 @@
-import React from "react";
-import { useThemeColors } from "@hooks/useThemeColors";
-import { Title } from "@theme/src/foundation/typography/Title";
-import { Paragraph } from "@theme/src/foundation/typography/Paragraph";
-import { Label } from "@theme/src/foundation/typography/Label";
-import { useElectionResultsData } from "./useElectionResults";
-import { getPartyColor, getPartyIcon } from "./partyMappings";
-import { Card } from "@theme/src/components/cards/Card";
-import { VoteBar } from "./VoteBar";
-import { t } from "i18next";
+import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { ERC20_ABI, ERC20_ADDRESS } from "../../../constants/index.js";
+import { useWallets } from "@web3-onboard/react";
+import { useParams } from "react-router-dom";
+
 
 export const ElectionResults = () => {
-  const { primary, secondary, text, background, border } = useThemeColors();
+  const { id } = useParams(); // Get election ID from URL
+  const [parties, setParties] = useState([]);
+  const [totalVotes, setTotalVotes] = useState(0);
+  const [voterTurnout, setVoterTurnout] = useState(0); // Percentage
+  const connectedWallets = useWallets();
+  const totalEligibleVoters = 150000; // Hardcoded total eligible voters
 
-  const partyColorCallback = (name: string) =>
-    getPartyColor(name, primary, secondary);
-  const partyIconCallback = (name: string) => getPartyIcon(name);
+  const fetchResults = async () => {
+    try {
+      const injectedProvider = connectedWallets[0].provider;
+      const provider = new ethers.providers.Web3Provider(injectedProvider);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-  const { parties, totalVotes, voterTurnout, loading, error } =
-    useElectionResultsData(partyColorCallback, partyIconCallback);
+      // Fetch election results using the getResults function
+      const electionResults = await contract.getResults(id);
+
+      // Map the results and calculate total votes
+      let calculatedTotalVotes = 0;
+      const formattedParties = electionResults.map((party) => {
+        const votes = parseInt(party.voteCount.toString(), 10);
+        calculatedTotalVotes += votes;
+
+        return {
+          name: party.name,
+          votes: votes,
+          color: getPartyColor(party.name), // Assign hardcoded color based on name
+        };
+      });
+
+      // Calculate voter turnout
+      const calculatedVoterTurnout = (
+        (calculatedTotalVotes / totalEligibleVoters) *
+        100
+      ).toFixed(1);
+
+      // Update state
+      setParties(formattedParties);
+      setTotalVotes(calculatedTotalVotes);
+      //setVoterTurnout(calculatedVoterTurnout);
+    } catch (error) {
+      console.error("Error fetching election results:", error);
+    }
+  };
+
+  // Assign hardcoded colors based on party name (fallback to gray)
+  const getPartyColor = (name) => {
+    const colorMapping = {
+      "Партия А": "bg-blue-500",
+      "Партия Б": "bg-red-500",
+      "Партия В": "bg-green-500",
+      "Партия Г": "bg-yellow-500",
+    };
+    return colorMapping[name] || "bg-gray-500";
+  };
+
+  useEffect(() => {
+    fetchResults(); // Load results when the component mounts
+  }, []);
+
+  const renderVoteBar = (party) => {
+    const votePercentage = ((party.votes / totalVotes) * 100).toFixed(1);
+    return (
+      <div key={party.name} className="flex items-center space-x-2">
+        <div className="text-gray-700 font-semibold w-24">{party.name}</div>
+        <div className="flex-1 bg-gray-200 h-5 rounded-md">
+          <div
+            className={`${party.color} h-5 rounded-md`}
+            style={{ width: `${votePercentage}%` }}
+          ></div>
+        </div>
+        <div className="w-16 text-right text-gray-700 font-semibold">
+          {votePercentage}%
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div
-      className="py-12 min-h-screen flex items-center justify-center"
-      style={{ backgroundColor: background }}
-    >
-      <Card backgroundVariant="grey" className="text-center">
-        <Title variant="gradient" className="mb-2">
-          {t("electionResults.headerTitle")}
-        </Title>
-        <Paragraph>
-          {t("electionResults.lastUpdated")} {new Date().toLocaleString()}
-        </Paragraph>
+    <div className="p-8 bg-gray-100 min-h-screen">
+      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg space-y-6">
+        <h1 className="text-3xl font-bold text-center text-gray-800">
+          Резултати от изборите: Гласове в реално време
+        </h1>
+        <p className="text-center text-gray-500">
+          Последно обновяване: {new Date().toLocaleString()}
+        </p>
 
-        {loading && (
-          <Paragraph size="md">{t("electionResults.loading")}</Paragraph>
-        )}
-        {error && (
-          <Paragraph size="md" style={{ color: "red" }}>
-            {t("electionResults.error")}
-          </Paragraph>
-        )}
-
-        {/* Voter Turnout Section */}
-        <Card className="mt-8">
-          <Title as="h2" size="2xl">
-            {t("electionResults.totalVotes", { count: totalVotes })}
-          </Title>
-          <div className="flex items-center space-x-3 mt-3">
-            <Label size="lg">{t("electionResults.voterTurnoutLabel")}</Label>
-            <div className="flex-1 bg-border-light dark:bg-border-dark h-6 rounded-lg">
+        {/* Summary for voter turnout */}
+        <div className="space-y-2">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Общо гласове: {totalVotes}
+          </h2>
+          <div className="flex items-center space-x-2">
+            <span className="text-gray-700">Избирателна активност:</span>
+            <div className="flex-1 bg-gray-200 h-5 rounded-md">
               <div
-                className="h-6 rounded-lg transition-all"
-                style={{
-                  width: `${voterTurnout}%`,
-                  backgroundColor: primary,
-                }}
+                className="bg-purple-500 h-5 rounded-md"
+                style={{ width: `${voterTurnout}%` }}
               ></div>
             </div>
-            <Label size="lg" weight="semibold">
-              {voterTurnout}%
-            </Label>
-          </div>
-        </Card>
-
-        {/* Votes for Parties */}
-        <div className="mt-8">
-          <Title as="h2" size="2xl">
-            {t("electionResults.voteDistributionTitle")}
-          </Title>
-          <div className="mt-6 space-y-4">
-            {parties.length > 0 ? (
-              parties.map((party) => (
-                <VoteBar
-                  key={party.name}
-                  party={party}
-                  totalVotes={totalVotes}
-                  background={background}
-                  border={border}
-                  text={text}
-                />
-              ))
-            ) : (
-              <Paragraph size="md">{t("electionResults.noParties")}</Paragraph>
-            )}
+            <span className="text-gray-700">{voterTurnout}%</span>
           </div>
         </div>
-      </Card>
+
+        {/* Votes for parties */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Гласове за партии
+          </h2>
+          {parties.length > 0 ? (
+            parties.map((party) => renderVoteBar(party))
+          ) : (
+            <p className="text-center text-gray-500">Няма налични партии.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

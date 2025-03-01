@@ -75,7 +75,7 @@ export const MobileNavbar: React.FC<MobileNavbarProps> = ({
             }}
           >
             {/* Navigation Links */}
-            {["home", "voting", "results", "resources", "about"].map((key) => (
+            {["home", "onGoingElections", "finishedElections", "resources", "about"].map((key) => (
               <button
                 key={key}
                 onClick={() => {

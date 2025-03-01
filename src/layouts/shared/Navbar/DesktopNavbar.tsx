@@ -23,7 +23,7 @@ export const DesktopNavbar: React.FC<DesktopNavbarProps> = ({
 
   return (
     <div className="hidden md:flex space-x-6 items-center">
-      {["home", "voting", "results", "resources", "about"].map((key) => (
+      {["home", "onGoingElections", "finishedElections", "resources", "about"].map((key) => (
         <Link
           key={key}
           to={`/${key}`}

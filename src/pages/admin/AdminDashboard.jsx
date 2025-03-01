@@ -1,76 +1,84 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useState } from "react";
+import { ethers } from "ethers";
 import { useWallets } from "@web3-onboard/react";
-
-import { useParties } from "../../hooks/useParties";
-import { useElections } from "../../hooks/useElections";
+import { ERC20_ABI, ERC20_ADDRESS } from "../../constants/index.js";
 
 export const AdminDashboard = () => {
-  // Custom hooks for managing parties and elections
-  const {
-    parties,
-    partyName,
-    partyDescription,
-    setPartyName,
-    setPartyDescription,
-    fetchParties,
-    addParty,
-  } = useParties();
-
-  const {
-    elections,
-    electionName,
-    electionStart,
-    electionEnd,
-    setElectionName,
-    setElectionStart,
-    setElectionEnd,
-    addElection,
-  } = useElections();
-
+  const [partyName, setPartyName] = useState("");
+  const [partyDescription, setPartyDescription] = useState("");
+  const [electionName, setElectionName] = useState("");
+  const [electionStart, setElectionStart] = useState("");
+  const [electionEnd, setElectionEnd] = useState("");
+  const [parties, setParties] = useState([]);
+  const [elections] = useState([]);
   const connectedWallets = useWallets();
 
-  useEffect(() => {
-    fetchParties();
-  }, [fetchParties]);
+  // Function to add a new party (blockchain logic from first version)
+  const handleAddParty = async (e) => {
+    e.preventDefault();
 
-  const handleAddParty = useCallback(
-    (e) => {
-      addParty(e, connectedWallets);
-    },
-    [addParty, connectedWallets]
-  );
+    if (!partyDescription || !partyName) {
+      alert("Моля, попълнете всички полета!");
+      return;
+    }
 
-  const handlePartyNameChange = useCallback(
-    (e) => setPartyName(e.target.value),
-    [setPartyName]
-  );
+    const injectedProvider = connectedWallets[0]?.provider;
+    if (!injectedProvider) {
+      alert("Моля, свържете портфейла си!");
+      return;
+    }
 
-  const handlePartyDescriptionChange = useCallback(
-    (e) => setPartyDescription(e.target.value),
-    [setPartyDescription]
-  );
+    const provider = new ethers.providers.Web3Provider(injectedProvider);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-  const handleAddElection = useCallback(
-    (e) => {
-      addElection(e, connectedWallets);
-    },
-    [addElection, connectedWallets]
-  );
+    try {
+      const electionId = await contract.electionCount();
+      const tx = await contract.addParty(electionId, partyName, partyDescription);
+      await tx.wait();
 
-  const handleElectionNameChange = useCallback(
-    (e) => setElectionName(e.target.value),
-    [setElectionName]
-  );
+      alert("Партията беше успешно добавена!");
+    } catch (err) {
+      console.error("Error adding party:", err);
+      alert("Възникна грешка при добавянето на партията.");
+    }
+  };
 
-  const handleElectionStartChange = useCallback(
-    (e) => setElectionStart(e.target.value),
-    [setElectionStart]
-  );
+  // Function to create a new election (maintained from first version)
+  const handleCreateElection = async (e) => {
+    e.preventDefault();
 
-  const handleElectionEndChange = useCallback(
-    (e) => setElectionEnd(e.target.value),
-    [setElectionEnd]
-  );
+    if (!electionName || !electionStart || !electionEnd) {
+      alert("Моля, попълнете всички полета!");
+      return;
+    }
+
+    const injectedProvider = connectedWallets[0]?.provider;
+    if (!injectedProvider) {
+      alert("Моля, свържете портфейла си!");
+      return;
+    }
+
+    const provider = new ethers.providers.Web3Provider(injectedProvider);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
+    const startTime = Math.floor(new Date(electionStart).getTime() / 1000);
+    const endTime = Math.floor(new Date(electionEnd).getTime() / 1000);
+
+    try {
+      const tx = await contract.createElection(
+        electionName,
+        startTime,
+        endTime
+      );
+      await tx.wait();
+
+      alert("Изборите бяха успешно създадени на блокчейна!");
+    } catch (err) {
+      console.error("Error creating election:", err);
+      alert("Възникна грешка при създаването на изборите.");
+    }
+  };
 
   return (
     <div className="min-h-screen min-w-80 bg-gray-100 p-10 w-full flex justify-center">
@@ -79,7 +87,7 @@ export const AdminDashboard = () => {
           Администраторски портал
         </h1>
 
-        {/* Party Creation Section */}
+        {/* Create Party Form */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800">Създай партия</h2>
           <form
@@ -89,7 +97,7 @@ export const AdminDashboard = () => {
             <input
               type="text"
               value={partyName}
-              onChange={handlePartyNameChange}
+              onChange={(e) => setPartyName(e.target.value)}
               placeholder="Име на партия"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
@@ -97,7 +105,7 @@ export const AdminDashboard = () => {
             <input
               type="text"
               value={partyDescription}
-              onChange={handlePartyDescriptionChange}
+              onChange={(e) => setPartyDescription(e.target.value)}
               placeholder="Информация за партията"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
@@ -112,25 +120,25 @@ export const AdminDashboard = () => {
           <ul className="mt-4 space-y-2">
             {parties.map((party) => (
               <li key={party.id} className="text-gray-700">
-                {`ID: ${party.id}, Name: ${party.name}`}
+                {`ID: ${party.id}, Election ID: ${party.election_id}, Name: ${party.name}`}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Election Creation Section */}
+        {/* Create Election Form */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800">
             Създай нови избори
           </h2>
           <form
-            onSubmit={handleAddElection}
+            onSubmit={handleCreateElection}
             className="flex flex-col space-y-4 mt-4"
           >
             <input
               type="text"
               value={electionName}
-              onChange={handleElectionNameChange}
+              onChange={(e) => setElectionName(e.target.value)}
               placeholder="Име на изборите"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
               required
@@ -139,14 +147,16 @@ export const AdminDashboard = () => {
               <input
                 type="datetime-local"
                 value={electionStart}
-                onChange={handleElectionStartChange}
+                onChange={(e) => setElectionStart(e.target.value)}
+                placeholder="Начална дата и час"
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
                 required
               />
               <input
                 type="datetime-local"
                 value={electionEnd}
-                onChange={handleElectionEndChange}
+                onChange={(e) => setElectionEnd(e.target.value)}
+                placeholder="Крайна дата и час"
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-900"
                 required
               />
@@ -159,8 +169,8 @@ export const AdminDashboard = () => {
             </button>
           </form>
           <ul className="mt-4 space-y-2">
-            {elections.map((election) => (
-              <li key={election.id} className="text-gray-700">
+            {elections.map((election, index) => (
+              <li key={index} className="text-gray-700">
                 {`Name: ${election.name}, Start: ${election.start}, End: ${election.end}`}
               </li>
             ))}
