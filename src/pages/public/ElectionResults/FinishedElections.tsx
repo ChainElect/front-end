@@ -2,19 +2,24 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useWallets } from "@web3-onboard/react";
 import { useNavigate } from "react-router-dom";
+import { useThemeColors } from "@hooks/useThemeColors";
+import { Card } from "@theme/src/components/cards/Card";
+import { Title } from "@theme/src/foundation/typography/Title";
+import { Paragraph } from "@theme/src/foundation/typography/Paragraph";
+import { ActionButton } from "@theme/src/components";
 import { ERC20_ABI, ERC20_ADDRESS } from "@utils/wallet/walletConstants.js";
+import { t } from "i18next";
 
 export const FinishedElections = () => {
   const navigate = useNavigate();
+  const { primary, text, background, border } = useThemeColors();
   const [elections, setElections] = useState([]);
-  const [voteSubmitted, setVoteSubmitted] = useState(false);
   const connectedWallets = useWallets();
 
   const handleButtonClick = (id) => {
     navigate(`/results/${id}`);
   };
 
-  // Fetch elections and parties from the backend
   const fetchElections = async () => {
     try {
       if (!connectedWallets || connectedWallets.length === 0) {
@@ -32,9 +37,9 @@ export const FinishedElections = () => {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-      const ongoingElections = await contract.getClosedElection();
+      const closedElections = await contract.getClosedElection();
       const electionsWithParties = await Promise.all(
-        ongoingElections.map(async (election) => {
+        closedElections.map(async (election) => {
           const parties = await contract.getElectionParties(election.id);
           return {
             ...election,
@@ -50,43 +55,66 @@ export const FinishedElections = () => {
 
   useEffect(() => {
     fetchElections();
-  }, [connectedWallets]); // Add connectedWallets as a dependency to refetch when it changes
+  }, [connectedWallets]);
 
   return (
-    <div className="min-h-screen bg-gray-100 mt-10 mb-10">
+    <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
+      <header
+        className="py-20 backdrop-blur-lg border-b text-center"
+        style={{
+          backgroundColor: `color-mix(in srgb, ${background} 85%, transparent)`,
+          borderColor: `color-mix(in srgb, ${primary} 30%, transparent)`,
+        }}
+      >
+        <Title variant="gradient" className="text-4xl font-bold">
+          {t("elections.finishedTitle", "Резултати от изминали избори")}
+        </Title>
+        <Paragraph className="mt-4 text-lg opacity-90" style={{ color: text }}>
+          {t(
+            "elections.finishedSubtitle",
+            "Изберете избори, за които искате да гласувате."
+          )}
+        </Paragraph>
+      </header>
+
       <main className="py-12">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-purple-600 text-center">
-            Резултати от изминали избори
-          </h2>
-          <p className="text-center text-gray-700 mt-4">
-            Изберете избори, за които искате да гласувате.
-          </p>
+        <div className="max-w-5xl mx-auto px-6 sm:px-8">
+          <Title as="h2" size="2xl" variant="gradient" className="text-center">
+            {t("elections.chooseFinishedElection", "Изберете избор")}
+          </Title>
+
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
             {elections.length > 0 ? (
               elections.map((election) => (
-                <div
-                  key={election.id}
-                  className="p-6 bg-white rounded-lg shadow-md cursor-pointer hover:scale-105 transition-transform"
+                <Card
+                  key={election.id.toString()}
+                  variant="default"
+                  backgroundVariant="default"
+                  className="cursor-pointer hover:scale-105 transition-transform"
+                  style={{ borderColor: border }}
                 >
-                  <h3 className="text-xl font-semibold text-purple-600">
+                  <Title as="h3" size="xl" style={{ color: primary }}>
                     {election.name}
-                  </h3>
-                  <p className="mt-4 text-sm text-gray-600">
-                    Описание: {election.description || "Описание липсва."}
-                  </p>
+                  </Title>
+                  <Paragraph
+                    className="mt-2 opacity-80"
+                    style={{ color: text }}
+                  >
+                    {election.description ||
+                      t("elections.noDescription", "Описание липсва.")}
+                  </Paragraph>
                   <div className="mt-6 text-center">
-                    <button
+                    <ActionButton
+                      text={t("elections.resultsButton", "Резултати")}
                       onClick={() => handleButtonClick(election.id)}
-                      className="px-6 py-3 bg-purple-600 text-white font-medium rounded-md shadow-md hover:bg-purple-700 transition"
-                    >
-                      Резултати
-                    </button>
+                    />
                   </div>
-                </div>
+                </Card>
               ))
             ) : (
-              <p className="text-center text-gray-500">Няма текущи избори.</p>
+              <Paragraph className="text-center" opacity="high">
+                {t("elections.noElections", "Няма текущи избори.")}
+              </Paragraph>
             )}
           </div>
         </div>

@@ -75,7 +75,7 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           path="/results"
           element={
             <PageWrapper>
-              <ElectionResults />
+              <FinishedElections />
             </PageWrapper>
           }
         />
@@ -115,7 +115,7 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           path="/voting"
           element={
             <PageWrapper>
-              <VotingPage />
+              <OngoingElections />
             </PageWrapper>
           }
         />
