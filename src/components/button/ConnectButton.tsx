@@ -24,7 +24,13 @@ export const ConnectButton: React.FC<ConnectButtonProps> = ({
   const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const buttonLabel = wallet
+    ? loading
+      ? "Disconnecting..."
+      : "Disconnect Wallet"
+    : loading
+    ? "Connecting..."
+    : label;
   // ✅ If no wallets are available, redirect user to MetaMask download page
   const handleNoWallet = useCallback(() => {
     navigate("/get-wallet");
@@ -108,7 +114,7 @@ export const ConnectButton: React.FC<ConnectButtonProps> = ({
             isDisabled
               ? "opacity-50 cursor-not-allowed"
               : "hover:border-primary",
-            "px-6 py-3" // Base padding
+            "px-6 py-3"
           )}
           style={{
             color: colors.text,
@@ -124,7 +130,7 @@ export const ConnectButton: React.FC<ConnectButtonProps> = ({
           />
 
           <FaPowerOff className="text-red-400 transition-transform group-hover:rotate-90" />
-          <span>{loading ? "Disconnecting..." : label}</span>
+          <span>{buttonLabel}</span>
         </button>
       ) : (
         <button
@@ -140,7 +146,7 @@ export const ConnectButton: React.FC<ConnectButtonProps> = ({
             isDisabled
               ? "opacity-50 cursor-not-allowed"
               : "hover:border-primary",
-            "px-6 py-3" // Base padding
+            "px-6 py-3"
           )}
           style={{
             color: colors.text,
@@ -156,7 +162,7 @@ export const ConnectButton: React.FC<ConnectButtonProps> = ({
 
           <div className="relative z-10 flex items-center gap-2">
             <FaEthereum className="text-primary animate-pulse" />
-            <span>{loading ? "Connecting..." : label}</span>
+            <span>{buttonLabel}</span>
           </div>
         </button>
       )}
