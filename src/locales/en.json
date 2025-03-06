@@ -21,7 +21,7 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Use",
     "followUs": "Follow Us",
-    "copyRight": "© 2024 ChainElect. All rights reserved."
+    "rights": "All rights reserved."
   },
   "navbar": {
     "brand": "ChainElect",
@@ -55,7 +55,7 @@
         "description": "We protect the personal data of all voters."
       }
     },
-    "ctaTitle": "Be Part of the Change!",
+    "ctaTitle": "Be Part of the Future!",
     "ctaSubtitle": "Join us and make your vote matter",
     "ctaAboutUs": "About us",
     "ctaDocs": "Documentation",
@@ -70,7 +70,7 @@
     "teamTitle": "Our Team",
     "teamDescription": "ChainElect is built by a team of innovators...",
     "callToActionTitle": "Join Us",
-    "callToActionDescription": "Be part of the change! Support us in...",
+    "callToActionDescription": "Be part of the future! Support us in...",
     "features": {
       "transparency": {
         "title": "Transparency",
@@ -108,7 +108,8 @@
     "headerSubtitle": "Useful information and guides for using ChainElect",
     "tutorialsTitle": "User Guides",
     "faqTitle": "Frequently Asked Questions",
-    "additionalResourcesTitle": "Additional Resources"
+    "additionalResourcesTitle": "Additional Resources",
+    "faqSubtitle": "Find answers to the most frequently asked questions about ChainElect."
   },
   "resourcesData": {
     "tutorials": [
@@ -129,19 +130,27 @@
       }
     ],
     "faqs": [
-      {
-        "question": "How do I register on the platform?",
-        "answer": "You can register by providing your email and creating a password. Then follow the verification steps."
-      },
-      {
-        "question": "Is voting through ChainElect secure?",
-        "answer": "Yes! The platform uses blockchain technology, ensuring that votes cannot be manipulated."
-      },
-      {
-        "question": "How can I verify my vote?",
-        "answer": "After voting, you will receive a unique hash that you can use to verify your vote in the system."
-      }
-    ],
+    {
+      "question": "How do I register on the platform?",
+      "answer": "You can register by providing your email and creating a password. Then follow the verification steps."
+    },
+    {
+      "question": "What is blockchain and why is it used for voting?",
+      "answer": "Blockchain is a decentralized technology that ensures your votes are secure and cannot be tampered with."
+    },
+    {
+      "question": "Can I verify if my vote was recorded correctly?",
+      "answer": "Yes, after voting you will receive a unique hash code to verify your vote in the system."
+    },
+    {
+      "question": "How long will voting take?",
+      "answer": "The voting process is quick and takes only a few minutes. Make sure you have valid identification ready."
+    },
+    {
+      "question": "What are the voting requirements?",
+      "answer": "You must be at least 18 years old and have valid identification."
+    }
+  ],
     "additionalResources": [
       {
         "title": "Learn more about blockchain technology",
@@ -184,5 +193,297 @@
       "successSubtitle": "You can now log in to your account.",
       "loginLink": "Log In"
     }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Do you have questions or need help? Contact us using the form below.",
+    "form": {
+      "title": "Send us a message",
+      "message": "Message",
+      "messagePlaceholder": "Your message",
+      "submit": "Send"
+    },
+    "info": {
+      "title": "Contact Information",
+      "description": "You can reach us directly through these channels:",
+      "phone": "+359 123 456 789",
+      "email": "info@chainelect.com",
+      "address": "Democracy Str. 12, Sofia, Bulgaria"
+    },
+    "social": {
+      "title": "Social Media"
+    }
+  },
+  "privacyPolicy": {
+  "title": "Privacy Policy",
+  "subtitle": "We are committed to your privacy. Please read this policy to understand how we use your data.",
+  "sections": {
+    "dataCollection": {
+      "title": "Data Collection",
+      "description": "We collect the following user information:",
+      "items": [
+        "Personal information such as name, email, and phone number.",
+        "Device data including IP address, browser type, and operating system.",
+        "Platform activity history including votes."
+      ]
+    },
+    "dataUsage": {
+      "title": "Data Usage",
+      "description": "Your data is used for the following purposes:",
+      "items": [
+        "To ensure security and identity verification during voting",
+        "To improve platform functionality",
+        "To contact you regarding issues or questions"
+      ]
+    },
+    "dataProtection": {
+      "title": "Data Protection",
+      "description": "We use the latest technologies to protect your personal information, including:",
+      "items": [
+        "Data encryption during transmission",
+        "Access control and two-factor authentication",
+        "Continuous vulnerability monitoring"
+      ]
+    },
+    "userRights": {
+      "title": "Your Rights",
+      "description": "As a platform user, you have the following rights:",
+      "items": [
+        "Right to access your data",
+        "Right to correct inaccurate information",
+        "Right to request data deletion"
+      ]
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "If you have questions about our privacy policy, please contact us:"
+    }
   }
+},
+"termsOfUse": {
+  "title": "Terms of Use",
+  "subtitle": "Please read these terms carefully before using our platform.",
+  "sections": {
+    "generalTerms": {
+      "title": "General Terms",
+      "description": "By using the platform you agree to these terms and agree to follow the rules outlined below:",
+      "items": [
+        "The platform is intended for lawful use only.",
+        "Users are responsible for providing accurate information.",
+        "Distribution of illegal, harmful, or infringing content is prohibited."
+      ]
+    },
+    "userResponsibilities": {
+      "title": "User Responsibilities",
+      "description": "As a platform user you agree to:",
+      "items": [
+        "Not use the platform for fraud or illegal activities",
+        "Maintain the confidentiality of your access credentials",
+        "Report suspicious activities related to your account"
+      ]
+    },
+    "platformUsage": {
+      "title": "Platform Usage",
+      "description": "We reserve the right to terminate your access in the following cases:",
+      "items": [
+        "Violation of terms of use",
+        "Distribution of harmful content",
+        "Unauthorized use of the platform"
+      ]
+    },
+    "liabilityLimitation": {
+      "title": "Liability Limitation",
+      "description": "The platform is provided 'as is' without warranties. We are not responsible for:",
+      "items": [
+        "Service interruptions or errors",
+        "Data loss or information loss",
+        "Improper use of the platform by users"
+      ]
+    },
+    "amendments": {
+      "title": "Terms Amendments",
+      "description": "We reserve the right to update these terms at any time. Changes will be published on this page, and your continued use will be considered acceptance of the new terms."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "If you have questions about these terms, please contact us:"
+    }
+  }
+},
+"walletGuide": {
+  "title": "How to Connect Your Wallet",
+  "subtitle": "Follow these steps to securely connect your crypto wallet",
+  "securityNotice": "Secure integration with leading crypto wallets",
+  "ctaButton": "Connect Wallet Now",
+  "steps": [
+    {
+      "icon": "wallet",
+      "title": "Install Wallet",
+      "content": "Ensure you have a crypto wallet like MetaMask installed"
+    },
+    {
+      "icon": "plug",
+      "title": "Login to Profile",
+      "content": "Log in to your ChainElect platform account"
+    },
+    {
+      "icon": "check",
+      "title": "Initiate Connection",
+      "content": "Click the 'Connect Wallet' button in the top right corner"
+    },
+    {
+      "icon": "wallet",
+      "title": "Select Wallet",
+      "content": "Choose your wallet from the list of supported options"
+    },
+    {
+      "icon": "check",
+      "title": "Approve Connection",
+      "content": "Confirm the connection through your wallet interface"
+    },
+    {
+      "icon": "plug",
+      "title": "Confirmation",
+      "content": "You'll receive visual confirmation after successful connection"
+    }
+  ],
+  "infoBox": {
+    "title": "Important Information",
+    "content": "If experiencing issues, verify your wallet is updated and you've selected the correct network (Ethereum Sepolia). The connection is completely secure and does not provide access to your funds."
+  }
+},
+"resultsGuide": {
+  "title": "How to View Results",
+  "subtitle": "Follow these steps to verify voting results",
+  "steps": [
+    {
+      "icon": "chart",
+      "title": "Login to Profile",
+      "content": "Access your account using the login form"
+    },
+    {
+      "icon": "chart",
+      "title": "Open Results Section",
+      "content": "Select 'Results' from the navigation menu"
+    },
+    {
+      "icon": "chart",
+      "title": "View Results",
+      "content": "See current results updated in real-time"
+    },
+    {
+      "icon": "info",
+      "title": "Detailed Statistics",
+      "content": "Analyze candidate statistics and voting details"
+    }
+  ]
+},
+"votingGuide": {
+  "title": "How to Vote",
+  "subtitle": "Follow these steps to vote successfully on ChainElect",
+  "intro": "Learn to use our platform for secure and transparent voting",
+  "steps": [
+    {
+      "icon": "userCheck",
+      "title": "Registration",
+      "content": "Register on the platform with a valid email and password"
+    },
+    {
+      "icon": "listAlt",
+      "title": "Login",
+      "content": "Access your account using the login button"
+    },
+    {
+      "icon": "voteYea",
+      "title": "Navigation",
+      "content": "Select the 'Voting' section from the navigation menu"
+    },
+    {
+      "icon": "checkCircle",
+      "title": "Candidate Review",
+      "content": "Review available candidates and their programs"
+    },
+    {
+      "icon": "voteYea",
+      "title": "Voting",
+      "content": "Click the 'Vote' button next to your chosen candidate"
+    },
+    {
+      "icon": "checkCircle",
+      "title": "Confirmation",
+      "content": "Confirm your choice. Your vote will be recorded on the blockchain"
+    },
+    {
+      "icon": "chartBar",
+      "title": "Verification",
+      "content": "Check your vote status in the 'Results' section"
+    }
+  ],
+  "ctaSection": {
+    "title": "Ready to Vote?",
+    "content": "Log in to your account and participate in the democratic process!",
+    "buttonText": "Start Now"
+  }
+},
+"voting": {
+  "headerTitle": "Voting",
+  "headerSubtitle": "Select your party and cast your vote on the blockchain",
+  "chooseParty": "Choose Party",
+  "voteButton": "Cast Your Vote",
+  "voteSubmittedMessage": "Your vote has been recorded!",
+  "loadingTime": "Loading...",
+  "votingEnded": "Voting has ended!",
+  "connectWalletAlert": "Please connect your wallet before voting!",
+  "voteError": "Error submitting vote",
+  "confirmationTitle": "Confirm Your Choice",
+  "confirmationText": "Selected party:",
+  "noParties": "No parties available",
+  "viewResults": "View Results",
+  "selectPartyAlert": "Please select a party before voting"
+},
+"time": {
+  "h": "h",
+  "m": "m",
+  "s": "s"
+},
+"elections": {
+  "ongoingTitle": "Ongoing Elections",
+  "ongoingSubtitle": "Participate in current democratic processes",
+  "chooseElection": "Select Election",
+  "noDescription": "No description available",
+  "noElections": "No ongoing elections",
+  "voteButton": "Vote Now"
+},
+"admin": {
+  "title": "Admin Dashboard",
+  "createParty": "Create Political Party",
+  "partyName": "Party Name",
+  "partyDescription": "Party Description",
+  "addParty": "Add Party",
+  "existingParties": "Existing Parties",
+  "createElection": "Create New Election",
+  "electionName": "Election Name",
+  "startDate": "Start Date & Time",
+  "endDate": "End Date & Time",
+  "createElectionButton": "Create Election",
+  "activeElections": "Active Elections",
+  "formError": "Please fill all required fields!",
+  "connectWalletAlert": "Please connect your wallet!",
+  "partySuccess": "Party added successfully!",
+  "partyError": "Error adding party!",
+  "electionSuccess": "Election created successfully!",
+  "electionError": "Error creating election!",
+  "adminManagement": "Admin Management",
+  "currentAdmin": "Current Administrator",
+  "fetchAdminButton": "Fetch Current Admin",
+  "currentAdminLabel": "Current Admin:",
+  "changeAdmin": "Change Administrator",
+  "newAdminAddress": "New Admin Address",
+  "newAdminPlaceholder": "0x...",
+  "changeAdminButton": "Change Admin",
+  "adminFetchError": "Error fetching admin address!",
+  "invalidAdminAlert": "Please enter a valid admin address!",
+  "adminChangeSuccess": "Admin successfully changed to: {admin}",
+  "adminChangeError": "Error changing admin!"
+}
 }

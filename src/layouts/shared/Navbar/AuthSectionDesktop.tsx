@@ -25,24 +25,19 @@ export const AuthSectionDesktop: React.FC<AuthSectionProps> = ({
       {isLoggedIn ? (
         <>
           <ConnectButton />
-          <button
-            className="px-4 py-2 rounded-full hover:bg-opacity-10"
-            style={{
-              color: text,
-              border: `1px solid ${border}`,
-            }}
+          <SecondaryButton
+            size="sm"
             onClick={logout}
-          >
-            <Paragraph size="md">{t("navbar.logout", "Изход")}</Paragraph>
-          </button>
+            text={t("navbar.logout")}
+          />
         </>
       ) : (
         <>
           <Link to="/login">
-            <SecondaryButton text={t("navbar.login")} />
+            <SecondaryButton size="sm" text={t("navbar.login")} />
           </Link>
           <Link to="/register">
-            <ActionButton text={t("navbar.register")} />
+            <ActionButton size="sm" text={t("navbar.register")} />
             {/* <Paragraph size="md" weight="medium" color="white">
             </Paragraph> */}
           </Link>

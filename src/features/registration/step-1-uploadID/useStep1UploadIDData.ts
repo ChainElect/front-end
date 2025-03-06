@@ -22,7 +22,7 @@ export const useStep1IDUploadData = ({
       const formdata = new FormData();
       formdata.append("frontImage", file);
 
-      const res = await fetch("http://localhost:5001/api/ocr/upload/id/front", {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/ocr/upload/id/front`, {
         method: "POST",
         body: formdata,
       });
@@ -48,7 +48,7 @@ export const useStep1IDUploadData = ({
       const formdata = new FormData();
       formdata.append("backImage", file);
 
-      const res = await fetch("http://localhost:5001/api/ocr/upload/id/back", {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/ocr/upload/id/back`, {
         method: "POST",
         body: formdata,
       });

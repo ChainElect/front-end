@@ -9,8 +9,6 @@ import { AnimatePresence } from "framer-motion";
 
 import { LoginForm } from "../features/auth/LoginForm";
 import { RegisterForm } from "../features/auth/RegisterForm";
-import { MainPage } from "../pages/MainPage";
-import { HeroSection } from "../components/sections/HeroSection";
 import { AdminDashboard } from "../pages/admin/AdminDashboard";
 import { ElectionResults } from "../pages/public/ElectionResults/ElectionResults";
 import { OngoingElections } from "../pages/user/OnGoingElections";
@@ -18,16 +16,15 @@ import { About } from "../pages/public/About/About";
 import { Resources } from "pages/user/Resources/Resourses";
 import { Home } from "../pages/public/Home/Home";
 import { VotingPage } from "../pages/user/VotingPage/VotingPage";
-import { FAQ } from "../pages/public/FAQ";
+import { FAQ } from "../pages/public/FAQ/FAQ";
 import { ContactUs } from "../pages/public/ContactUs";
 import { PrivacyPolicy } from "../pages/public/PrivacyPolicy";
 import { TermsOfUse } from "../pages/public/TermsOfUse";
 import { AdminFunc } from "../pages/admin/AdminFunc";
-import { VotingGuide } from "../pages/guide/VotingGuide";
-import { ConnectWalletGuide } from "../pages/guide/ConnectWallet";
-import { ResultsGuide } from "../pages/guide/ResultsGuide";
-import { WelcomePage } from "../pages/auth/WelcomePage";
-
+import { VotingGuide } from "../pages/guide/VotingGuide/VotingGuide";
+import { ConnectWalletGuide } from "pages/guide/WalletGuide/ConnectWallet";
+import { ResultsGuide } from "../pages/guide/ResultsGuide/ResultsGuide";
+import { FinishedElections } from "pages/public/ElectionResults/FinishedElections";
 import { PageWrapper } from "@theme/PageWrapper";
 import { RegistrationFlow } from "features/registration/RegistrationFlow";
 
@@ -51,23 +48,7 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           }
         />
         <Route
-          path="/welcome"
-          element={
-            <PageWrapper>
-              <WelcomePage />
-            </PageWrapper>
-          }
-        />
-        <Route
           path="/register"
-          element={
-            <PageWrapper>
-              <RegisterForm />
-            </PageWrapper>
-          }
-        />
-        <Route
-          path="/register2"
           element={
             <PageWrapper>
               <RegistrationFlow />
@@ -79,22 +60,6 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           element={
             <PageWrapper>
               <RegisterForm />
-            </PageWrapper>
-          }
-        />
-        <Route
-          path="/main"
-          element={
-            <PageWrapper>
-              <MainPage />
-            </PageWrapper>
-          }
-        />
-        <Route
-          path="/hero"
-          element={
-            <PageWrapper>
-              <HeroSection />
             </PageWrapper>
           }
         />
@@ -223,6 +188,30 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           element={
             <PageWrapper>
               <ResultsGuide />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/finishedElections"
+          element={
+            <PageWrapper>
+              <FinishedElections />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/voting/:id"
+          element={
+            <PageWrapper>
+              <VotingPage />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/results/:id"
+          element={
+            <PageWrapper>
+              <ElectionResults />
             </PageWrapper>
           }
         />

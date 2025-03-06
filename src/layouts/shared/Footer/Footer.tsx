@@ -111,7 +111,7 @@ export const Footer: FC = () => {
           style={{ borderColor: border }}
         >
           <p className="text-sm opacity-80" style={{ color: text }}>
-            © {new Date().getFullYear()} ChainElect. {t("footer.rights")}
+            ©{new Date().getFullYear()} ChainElect. {t("footer.rights")}
           </p>
           <div className="flex space-x-6">
             {bottomLinks.map((item) => (

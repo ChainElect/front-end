@@ -1,7 +1,8 @@
 import React from "react";
-import { FaEthereum, FaSun } from "react-icons/fa"; // ✅ Crypto icon & normal light mode icon
+import { FaEthereum, FaMoon, FaSun } from "react-icons/fa";
 import { useTheme } from "@context/CustomThemeContext";
 import { useThemeColors } from "@hooks/useThemeColors";
+import clsx from "clsx";
 
 interface ThemeToggleProps {
   className?: string;
@@ -13,53 +14,62 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   iconClassName = "",
 }) => {
   const { theme, toggleTheme } = useTheme();
-  const { primary, accent, text } = useThemeColors();
+  const colors = useThemeColors();
 
   return (
     <button
       onClick={toggleTheme}
-      className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 shadow-lg overflow-hidden ${className}`}
+      className={clsx(
+        "relative w-12 h-12 rounded-full flex items-center justify-center",
+        "transition-all duration-300 hover:scale-[1.05] group",
+        "backdrop-blur-lg border-2",
+        "hover:bg-opacity-20 focus:outline-none focus:ring-2",
+        className
+      )}
       style={{
-        background: `linear-gradient(45deg, var(--color-primary), var(--color-accent))`,
-        boxShadow:
-          theme.mode === "dark"
-            ? `0 0 12px rgba(0, 0, 0, 0.8)`
-            : `0 0 10px rgba(255, 215, 0, 0.6)`, // Golden glow for light mode
-        border: `1px solid ${theme.mode === "dark" ? primary : accent}`,
+        borderColor: `color-mix(in srgb, ${colors.border} 20%, transparent)`,
+        backgroundColor: `color-mix(in srgb, ${colors.background} 90%, transparent)`,
+        boxShadow: `0 4px 12px ${colors.border}20`,
       }}
     >
-      {/* Smooth Fade Effect */}
-      <div className="relative z-10 transition-opacity duration-300">
+      {/* Animated Icons */}
+      <div className="relative z-10">
         {theme.mode === "dark" ? (
-          <FaEthereum
-            className={`transition-transform duration-500 transform group-hover:scale-110 ${iconClassName}`}
+          <FaMoon
+            className={clsx(
+              "transition-all duration-500",
+              "group-hover:scale-110 group-active:scale-95",
+              iconClassName
+            )}
             style={{
-              color: "#fff",
-              filter: `drop-shadow(0 0 8px ${accent})`, // More subtle glow
+              color: colors.primary,
+              filter: `drop-shadow(0 2px 4px ${colors.primary}30)`,
             }}
             size={22}
           />
         ) : (
           <FaSun
-            className={`transition-transform duration-300 transform group-hover:rotate-12 ${iconClassName}`}
+            className={clsx(
+              "transition-transform duration-300",
+              "group-hover:rotate-45 group-active:rotate-90",
+              iconClassName
+            )}
             style={{
-              color: "#FFD700",
-              filter: "drop-shadow(0 0 5px rgba(255, 215, 0, 0.8))",
+              color: colors.accent,
+              filter: `drop-shadow(0 2px 4px ${colors.accent}30)`,
             }}
             size={22}
           />
         )}
       </div>
 
-      {/* Subtle Background Glow for Dark Mode */}
-      {theme.mode === "dark" && (
-        <div
-          className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity"
-          style={{
-            background: `radial-gradient(circle, rgba(0, 0, 0, 0.6) 10%, transparent 90%)`,
-          }}
-        />
-      )}
+      {/* Subtle hover effect */}
+      <div
+        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-10 transition-opacity"
+        style={{
+          backgroundColor: colors.primary,
+        }}
+      />
 
       <span className="sr-only">Toggle theme</span>
     </button>

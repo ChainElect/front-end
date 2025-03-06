@@ -1,5 +1,5 @@
 export const BACKEND_BASE_URL =
-  process.env.BACKEND_BASE_URL || "http://localhost:5001";
+  process.env.REACT_APP_BACKEND_BASE_URL || "http://localhost:5001";
 
 export const BACKEND_AUTH_API_ENDPOINTS = {
   REGISTER: `${BACKEND_BASE_URL}/register`,

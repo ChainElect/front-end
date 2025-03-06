@@ -1,3 +1,5 @@
+import { BACKEND_BASE_URL } from "@utils/endpoints";
+
 // useStep3VerificationData.ts
 export const useStep3VerificationData = (
   registrationData: any,
@@ -21,11 +23,14 @@ export const useStep3VerificationData = (
     };
 
     try {
-      const registerResponse = await fetch("http://localhost:5001/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(registerPayload),
-      });
+      const registerResponse = await fetch(
+        `${BACKEND_BASE_URL}/api/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(registerPayload),
+        }
+      );
       const registerResult = await registerResponse.json();
 
       if (registerResult.success) {

@@ -4,6 +4,7 @@ import { useThemeColors } from "@hooks/useThemeColors";
 import { ActionButton } from "@theme/src/components";
 import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
 import { useStep3VerificationData } from "./useStep3VerificationData";
+import { BACKEND_BASE_URL } from "@utils/endpoints";
 
 export const Step3Verification = ({ data, onConfirm, onRetry }) => {
   const { primary, text, border } = useThemeColors();
@@ -25,7 +26,7 @@ export const Step3Verification = ({ data, onConfirm, onRetry }) => {
       }
       try {
         const matchResponse = await fetch(
-          "http://localhost:5001/api/ir/match/face",
+          `${BACKEND_BASE_URL}/api/ir/match/face`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

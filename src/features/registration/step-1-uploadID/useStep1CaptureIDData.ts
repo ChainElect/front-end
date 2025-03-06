@@ -44,8 +44,8 @@ export const useStep1IDCaptureData = ({
     // Decide if it's front or back
     const fileName = frontCaptured ? "id_back.jpg" : "id_front.jpg";
     const endpoint = frontCaptured
-      ? "http://localhost:5001/api/ocr/upload/id/back"
-      : "http://localhost:5001/api/ocr/upload/id/front";
+      ? `${process.env.REACT_APP_BACKEND_BASE_URL}/api/ocr/upload/id/back`
+      : `${process.env.REACT_APP_BACKEND_BASE_URL}/api/ocr/upload/id/front`;
 
     try {
       const file = dataURLtoFile(capturedImage, fileName);

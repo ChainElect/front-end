@@ -8,7 +8,6 @@ import { CTASection } from "./CTASection";
 import { useHomeData } from "./useHomeData";
 
 export const Home: FC = () => {
-  const { t } = useTranslation();
   const { features } = useHomeData();
   const { background } = useThemeColors();
 
@@ -23,5 +22,3 @@ export const Home: FC = () => {
     </div>
   );
 };
-
-export default Home;

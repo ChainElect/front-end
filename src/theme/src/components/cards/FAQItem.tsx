@@ -1,9 +1,5 @@
 import React, { FC } from "react";
-import {
-  Subtitle,
-  Paragraph,
-  SectionTitle,
-} from "@theme/src/foundation/typography";
+import { Paragraph, SectionTitle } from "@theme/src/foundation/typography";
 import { useThemeColors } from "@hooks/useThemeColors";
 
 export interface FAQItemProps {

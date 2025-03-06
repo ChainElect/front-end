@@ -10,6 +10,7 @@
   --color-background-dark: #0D1117; /* Deep space blue */
   --color-border-light: #CFD8DC;  /* Subtle gray borders */
   --color-border-dark: #37474F;   /* Dark element separation */
+  --color-error: #dc2626;         /* Error red */
 }
 
 /* Dark Theme (Crypto Moon) */
@@ -17,10 +18,11 @@
   --color-primary: #6C5DD3;       /* Crypto purple */
   --color-secondary: #00E0FF;     /* Cyber teal */
   --color-accent: #FF6B6B;        /* Crypto coral */
-  --color-text-light: #1E293B;
+  --color-text-light: #1E293B;    /* Dark slate for readability */
   --color-text-dark: #E8F4FD;     /* Moon glow */
   --color-background-light: #0A0F1A; /* Deep space */
   --color-background-dark: #020617; /* Cosmic void */
   --color-border-light: #2D3B4D;  /* Nebula borders */
-  --color-border-dark: #455A64;
+  --color-border-dark: #455A64;   /* Dark element separation */
+  --color-error: #dc2626;         /* Error red */
 }

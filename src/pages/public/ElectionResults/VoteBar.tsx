@@ -2,10 +2,13 @@ import React, { FC } from "react";
 import { useThemeColors } from "@hooks/useThemeColors";
 
 export interface Party {
-  name: string;
-  votes: number;
-  color: string;
-  icon: JSX.Element;
+  name?: string;
+  votes?: number;
+  color?: string;
+  icon?: JSX.Element;
+  description?: string;
+  photo?: string;
+  id?: string;
 }
 
 export interface VoteBarProps {

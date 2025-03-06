@@ -9,6 +9,7 @@ export const useThemeColors = () => {
     text: theme.mode === "dark" ? "var(--color-text-dark)" : "var(--color-text-light)",
     background: theme.mode === "dark" ? "var(--color-background-dark)" : "var(--color-background-light)",
     border: theme.mode === "dark" ? "var(--color-border-dark)" : "var(--color-border-light)",
-    accent: "var(--color-accent)"
+    accent: "var(--color-accent)",
+    error: "var(--color-error)"
   };
 };

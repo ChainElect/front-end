@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "@context/AuthContext";
 import { AuthService } from "services/authService";
 import { ERROR_MESSAGES } from "@utils/messages/errorMessages";
-import { ConnectButton } from "@components/button/ConnectButton";
-import { FaEthereum, FaFingerprint, FaLock } from "react-icons/fa";
+import { FaFingerprint, FaLock } from "react-icons/fa";
 import { useThemeColors } from "@hooks/useThemeColors";
 import { useTranslation } from "react-i18next";
 

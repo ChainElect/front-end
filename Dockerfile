@@ -1,5 +1,5 @@
 # Stage 1: Build the React app
-FROM node:16-alpine AS build
+FROM node:18-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
-# Install dependencies using legacy peer deps flag
+# Install dependencies with legacy peer deps flag if needed
 RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application

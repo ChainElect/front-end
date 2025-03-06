@@ -1,32 +1,38 @@
 // src/theme/typography/SectionTitle.tsx
 import React, { FC, HTMLAttributes } from "react";
 import { useThemeColors } from "@hooks/useThemeColors";
+import clsx from "clsx";
 
-/**
- * @interface SectionTitleProps
- * @description Props for the SectionTitle component.
- */
 export interface SectionTitleProps extends HTMLAttributes<HTMLHeadingElement> {
   /** The content to display inside the section title */
   children: React.ReactNode;
+  /** Visual variant of the title */
+  variant?: "gradient" | "solid";
 }
 
-/**
- * @component SectionTitle
- * @description A reusable component for section headings, smaller than a main title.
- * By default, it renders with `text-2xl`.
- */
 export const SectionTitle: FC<SectionTitleProps> = ({
   children,
+  variant = "solid",
   className = "",
   ...rest
 }) => {
-  const { text } = useThemeColors();
+  const { text, primary, accent } = useThemeColors();
 
   return (
     <h2
-      className={`text-2xl font-semibold ${className}`}
-      style={{ color: text, ...(rest.style as object) }}
+      className={clsx(
+        "text-2xl font-semibold",
+        variant === "gradient" && "bg-clip-text text-transparent",
+        className
+      )}
+      style={{
+        ...(variant === "gradient"
+          ? {
+              backgroundImage: `linear-gradient(45deg, ${primary}, ${accent})`,
+            }
+          : { color: text }),
+        ...rest.style,
+      }}
       {...rest}
     >
       {children}

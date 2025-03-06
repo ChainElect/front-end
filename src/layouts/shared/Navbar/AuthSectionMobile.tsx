@@ -6,6 +6,7 @@ import { Paragraph } from "@theme/src/foundation/typography";
 import { useThemeColors } from "@hooks/useThemeColors";
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "@context/AuthContext";
+import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
 
 interface AuthSectionProps {
   isLoggedIn: boolean;
@@ -23,16 +24,11 @@ export const AuthSectionMobile: React.FC<AuthSectionProps> = ({
       {isLoggedIn ? (
         <>
           <ConnectButton />
-          <button
-            className="w-full px-4 py-3 rounded-full font-medium"
-            style={{
-              color: text,
-              border: `1px solid ${border}`,
-            }}
+          <SecondaryButton
+            size="sm"
             onClick={logout}
-          >
-            <Paragraph size="md">{t("navbar.logout", "Изход")}</Paragraph>
-          </button>
+            text={t("navbar.logout")}
+          />
         </>
       ) : (
         <>

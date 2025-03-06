@@ -2,62 +2,19 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useWallets } from "@web3-onboard/react";
 import { ERC20_ABI, ERC20_ADDRESS } from "@utils/wallet/walletConstants";
+import { t } from "i18next";
+import { Party } from "pages/public/ElectionResults/VoteBar";
+import { defaultParties } from "./voting";
 
-export interface Party {
-  id: string;
-  name: string;
-  description: string;
-  photo: string;
-}
-
-// Fallback default parties
-export const defaultParties: Party[] = [
-  {
-    id: "1",
-    name: "Партия А",
-    description: "За модерна и дигитална демокрация.",
-    photo: "https://via.placeholder.com/150/1E40AF/FFFFFF?text=Партия+А",
-  },
-  {
-    id: "2",
-    name: "Партия Б",
-    description: "Традиционни ценности за новото време.",
-    photo: "https://via.placeholder.com/150/9B2226/FFFFFF?text=Партия+Б",
-  },
-  {
-    id: "3",
-    name: "Партия В",
-    description: "Реформи и прозрачност в управлението.",
-    photo: "https://via.placeholder.com/150/047857/FFFFFF?text=Партия+В",
-  },
-];
-
-export const useVotingData = () => {
+export const useVotingData = (electionId) => {
   const [parties, setParties] = useState<Party[]>(defaultParties);
   const [selectedParty, setSelectedParty] = useState<Party | null>(null);
   const [voteSubmitted, setVoteSubmitted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState("Зареждане...");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(t("voting.loadingTime"));
+  const [votingEndTime, setVotingEndTime] = useState<number | null>(null);
   const connectedWallets = useWallets();
 
-  // Start a countdown timer based on the voting end time.
-  const startCountdown = (votingEndTime: number) => {
-    const timer = setInterval(() => {
-      const now = Date.now();
-      const remaining = votingEndTime - now;
-
-      if (remaining <= 0) {
-        clearInterval(timer);
-        setTimeLeft("Гласуването е приключило!");
-      } else {
-        const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((remaining / (1000 * 60)) % 60);
-        const seconds = Math.floor((remaining / 1000) % 60);
-        setTimeLeft(`${hours}ч ${minutes}м ${seconds}с`);
-      }
-    }, 1000);
-  };
-
-  // Fetch parties and election details from the smart contract.
   const fetchParties = async () => {
     try {
       const injectedProvider = connectedWallets[0]?.provider;
@@ -67,13 +24,19 @@ export const useVotingData = () => {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-      const electionId = await contract.electionCount();
-      const electionDetails = await contract.elections(electionId);
-      const endTime = electionDetails.endTime * 1000;
+      const electionDetails = await contract.getElectionDetails(electionId);
+      const endTime = electionDetails.endTime.toNumber() * 1000;
+      setVotingEndTime(endTime);
 
-      // For now we use defaultParties; in a real app, you could fetch party details.
-      setParties(defaultParties);
-      startCountdown(endTime);
+      const fetchedParties = await contract.getElectionParties(electionId);
+      setParties(
+        fetchedParties.map(party => ({
+          id: party.id.toString(),
+          name: party.name,
+          description: party.description,
+          photo: party.photo || "https://via.placeholder.com/150"
+        }))
+      );
     } catch (error) {
       console.error("Error fetching parties:", error);
       setParties(defaultParties);
@@ -81,32 +44,51 @@ export const useVotingData = () => {
   };
 
   useEffect(() => {
-    fetchParties();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectedWallets]);
+    if (electionId) fetchParties();
+  }, [electionId, connectedWallets]);
 
-  // Handle vote submission.
+  useEffect(() => {
+    if (!votingEndTime) return;
+
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const remaining = votingEndTime - now;
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        setTimeLeft(t("voting.votingEnded"));
+      } else {
+        const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((remaining / (1000 * 60)) % 60);
+        const seconds = Math.floor((remaining / 1000) % 60);
+        setTimeLeft(`${hours}${t("time.h")} ${minutes}${t("time.m")} ${seconds}${t("time.s")}`);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [votingEndTime]);
+
   const handleVote = async () => {
-    if (!selectedParty) {
-      alert("Моля, изберете партия преди да гласувате!");
-      return;
-    }
+    if (!selectedParty || !electionId) return;
+
     try {
       const injectedProvider = connectedWallets[0]?.provider;
       if (!injectedProvider) {
-        alert("Моля, свържете портфейла си преди да гласувате!");
+        alert(t("voting.connectWalletAlert"));
         return;
       }
+
       const provider = new ethers.providers.Web3Provider(injectedProvider);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 
-      const tx = await contract.vote(selectedParty.id);
+      const tx = await contract.vote(electionId, selectedParty.id);
       await tx.wait();
       setVoteSubmitted(true);
+      setShowConfirmation(false);
     } catch (error) {
       console.error("Error submitting vote:", error);
-      alert("Възникна грешка при подаването на гласа.");
+      alert(t("voting.voteError"));
     }
   };
 
@@ -117,5 +99,7 @@ export const useVotingData = () => {
     voteSubmitted,
     timeLeft,
     handleVote,
+    showConfirmation,
+    setShowConfirmation
   };
 };
