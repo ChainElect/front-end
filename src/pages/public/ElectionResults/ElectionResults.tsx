@@ -45,9 +45,10 @@ export const ElectionResults = () => {
       let calculatedTotalVotes = 0;
 
       const formattedParties = electionResults.map((party) => {
-        const votes = parseInt(party.voteCount.toString(), 10);
-        calculatedTotalVotes += votes;
+      const votes = parseInt(party.voteCount.toString(), 10);
+      calculatedTotalVotes += votes;
 
+      console.log("Votes: ", calculatedTotalVotes);
         return {
           name: party.name,
           votes: votes,
@@ -55,14 +56,9 @@ export const ElectionResults = () => {
         };
       });
 
-      const calculatedVoterTurnout = (
-        (calculatedTotalVotes / totalEligibleVoters) *
-        100
-      ).toFixed(1);
-
       setParties(formattedParties);
+      console.log("Ivo: ", calculatedTotalVotes)
       setTotalVotes(calculatedTotalVotes);
-      //setVoterTurnout(calculatedVoterTurnout);
       setLoading(false);
     } catch (err) {
       setError(err.message);
@@ -98,23 +94,8 @@ export const ElectionResults = () => {
 
         <Card className="mt-8">
           <Title as="h2" size="2xl">
-            {t("electionResults.totalVotes", { count: totalVotes })}
+            {t("electionResults.totalVotes")} {" "} { totalVotes }
           </Title>
-          <div className="flex items-center space-x-3 mt-3">
-            <Label size="lg">{t("electionResults.voterTurnoutLabel")}</Label>
-            <div className="flex-1 bg-border-light dark:bg-border-dark h-6 rounded-lg">
-              <div
-                className="h-6 rounded-lg transition-all"
-                style={{
-                  width: `${voterTurnout}%`,
-                  backgroundColor: primary,
-                }}
-              ></div>
-            </div>
-            <Label size="lg" weight="semibold">
-              {voterTurnout}%
-            </Label>
-          </div>
         </Card>
 
         <div className="mt-8">

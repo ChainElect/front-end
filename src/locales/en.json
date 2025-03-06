@@ -98,7 +98,7 @@
     "lastUpdated": "Last updated:",
     "loading": "Loading results...",
     "error": "Error loading results.",
-    "totalVotes": "Total Votes: {count}",
+    "totalVotes": "Total Votes:",
     "voterTurnoutLabel": "Voter Turnout:",
     "voteDistributionTitle": "Vote Distribution",
     "noParties": "No parties available."
@@ -485,5 +485,9 @@
   "invalidAdminAlert": "Please enter a valid admin address!",
   "adminChangeSuccess": "Admin successfully changed to: {admin}",
   "adminChangeError": "Error changing admin!"
+},
+"common": {
+  "cancel": "Cancel",
+  "confirm": "Confirm"
 }
 }
