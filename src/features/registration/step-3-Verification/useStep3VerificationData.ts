@@ -28,6 +28,7 @@ export const useStep3VerificationData = (
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(registerPayload),
         }
       );
