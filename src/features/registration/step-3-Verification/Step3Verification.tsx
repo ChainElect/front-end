@@ -30,6 +30,7 @@ export const Step3Verification = ({ data, onConfirm, onRetry }) => {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({
               selfieFacePath: selfiePhotoPath,
               idCardFacePath: frontPath,
