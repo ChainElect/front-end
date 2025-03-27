@@ -43,6 +43,7 @@ export const useStep2CaptureSelfieData = (
       const response = await fetch(`${BACKEND_BASE_URL}/api/ir/upload/face`, {
         method: "POST",
         body: formdata,
+        credentials: "include",
       });
       const result = await response.json();
       if (result.success) {
