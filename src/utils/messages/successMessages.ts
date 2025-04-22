@@ -7,4 +7,7 @@ export const SUCCESS_MESSAGES = {
   LOGOUT_SUCCESS: "You have successfully logged out.",
   PARTY_ADDED: "Успешно добавихте партия!",
   ELECTION_ADDED: "Успешно добавихте избори!",
+  VOTE_PREPARED: "Vote data prepared successfully.",
+  VOTE_SUBMITTED: "Your vote has been successfully recorded on the blockchain.",
+  COMMITMENT_GENERATED: "Commitment generated successfully.",
 };

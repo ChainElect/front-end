@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { RegistrationData, RegistrationStep } from "types/registration";
+import { useNavigate } from "react-router-dom";
 
 export const useRegistrationFlowData = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<RegistrationStep>("ID_UPLOAD");
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     frontPath: null,
@@ -40,10 +42,17 @@ export const useRegistrationFlowData = () => {
     });
   };
 
+  const handleFinalComplete = () => {
+    // Reset registration flow and potentially navigate to a success page
+    handleErrorRetry();
+    navigate('/login'); // or any other appropriate route
+  };
+
   return {
     currentStep,
     registrationData,
     handleStepComplete,
     handleErrorRetry,
+    handleFinalComplete,
   };
 };

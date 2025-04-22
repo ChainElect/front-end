@@ -1,5 +1,5 @@
 export const BACKEND_BASE_URL =
-  process.env.REACT_APP_BACKEND_BASE_URL || "http://localhost:5001";
+  process.env.BACKEND_BASE_URL || "http://localhost:5001";
 
 export const BACKEND_AUTH_API_ENDPOINTS = {
   REGISTER: `${BACKEND_BASE_URL}/register`,
@@ -7,5 +7,8 @@ export const BACKEND_AUTH_API_ENDPOINTS = {
 };
 
 export const BACKEND_DATA_API_ENDPOINTS = {
-  PARTIES: `${BACKEND_BASE_URL}/parties`,
+  PARTIES: `${BACKEND_BASE_URL}/api/party/parties`,
+  PREPARE_VOTE: `${BACKEND_BASE_URL}/api/zkp/prepare-vote`,
+  CAST_VOTE: `${BACKEND_BASE_URL}/api/zkp/cast-vote`,
+  VOTE_STATUS: `${BACKEND_BASE_URL}/api/zkp/status`,
 };

@@ -1,145 +1,218 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
-import { FaCheckCircle, FaClock, FaVoteYea } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useThemeColors } from "@hooks/useThemeColors";
-import { Card } from "@theme/src/components/cards/Card";
-import { Title } from "@theme/src/foundation/typography/Title";
-import { Paragraph } from "@theme/src/foundation/typography/Paragraph";
-import { ActionButton, Button } from "@theme/src/components";
-import { useVotingData } from "./useVotingData";
-import { t } from "i18next";
-import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
+import { VotingService } from "../../../services/votingService";
+import ZkpCredentialsService from "../../../services/zkpCredentialsService";
+import { ethers } from "ethers";
+import { useWallets } from "@web3-onboard/react";
+import { ERC20_ABI, ERC20_ADDRESS } from "../../../utils/wallet/walletConstants";
 
 export const VotingPage = () => {
   const { id } = useParams();
-  const { primary, secondary, text, background, border } = useThemeColors();
-  const {
-    parties,
-    selectedParty,
-    setSelectedParty,
-    voteSubmitted,
-    timeLeft,
-    handleVote,
-    showConfirmation,
-    setShowConfirmation,
-  } = useVotingData(id);
+  const { primary, text, background, border } = useThemeColors();
+  const [parties, setParties] = useState([]);
+  const [selectedParty, setSelectedParty] = useState(null);
+  const [voteSubmitted, setVoteSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [timeLeft, setTimeLeft] = useState("Loading...");
+  const connectedWallets = useWallets();
+  // Check if user has ZKP credentials
+  useEffect(() => {
+    const credentials = ZkpCredentialsService.getCredentials();
+    if (!credentials) {
+      setError("You need to register before voting. Please complete the registration process.");
+    }
+  }, []);
+  // Start a countdown timer
+  const startCountdown = (endTime) => {
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const remaining = endTime - now;
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        setTimeLeft("Voting has ended");
+      } else {
+        const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((remaining / (1000 * 60)) % 60);
+        const seconds = Math.floor((remaining / 1000) % 60);
+        setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  };
+
+  // Fetch parties from blockchain
+  useEffect(() => {
+    const fetchParties = async () => {
+      try {
+        const injectedProvider = connectedWallets[0]?.provider;
+        if (!injectedProvider) {
+          console.error("No provider connected.");
+          return;
+        }
+
+        const provider = new ethers.providers.Web3Provider(injectedProvider);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
+
+        // Get election details
+        const electionDetails = await contract.getElectionDetails(id);
+
+        // Set parties
+        setParties(electionDetails.parties.map(party => ({
+          id: party.id.toString(),
+          name: party.name,
+          description: party.description
+        })));
+
+        // Start countdown timer
+        startCountdown(electionDetails.endTime.toNumber() * 1000);
+      } catch (error) {
+        console.error("Error fetching election details:", error);
+        setError("Failed to load election details");
+      }
+    };
+
+    if (id) {
+      fetchParties();
+    }
+  }, [id]);
+
+  const openConfirmation = () => {
+    if (!selectedParty) {
+      alert("Please select a party before voting!");
+      return;
+    }
+    setShowConfirmation(true);
+  };
+
+  const handleVote = async () => {
+    if (!selectedParty) {
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Step 1: Prepare vote data with ZKP
+      const voteData = await VotingService.prepareVote(id, selectedParty.id);
+
+      // Step 2: Cast vote
+      await VotingService.castVote(voteData);
+
+      // Step 3: Update UI
+      setVoteSubmitted(true);
+      setShowConfirmation(false);
+    } catch (error) {
+      console.error("Error casting vote:", error);
+      setError(error.message || "Failed to cast vote");
+      setShowConfirmation(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
-      {/* Header */}
+    <div
+      className="min-h-screen py-10"
+      style={{ backgroundColor: background }}
+    >
       <header
-        className="py-20 backdrop-blur-lg border-b text-center"
+        className="py-16 backdrop-blur-lg border-b"
         style={{
           backgroundColor: `color-mix(in srgb, ${background} 85%, transparent)`,
           borderColor: `color-mix(in srgb, ${primary} 30%, transparent)`,
         }}
       >
-        <Title variant="gradient" className="text-4xl font-bold">
-          {t("voting.headerTitle")}
-        </Title>
-        <Paragraph className="mt-4 text-lg opacity-90" style={{ color: text }}>
-          {t("voting.headerSubtitle")}
-        </Paragraph>
-        <div className="mt-6 flex items-center justify-center space-x-3">
-          <FaClock className="text-xl" style={{ color: primary }} />
-          <Title size="2xl" className="font-bold" style={{ color: text }}>
-            {timeLeft || t("voting.loadingTime")}
-          </Title>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1
+            className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+          >
+            Voting
+          </h1>
+          <p className="mt-4 text-lg" style={{ color: text }}>
+            Select your party and cast your vote securely.
+          </p>
+          <div className="mt-4">
+            <span className="text-xl font-bold" style={{ color: primary }}>Time remaining:</span>{" "}
+            <span className="text-xl" style={{ color: text }}>{timeLeft}</span>
+          </div>
         </div>
       </header>
 
-      {/* Main content */}
       <main className="py-12">
-        <div className="max-w-5xl mx-auto px-6 sm:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {error && (
+            <div className="mb-8 p-4 bg-red-100 border border-red-300 rounded-lg text-red-700">
+              {error}
+            </div>
+          )}
+
           {!voteSubmitted ? (
             <>
-              <Title
-                as="h2"
-                size="2xl"
-                variant="gradient"
-                className="text-center"
-              >
-                {t("voting.chooseParty")}
-              </Title>
+              <h2 className="text-2xl font-bold mb-6 text-center" style={{ color: primary }}>
+                Select a Party
+              </h2>
 
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {parties.length > 0 ? (
                   parties.map((party) => (
-                    <Card
+                    <div
                       key={party.id}
-                      variant="default"
-                      backgroundVariant="default"
-                      className={`cursor-pointer transition-transform transform ${
-                        selectedParty?.id === party.id
-                          ? "border-4 scale-105"
-                          : "border border-opacity-50 hover:scale-105"
-                      }`}
+                      className={`p-6 rounded-xl border transition-all hover:scale-105 cursor-pointer ${selectedParty?.id === party.id ? "border-4" : "border"
+                        }`}
                       style={{
-                        borderColor:
-                          selectedParty?.id === party.id ? primary : border,
+                        backgroundColor: `color-mix(in srgb, ${background} 95%, transparent)`,
+                        borderColor: selectedParty?.id === party.id ? primary : border,
                       }}
                       onClick={() => setSelectedParty(party)}
                     >
-                      <img
-                        src={party.photo}
-                        alt={party.name}
-                        className="w-24 h-24 rounded-full mx-auto"
-                      />
-                      <Title
-                        as="h3"
-                        size="xl"
-                        className="mt-4"
-                        style={{ color: primary }}
-                      >
+                      <h3 className="text-xl font-bold mb-3" style={{ color: primary }}>
                         {party.name}
-                      </Title>
-                      <Paragraph
-                        className="mt-2 text-sm opacity-80"
-                        style={{ color: text }}
-                      >
-                        {party.description}
-                      </Paragraph>
-                    </Card>
+                      </h3>
+                      <p className="opacity-90" style={{ color: text }}>
+                        {party.description || "No description available."}
+                      </p>
+                    </div>
                   ))
                 ) : (
-                  <Paragraph className="text-center" opacity="high">
-                    {t("voting.noParties")}
-                  </Paragraph>
+                  <p className="col-span-3 text-center opacity-90" style={{ color: text }}>
+                    No parties available.
+                  </p>
                 )}
               </div>
 
               <div className="mt-12 text-center">
-                <ActionButton
-                  text={t("voting.voteButton")}
-                  onClick={() =>
-                    selectedParty
-                      ? setShowConfirmation(true)
-                      : alert(t("voting.selectPartyAlert"))
-                  }
+                <button
+                  onClick={openConfirmation}
+                  disabled={isLoading || !selectedParty}
+                  className="px-8 py-3 rounded-full font-medium transition-all bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ color: "white" }}
                 >
-                  <FaVoteYea className="inline-block mr-2" />
-                </ActionButton>
+                  {isLoading ? "Processing..." : "Cast Your Vote"}
+                </button>
               </div>
             </>
           ) : (
-            <div className="text-center">
-              <FaCheckCircle
-                className="text-5xl mx-auto"
-                style={{ color: primary }}
-              />
-              <Title
-                as="h2"
-                size="3xl"
-                className="mt-4"
-                style={{ color: primary }}
+            <div className="text-center p-8 rounded-xl border" style={{ borderColor: border }}>
+              <h2 className="text-3xl font-bold mb-4" style={{ color: primary }}>
+                Thank you for voting!
+              </h2>
+              <p className="mb-8 opacity-90" style={{ color: text }}>
+                Your vote has been securely recorded on the blockchain.
+              </p>
+              <button
+                onClick={() => window.location.href = "/results"}
+                className="px-8 py-3 rounded-full font-medium transition-all bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary"
+                style={{ color: "white" }}
               >
-                {t("voting.voteSubmittedMessage")}
-              </Title>
-              <div className="mt-8">
-                <Link to="/results">
-                  <ActionButton text={t("voting.viewResults")} />
-                </Link>
-              </div>
+                View Results
+              </button>
             </div>
           )}
         </div>
@@ -147,23 +220,39 @@ export const VotingPage = () => {
 
       {/* Confirmation Modal */}
       {showConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card variant="elevated" className="p-6 max-w-sm w-full">
-            <Title as="h3" size="xl" variant="gradient" className="mb-4">
-              {t("voting.confirmationTitle")}
-            </Title>
-            <Paragraph className="mb-6">
-              {t("voting.confirmationText")}{" "}
-              <span className="font-semibold">{selectedParty?.name}</span>
-            </Paragraph>
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowConfirmation(false)}
+        >
+          <div
+            className="p-6 rounded-xl max-w-md w-full"
+            style={{ backgroundColor: background }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-bold mb-4" style={{ color: primary }}>
+              Confirm Your Vote
+            </h3>
+            <p className="mb-6 opacity-90" style={{ color: text }}>
+              You are about to vote for <span className="font-semibold">{selectedParty.name}</span>.
+              This action cannot be undone, and your vote will be anonymously recorded on the blockchain.
+            </p>
             <div className="flex justify-end space-x-4">
-              <SecondaryButton
-                text={t("common.cancel")}
+              <button
                 onClick={() => setShowConfirmation(false)}
-              />
-              <ActionButton text={t("common.confirm")} onClick={handleVote} />
+                className="px-4 py-2 rounded-lg border"
+                style={{ borderColor: border, color: text }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleVote}
+                className="px-4 py-2 rounded-lg"
+                style={{ backgroundColor: primary, color: "white" }}
+              >
+                Confirm Vote
+              </button>
             </div>
-          </Card>
+          </div>
         </div>
       )}
     </div>

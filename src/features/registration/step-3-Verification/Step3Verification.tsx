@@ -1,75 +1,40 @@
-// Step3Verification.tsx
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useThemeColors } from "@hooks/useThemeColors";
 import { ActionButton } from "@theme/src/components";
 import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
-import { useStep3VerificationData } from "./useStep3VerificationData";
-import { BACKEND_BASE_URL } from "@utils/endpoints";
+import axios from "axios";
 
 export const Step3Verification = ({ data, onConfirm, onRetry }) => {
   const { primary, text, border } = useThemeColors();
-  const [faceMatched, setFaceMatched] = useState<boolean | null>(null);
-  const { handleFinalRegistration } = useStep3VerificationData(
-    data,
-    onConfirm,
-    onRetry
-  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // 1. Face Match on Mount
-  useEffect(() => {
-    const verifyFaceMatch = async () => {
-      const { selfiePhotoPath, frontPath } = data;
-      if (!selfiePhotoPath || !frontPath) {
-        // If either path is missing, go back to retake
-        onRetry();
-        return;
+  // Handle final registration
+  const handleFinalRegistration = async () => {
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Send verification data to server for ZKP registration
+      const response = await axios.post("http://localhost:5001/api/registration/complete", {
+        frontPath: data.frontPath,
+        backPath: data.backPath,
+        selfiePath: data.selfiePhotoPath
+      });
+
+      if (response.data.success) {
+        // Pass ZKP credentials to parent component
+        onConfirm(response.data.credentials);
+      } else {
+        setError(response.data.message || "Registration failed");
+        setIsSubmitting(false);
       }
-      try {
-        const matchResponse = await fetch(
-          `${BACKEND_BASE_URL}/api/ir/match/face`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({
-              selfieFacePath: selfiePhotoPath,
-              idCardFacePath: frontPath,
-            }),
-          }
-        );
-        const matchResult = await matchResponse.json();
-        if (matchResult.success) {
-          setFaceMatched(true);
-        } else {
-          setFaceMatched(false);
-        }
-      } catch (err) {
-        setFaceMatched(false);
-      }
-    };
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Server error");
+      setIsSubmitting(false);
+    }
+  };
 
-    verifyFaceMatch();
-  }, [data, onRetry]);
-
-  // 2. While matching, show a "verifying" message
-  if (faceMatched === null) {
-    return <p style={{ color: text }}>Verifying face match...</p>;
-  }
-
-  // 3. If match fails, show error & retake
-  if (faceMatched === false) {
-    return (
-      <div className="space-y-8">
-        <p style={{ color: text }}>
-          Face verification failed. The person on the ID does not match the
-          selfie.
-        </p>
-        <SecondaryButton text="Retake Photos" onClick={onRetry} />
-      </div>
-    );
-  }
-
-  // 4. If match passes, show the extracted data
   return (
     <div className="space-y-8">
       <div className="p-6 rounded-xl border" style={{ borderColor: border }}>
@@ -92,11 +57,20 @@ export const Step3Verification = ({ data, onConfirm, onRetry }) => {
         </div>
       </div>
 
+      {error && (
+        <div className="p-4 bg-red-100 border border-red-300 rounded-lg text-red-700">
+          {error}
+        </div>
+      )}
+
       <div className="flex justify-center gap-4">
-        <SecondaryButton text="Retake Photos" onClick={onRetry} />
+        <SecondaryButton
+          text="Retake Photos"
+          onClick={onRetry}
+        />
         <ActionButton
-          text="Confirm & Register"
-          onClick={() => handleFinalRegistration()}
+          text={isSubmitting ? "Processing..." : "Confirm & Register"}
+          onClick={handleFinalRegistration}
         />
       </div>
     </div>

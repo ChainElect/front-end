@@ -5,6 +5,7 @@ import { Step2CaptureSelfie } from "./step-2-CaptureSelfie/Step2CaptureSelfie";
 import { Step3Verification } from "./step-3-Verification/Step3Verification";
 import { useRegistrationFlowData } from "./useRegistrationFlowData";
 import { Step1IDCard } from "./step-1-uploadID/Step1IDCard";
+import ZkpCredentialsService from "../../services/zkpCredentialsService";
 
 export const RegistrationFlow = () => {
   const { primary, background } = useThemeColors();
@@ -13,7 +14,20 @@ export const RegistrationFlow = () => {
     registrationData,
     handleStepComplete,
     handleErrorRetry,
+    handleFinalComplete
   } = useRegistrationFlowData();
+
+  // Handle final registration completion with ZKP credentials
+  const handleRegistrationComplete = (credentials) => {
+    // Store ZKP credentials securely
+    ZkpCredentialsService.storeCredentials(
+      credentials.nullifier,
+      credentials.secret
+    );
+    
+    // Complete registration flow
+    handleFinalComplete();
+  };
 
   return (
     <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
@@ -53,9 +67,7 @@ export const RegistrationFlow = () => {
           {currentStep === "VERIFICATION" && (
             <Step3Verification
               data={registrationData}
-              onConfirm={() => {
-                // Handle final confirmation (e.g. calling backend endpoints)
-              }}
+              onConfirm={handleRegistrationComplete}
               onRetry={handleErrorRetry}
             />
           )}

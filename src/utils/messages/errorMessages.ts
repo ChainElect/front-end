@@ -48,4 +48,32 @@ export const ERROR_MESSAGES = {
     code: "WALLET001",
     message: "Моля, свържете портфейла си!",
   },
+  VOTE_PREPARATION_FAILED: {
+    code: "VOTE001",
+    message: "Failed to prepare vote. Please try again.",
+  },
+  VOTE_SUBMISSION_FAILED: {
+    code: "VOTE002",
+    message: "Failed to submit vote. Please try again.",
+  },
+  VOTE_STATUS_CHECK_FAILED: {
+    code: "VOTE003",
+    message: "Failed to check vote status.",
+  },
+  ALREADY_VOTED: {
+    code: "VOTE004",
+    message: "You have already voted in this election.",
+  },
+  MISSING_VOTE_PARAMETERS: {
+    code: "VOTE005",
+    message: "Missing required vote parameters.",
+  },
+  INVALID_VOTE_DATA: {
+    code: "VOTE006",
+    message: "Invalid vote data provided.",
+  },
+  COMMITMENT_GENERATION_FAILED: {
+    code: "ZKP001",
+    message: "Failed to generate commitment.",
+  },
 };
