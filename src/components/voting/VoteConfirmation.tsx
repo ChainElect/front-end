@@ -5,6 +5,7 @@ import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
 import { Title, Paragraph, Badge } from "@theme/src/foundation/typography";
 import { Card } from "@theme/src/components/cards/Card";
 import axios from "axios";
+import { BACKEND_DATA_API_ENDPOINTS } from "@utils/endpoints";
 
 interface VoteConfirmationProps {
   voteData: {
@@ -37,7 +38,7 @@ export const VoteConfirmation: React.FC<VoteConfirmationProps> = ({
 
     try {
       // Call backend API to cast the vote
-      const response = await axios.post("/api/zkp/cast-vote", voteData);
+      const response = await axios.post(BACKEND_DATA_API_ENDPOINTS.CAST_VOTE, voteData);
 
       if (response.data.success) {
         setTxHash(response.data.data.transactionHash);
@@ -47,7 +48,7 @@ export const VoteConfirmation: React.FC<VoteConfirmationProps> = ({
       } else {
         setError(response.data.message || "Failed to cast vote");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error casting vote:", error);
       setError(
         error.response?.data?.message || 

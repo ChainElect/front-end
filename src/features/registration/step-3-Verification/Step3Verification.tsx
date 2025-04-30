@@ -3,6 +3,7 @@ import { useThemeColors } from "@hooks/useThemeColors";
 import { ActionButton } from "@theme/src/components";
 import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
 import axios from "axios";
+import { BACKEND_DATA_API_ENDPOINTS } from "@utils/endpoints";
 
 export const Step3Verification = ({ data, onConfirm, onRetry }) => {
   const { primary, text, border } = useThemeColors();
@@ -16,7 +17,7 @@ export const Step3Verification = ({ data, onConfirm, onRetry }) => {
 
     try {
       // Send verification data to server for ZKP registration
-      const response = await axios.post("http://localhost:5001/api/registration/complete", {
+      const response = await axios.post(BACKEND_DATA_API_ENDPOINTS.ZKP_REGISTER, {
         frontPath: data.frontPath,
         backPath: data.backPath,
         selfiePath: data.selfiePhotoPath

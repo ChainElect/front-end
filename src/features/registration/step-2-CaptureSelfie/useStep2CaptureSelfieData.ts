@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL } from "@utils/endpoints";
+import { BACKEND_DATA_API_ENDPOINTS } from "@utils/endpoints";
 import { useState, useRef } from "react";
 import Webcam from "react-webcam";
 
@@ -40,7 +40,7 @@ export const useStep2CaptureSelfieData = (
     const formdata = new FormData();
     formdata.append("faceImage", file);
     try {
-      const response = await fetch(`${BACKEND_BASE_URL}/api/ir/upload/face`, {
+      const response = await fetch(BACKEND_DATA_API_ENDPOINTS.IR_UPLOAD_FACE, {
         method: "POST",
         body: formdata,
         credentials: "include",

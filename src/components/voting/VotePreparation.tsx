@@ -6,6 +6,7 @@ import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
 import { Title, Paragraph } from "@theme/src/foundation/typography";
 import { Card } from "@theme/src/components/cards/Card";
 import axios from "axios";
+import { BACKEND_DATA_API_ENDPOINTS } from "@utils/endpoints";
 
 interface VotePreparationProps {
   electionId: string;
@@ -47,12 +48,12 @@ export const VotePreparation: React.FC<VotePreparationProps> = ({
     try {
       if (!credentials || !credentials.nullifier || !credentials.secret) {
         // No credentials found, redirect to registration
-        navigate("/register2");
+        navigate("/register");
         return;
       }
 
       // Call backend API to prepare the vote with ZKP
-      const response = await axios.post("/api/zkp/prepare-vote", {
+      const response = await axios.post(BACKEND_DATA_API_ENDPOINTS.PREPARE_VOTE, {
         electionId,
         partyId,
         userData: {
@@ -62,12 +63,23 @@ export const VotePreparation: React.FC<VotePreparationProps> = ({
       });
 
       if (response.data.success) {
+        // Save any updated credentials if provided
+        if (response.data.data.commitmentData) {
+          localStorage.setItem(
+            `commitment_${electionId}`,
+            JSON.stringify(response.data.data.commitmentData)
+          );
+        }
+        
         // Pass the vote data to the parent component
-        onComplete(response.data.data);
+        onComplete({
+          ...response.data.data,
+          partyName
+        });
       } else {
         setError(response.data.message || "Failed to prepare vote");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error preparing vote:", error);
       setError(
         error.response?.data?.message || 

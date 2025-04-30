@@ -467,6 +467,7 @@ export const ERC20_ABI = [
   },
 ];
 
-export const ERC20_ADDRESS = "0x92f93FD667d78cF3C98CF78d69F05F8927cbA5a2"; // Replace with your deployed VotingSystem contract address
-export const ZKTree_ADDRESS = "0x570042DFa06E8E607cC6373067aD2885CB4845D1"; // Replace with your deployed ZKTree contract address 
-export const Verifier_ADDRESS = "0xe7d04e13E747a9D4959596dbE33882F5a477953f"; // Replace with your deployed Verifier contract address
+// Standardize contract addresses across the app
+export const ERC20_ADDRESS = "0x92f93FD667d78cF3C98CF78d69F05F8927cbA5a2"; 
+export const ZKTree_ADDRESS = "0x570042DFa06E8E607cC6373067aD2885CB4845D1"; 
+export const Verifier_ADDRESS = "0xe7d04e13E747a9D4959596dbE33882F5a477953f";
