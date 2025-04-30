@@ -15,7 +15,7 @@ import { OngoingElections } from "../pages/user/OnGoingElections";
 import { About } from "../pages/public/About/About";
 import { Resources } from "pages/user/Resources/Resourses";
 import { Home } from "../pages/public/Home/Home";
-import { VotingPage } from "../pages/user/VotingPage/VotingPage";
+import { ZkpVotingPage } from "../pages/user/VotingPage/VotingPage";
 import { FAQ } from "../pages/public/FAQ/FAQ";
 import { ContactUs } from "../pages/public/ContactUs";
 import { PrivacyPolicy } from "../pages/public/PrivacyPolicy";
@@ -203,7 +203,7 @@ export const AnimatedRoutes: FC = (): JSX.Element => {
           path="/voting/:id"
           element={
             <PageWrapper>
-              <VotingPage />
+              <ZkpVotingPage />
             </PageWrapper>
           }
         />

@@ -1,32 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useThemeColors } from "@hooks/useThemeColors";
-import { VotingService } from "../../../services/votingService";
-import ZkpCredentialsService from "../../../services/zkpCredentialsService";
-import { ethers } from "ethers";
-import { useWallets } from "@web3-onboard/react";
-import { ERC20_ABI, ERC20_ADDRESS } from "../../../utils/wallet/walletConstants";
+import { Title, Paragraph } from "@theme/src/foundation/typography";
+import { Card } from "@theme/src/components/cards/Card";
+import { ActionButton } from "@theme/src/components/buttons/ActionButton";
+import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
+import { VotePreparation } from "../../../components/voting/VotePreparation";
+import { VoteConfirmation } from "../../../components/voting/VoteConfirmation";
+import axios from "axios";
+import { FaExclamationTriangle, FaCheckCircle, FaLock } from "react-icons/fa";
 
-export const VotingPage = () => {
-  const { id } = useParams();
-  const { primary, text, background, border } = useThemeColors();
-  const [parties, setParties] = useState([]);
-  const [selectedParty, setSelectedParty] = useState(null);
-  const [voteSubmitted, setVoteSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [timeLeft, setTimeLeft] = useState("Loading...");
-  const connectedWallets = useWallets();
-  // Check if user has ZKP credentials
+export const ZkpVotingPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { primary, secondary, text, background, border } = useThemeColors();
+  const navigate = useNavigate();
+
+  const [election, setElection] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedParty, setSelectedParty] = useState<any>(null);
+  const [step, setStep] = useState<"selection" | "preparation" | "confirmation" | "success">("selection");
+  const [voteData, setVoteData] = useState<any>(null);
+  const [timeLeft, setTimeLeft] = useState<string | null>(null);
+
+  // Fetch election details
   useEffect(() => {
-    const credentials = ZkpCredentialsService.getCredentials();
-    if (!credentials) {
-      setError("You need to register before voting. Please complete the registration process.");
+    const fetchElection = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`/api/zkp/elections/${id}`);
+        if (response.data.success) {
+          setElection(response.data.data);
+          
+          // Start countdown if election end time exists
+          if (response.data.data.endTime) {
+            startCountdown(new Date(response.data.data.endTime).getTime());
+          }
+        } else {
+          setError("Failed to fetch election details");
+        }
+      } catch (error) {
+        console.error("Error fetching election:", error);
+        setError("Error fetching election details. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchElection();
     }
-  }, []);
+  }, [id]);
+
   // Start a countdown timer
-  const startCountdown = (endTime) => {
+  const startCountdown = (endTime: number) => {
     const timer = setInterval(() => {
       const now = Date.now();
       const remaining = endTime - now;
@@ -34,6 +61,7 @@ export const VotingPage = () => {
       if (remaining <= 0) {
         clearInterval(timer);
         setTimeLeft("Voting has ended");
+        setError("This election has ended and is no longer accepting votes.");
       } else {
         const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((remaining / (1000 * 60)) % 60);
@@ -45,83 +73,132 @@ export const VotingPage = () => {
     return () => clearInterval(timer);
   };
 
-  // Fetch parties from blockchain
-  useEffect(() => {
-    const fetchParties = async () => {
-      try {
-        const injectedProvider = connectedWallets[0]?.provider;
-        if (!injectedProvider) {
-          console.error("No provider connected.");
-          return;
-        }
-
-        const provider = new ethers.providers.Web3Provider(injectedProvider);
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
-
-        // Get election details
-        const electionDetails = await contract.getElectionDetails(id);
-
-        // Set parties
-        setParties(electionDetails.parties.map(party => ({
-          id: party.id.toString(),
-          name: party.name,
-          description: party.description
-        })));
-
-        // Start countdown timer
-        startCountdown(electionDetails.endTime.toNumber() * 1000);
-      } catch (error) {
-        console.error("Error fetching election details:", error);
-        setError("Failed to load election details");
-      }
-    };
-
-    if (id) {
-      fetchParties();
-    }
-  }, [id]);
-
-  const openConfirmation = () => {
-    if (!selectedParty) {
-      alert("Please select a party before voting!");
-      return;
-    }
-    setShowConfirmation(true);
+  // Handle party selection
+  const handleSelectParty = (party: any) => {
+    setSelectedParty(party);
   };
 
-  const handleVote = async () => {
+  // Proceed to vote preparation
+  const handleProceedToPreparation = () => {
     if (!selectedParty) {
+      setError("Please select a party before proceeding");
       return;
     }
+    setStep("preparation");
+  };
 
-    setIsLoading(true);
-    setError(null);
+  // Handle vote preparation completion
+  const handlePreparationComplete = (data: any) => {
+    setVoteData(data);
+    setStep("confirmation");
+  };
 
-    try {
-      // Step 1: Prepare vote data with ZKP
-      const voteData = await VotingService.prepareVote(id, selectedParty.id);
+  // Handle vote confirmation completion
+  const handleVoteComplete = () => {
+    setStep("success");
+    // Show success message for a few seconds, then redirect
+    setTimeout(() => {
+      navigate(`/results/${id}`);
+    }, 5000);
+  };
 
-      // Step 2: Cast vote
-      await VotingService.castVote(voteData);
-
-      // Step 3: Update UI
-      setVoteSubmitted(true);
-      setShowConfirmation(false);
-    } catch (error) {
-      console.error("Error casting vote:", error);
-      setError(error.message || "Failed to cast vote");
-      setShowConfirmation(false);
-    } finally {
-      setIsLoading(false);
+  // Handle cancellation/back button
+  const handleCancel = () => {
+    if (step === "preparation") {
+      setStep("selection");
+    } else if (step === "confirmation") {
+      setStep("preparation");
     }
   };
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: background }}>
+        <Paragraph>Loading election details...</Paragraph>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="p-6 text-center">
+            <FaExclamationTriangle className="mx-auto text-red-500 h-16 w-16 mb-4" />
+            <Title as="h2" size="3xl" className="mb-4">
+              Something Went Wrong
+            </Title>
+            <Paragraph className="mb-6">{error}</Paragraph>
+            <SecondaryButton text="Back to Elections" onClick={() => navigate("/onGoingElections")} />
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Success page
+  if (step === "success") {
+    return (
+      <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="p-8 text-center">
+            <FaCheckCircle className="mx-auto text-green-500 h-16 w-16 mb-4" />
+            <Title as="h2" size="3xl" className="mb-4">
+              Vote Cast Successfully!
+            </Title>
+            <Paragraph className="mb-6">
+              Your vote has been anonymously recorded on the blockchain.
+            </Paragraph>
+            <Paragraph className="text-sm opacity-80 mb-8">
+              Redirecting to results page in a few seconds...
+            </Paragraph>
+            <ActionButton text="View Results Now" onClick={() => navigate(`/results/${id}`)} />
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Vote preparation page
+  if (step === "preparation") {
+    return (
+      <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <VotePreparation
+            electionId={id || ""}
+            partyId={selectedParty.id}
+            partyName={selectedParty.name}
+            onComplete={handlePreparationComplete}
+            onCancel={handleCancel}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Vote confirmation page
+  if (step === "confirmation" && voteData) {
+    return (
+      <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <VoteConfirmation
+            voteData={{
+              ...voteData,
+              partyName: selectedParty.name
+            }}
+            onComplete={handleVoteComplete}
+            onCancel={handleCancel}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Party selection page (default view)
   return (
-    <div
-      className="min-h-screen py-10"
-      style={{ backgroundColor: background }}
-    >
+    <div className="min-h-screen py-12" style={{ backgroundColor: background }}>
       <header
         className="py-16 backdrop-blur-lg border-b"
         style={{
@@ -129,132 +206,83 @@ export const VotingPage = () => {
           borderColor: `color-mix(in srgb, ${primary} 30%, transparent)`,
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1
-            className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
-          >
-            Voting
-          </h1>
-          <p className="mt-4 text-lg" style={{ color: text }}>
-            Select your party and cast your vote securely.
-          </p>
-          <div className="mt-4">
-            <span className="text-xl font-bold" style={{ color: primary }}>Time remaining:</span>{" "}
-            <span className="text-xl" style={{ color: text }}>{timeLeft}</span>
-          </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Title variant="gradient" size="4xl" className="mb-4">
+            {election?.name || "Vote Now"}
+          </Title>
+          <Paragraph className="text-lg opacity-90" style={{ color: text }}>
+            Select a party and cast your anonymous vote securely
+          </Paragraph>
+          {timeLeft && (
+            <div className="mt-4 inline-block px-4 py-2 rounded-full" style={{ backgroundColor: `color-mix(in srgb, ${primary} 20%, transparent)` }}>
+              <Paragraph className="font-semibold">Time remaining: {timeLeft}</Paragraph>
+            </div>
+          )}
         </div>
       </header>
 
       <main className="py-12">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {error && (
-            <div className="mb-8 p-4 bg-red-100 border border-red-300 rounded-lg text-red-700">
-              {error}
-            </div>
-          )}
-
-          {!voteSubmitted ? (
-            <>
-              <h2 className="text-2xl font-bold mb-6 text-center" style={{ color: primary }}>
-                Select a Party
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {parties.length > 0 ? (
-                  parties.map((party) => (
-                    <div
-                      key={party.id}
-                      className={`p-6 rounded-xl border transition-all hover:scale-105 cursor-pointer ${selectedParty?.id === party.id ? "border-4" : "border"
-                        }`}
-                      style={{
-                        backgroundColor: `color-mix(in srgb, ${background} 95%, transparent)`,
-                        borderColor: selectedParty?.id === party.id ? primary : border,
-                      }}
-                      onClick={() => setSelectedParty(party)}
-                    >
-                      <h3 className="text-xl font-bold mb-3" style={{ color: primary }}>
-                        {party.name}
-                      </h3>
-                      <p className="opacity-90" style={{ color: text }}>
-                        {party.description || "No description available."}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="col-span-3 text-center opacity-90" style={{ color: text }}>
-                    No parties available.
-                  </p>
-                )}
-              </div>
-
-              <div className="mt-12 text-center">
-                <button
-                  onClick={openConfirmation}
-                  disabled={isLoading || !selectedParty}
-                  className="px-8 py-3 rounded-full font-medium transition-all bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ color: "white" }}
-                >
-                  {isLoading ? "Processing..." : "Cast Your Vote"}
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="text-center p-8 rounded-xl border" style={{ borderColor: border }}>
-              <h2 className="text-3xl font-bold mb-4" style={{ color: primary }}>
-                Thank you for voting!
-              </h2>
-              <p className="mb-8 opacity-90" style={{ color: text }}>
-                Your vote has been securely recorded on the blockchain.
-              </p>
-              <button
-                onClick={() => window.location.href = "/results"}
-                className="px-8 py-3 rounded-full font-medium transition-all bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary"
-                style={{ color: "white" }}
-              >
-                View Results
-              </button>
-            </div>
-          )}
-        </div>
-      </main>
-
-      {/* Confirmation Modal */}
-      {showConfirmation && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => setShowConfirmation(false)}
-        >
-          <div
-            className="p-6 rounded-xl max-w-md w-full"
-            style={{ backgroundColor: background }}
-            onClick={e => e.stopPropagation()}
-          >
-            <h3 className="text-xl font-bold mb-4" style={{ color: primary }}>
-              Confirm Your Vote
-            </h3>
-            <p className="mb-6 opacity-90" style={{ color: text }}>
-              You are about to vote for <span className="font-semibold">{selectedParty.name}</span>.
-              This action cannot be undone, and your vote will be anonymously recorded on the blockchain.
-            </p>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={() => setShowConfirmation(false)}
-                className="px-4 py-2 rounded-lg border"
-                style={{ borderColor: border, color: text }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleVote}
-                className="px-4 py-2 rounded-lg"
-                style={{ backgroundColor: primary, color: "white" }}
-              >
-                Confirm Vote
-              </button>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 p-4 rounded-lg" style={{ backgroundColor: `color-mix(in srgb, ${primary} 10%, transparent)` }}>
+            <div className="flex items-center gap-3">
+              <FaLock className="flex-shrink-0" style={{ color: primary }} />
+              <Paragraph style={{ color: text }}>
+                Your vote is anonymous and secured using zero-knowledge proofs. No personal information is tied to your vote.
+              </Paragraph>
             </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {election?.parties?.map((party: any) => (
+              <div 
+                key={party.id}
+                onClick={() => handleSelectParty(party)}
+                className="cursor-pointer transition-all hover:scale-105"
+              >
+                <Card
+                  className="p-6 h-full flex flex-col"
+                  style={{
+                    borderColor: selectedParty?.id === party.id ? primary : border,
+                    borderWidth: selectedParty?.id === party.id ? '2px' : '1px'
+                  }}
+                >
+                  <div className="flex-1">
+                    <Title as="h3" size="xl" className="mb-2">
+                      {party.name}
+                    </Title>
+                    <Paragraph className="mb-4 opacity-80">
+                      {party.description || "No description available"}
+                    </Paragraph>
+                  </div>
+                  <div 
+                    className="w-6 h-6 rounded-full border-2 ml-auto mt-2 flex items-center justify-center"
+                    style={{ 
+                      borderColor: primary,
+                      backgroundColor: selectedParty?.id === party.id ? primary : 'transparent'
+                    }}
+                  >
+                    {selectedParty?.id === party.id && (
+                      <div className="w-3 h-3 rounded-full bg-white"></div>
+                    )}
+                  </div>
+                </Card>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-end">
+            <SecondaryButton 
+              text="Cancel" 
+              onClick={() => navigate("/onGoingElections")} 
+            />
+            <div className="w-4"></div>
+            <ActionButton 
+              text="Continue to Vote" 
+              onClick={handleProceedToPreparation} 
+            />
+          </div>
         </div>
-      )}
+      </main>
     </div>
   );
 };
