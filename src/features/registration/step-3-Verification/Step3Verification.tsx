@@ -38,26 +38,39 @@ export const Step3Verification = ({ data, onConfirm, onRetry }) => {
   const handleFinalRegistration = async () => {
     setIsSubmitting(true);
     setError(null);
-
+  
     try {
-      const response = await axios.post("http://localhost:5001/api/zkp/register", {
-        frontPath: data.frontPath,
-        backPath: data.backPath,
-        selfiePath: data.selfiePhotoPath,
-      });
-
+      const response = await axios.post(
+        BACKEND_DATA_API_ENDPOINTS.ZKP_REGISTER, 
+        {
+          frontPath: data.frontPath,
+          backPath: data.backPath,
+          selfiePath: data.selfiePhotoPath,
+        }
+      );
+  
       if (response.data.success) {
+        // Store the credentials in localStorage for future use
+        if (response.data.credentials) {
+          localStorage.setItem(
+            "zkp_credentials", 
+            JSON.stringify(response.data.credentials)
+          );
+        }
         onConfirm(response.data.credentials);
       } else {
         setError(response.data.message || "Registration failed");
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Server error");
+    } catch (err) {
+      console.error("Registration error:", err);
+      setError(
+        err.response?.data?.message || 
+        "Server error. Please try again later."
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
-
   // UI: waiting for face match
   if (faceMatched === null) {
     return <p style={{ color: text }}>Verifying face match...</p>;
