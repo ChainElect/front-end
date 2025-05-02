@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { BACKEND_DATA_API_ENDPOINTS } from "@utils/endpoints";
 
 interface UseStep1IDUploadDataProps {
   onComplete: (data: any) => void;
@@ -23,7 +22,7 @@ export const useStep1IDUploadData = ({
       const formdata = new FormData();
       formdata.append("frontImage", file);
 
-      const res = await fetch(BACKEND_DATA_API_ENDPOINTS.OCR_UPLOAD_FRONT, {
+      const res = await fetch("http://localhost:5001/api/ocr/upload/id/front", {
         method: "POST",
         body: formdata,
       });
@@ -49,7 +48,7 @@ export const useStep1IDUploadData = ({
       const formdata = new FormData();
       formdata.append("backImage", file);
 
-      const res = await fetch(BACKEND_DATA_API_ENDPOINTS.OCR_UPLOAD_BACK, {
+      const res = await fetch("http://localhost:5001/api/ocr/upload/id/back", {
         method: "POST",
         body: formdata,
       });
