@@ -1,13 +1,12 @@
 import React from "react";
 import { useThemeColors } from "@hooks/useThemeColors";
 import { Title, Paragraph } from "@theme/src/foundation/typography";
+import { Step1IDCard } from "./step-1-uploadID/Step1IDCard";
 import { Step2CaptureSelfie } from "./step-2-CaptureSelfie/Step2CaptureSelfie";
 import { Step3Verification } from "./step-3-Verification/Step3Verification";
 import { useRegistrationFlowData } from "./useRegistrationFlowData";
-import { Step1IDCard } from "./step-1-uploadID/Step1IDCard";
-import ZkpCredentialsService from "../../services/zkpCredentialsService";
 
-export const RegistrationFlow = () => {
+export const RegistrationFlow: React.FC = () => {
   const { primary, background } = useThemeColors();
   const {
     currentStep,
@@ -17,15 +16,8 @@ export const RegistrationFlow = () => {
     handleFinalComplete
   } = useRegistrationFlowData();
 
-  // Handle final registration completion with ZKP credentials
-  const handleRegistrationComplete = (credentials) => {
-    // Store ZKP credentials securely
-    ZkpCredentialsService.storeCredentials(
-      credentials.nullifier,
-      credentials.secret
-    );
-    
-    // Complete registration flow
+  // Final registration completion handler no longer expects credentials
+  const handleRegistrationComplete = () => {
     handleFinalComplete();
   };
 

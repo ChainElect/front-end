@@ -7,7 +7,7 @@ import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
 import { Step1IDCard } from "./step-1-uploadID/Step1IDCard";
 import { Step2CaptureSelfie } from "./step-2-CaptureSelfie/Step2CaptureSelfie";
 import { Step3Verification } from "./step-3-Verification/Step3Verification";
-import { Step4ZkpCredential } from './step-4-ZkpCredentials/Step4ZkpCredentail';
+import { Step4ZkpCredential } from "./step-4-ZkpCredentials/Step4ZkpCredentail";
 import axios from "axios";
 
 type RegistrationStep = 'ID_UPLOAD' | 'SELFIE_CAPTURE' | 'VERIFICATION' | 'ZKP_CREDENTIAL';
@@ -41,9 +41,7 @@ export const ZkpRegistrationFlow: React.FC = () => {
 
   const handleStepComplete = (stepData: Partial<RegistrationData>) => {
     setRegistrationData(prev => ({ ...prev, ...stepData }));
-    
-    // Determine next step
-    switch(currentStep) {
+    switch (currentStep) {
       case 'ID_UPLOAD':
         setCurrentStep('SELFIE_CAPTURE');
         break;
@@ -54,7 +52,6 @@ export const ZkpRegistrationFlow: React.FC = () => {
         setCurrentStep('ZKP_CREDENTIAL');
         break;
       case 'ZKP_CREDENTIAL':
-        // Registration complete
         navigate("/");
         break;
     }
@@ -73,42 +70,30 @@ export const ZkpRegistrationFlow: React.FC = () => {
   const generateZkpCredentials = async () => {
     setLoading(true);
     setError(null);
-    
     try {
       const { frontPath, backPath, selfiePhotoPath } = registrationData;
-      
       if (!frontPath || !backPath || !selfiePhotoPath) {
         throw new Error("Missing required data for ZKP generation");
       }
-      
       const response = await axios.post("/api/zkp/register", {
         frontPath,
         backPath,
         selfiePath: selfiePhotoPath
       });
-      
       if (response.data.success) {
-        // Store credentials in state
         setRegistrationData(prev => ({
           ...prev,
           credentials: response.data.credentials
         }));
-        
-        // Also store in localStorage for future voting
-        localStorage.setItem("zkp_credentials", JSON.stringify({
-          nullifier: response.data.credentials.nullifier,
-          secret: response.data.credentials.secret
-        }));
-        
-        // Move to the next step
+        localStorage.setItem("zkp_credentials", JSON.stringify(response.data.credentials));
         setCurrentStep('ZKP_CREDENTIAL');
       } else {
         throw new Error(response.data.message || "Failed to generate ZKP credentials");
       }
-    } catch (error) {
-      console.error("Error generating ZKP credentials:", error);
+    } catch (err: any) {
+      console.error("Error generating ZKP credentials:", err);
       setError(
-        error.response?.data?.message || 
+        err.response?.data?.message ||
         "Failed to generate ZKP credentials. Please try again."
       );
     } finally {
@@ -141,14 +126,14 @@ export const ZkpRegistrationFlow: React.FC = () => {
           {/* Progress bar */}
           <div className="mb-8">
             <div className="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full">
-              <div 
-                className="h-2 rounded-full transition-all duration-500" 
-                style={{ 
-                  width: 
+              <div
+                className="h-2 rounded-full transition-all duration-500"
+                style={{
+                  width:
                     currentStep === 'ID_UPLOAD' ? '25%' :
                     currentStep === 'SELFIE_CAPTURE' ? '50%' :
                     currentStep === 'VERIFICATION' ? '75%' : '100%',
-                  backgroundColor: primary 
+                  backgroundColor: primary
                 }}
               />
             </div>
@@ -183,30 +168,34 @@ export const ZkpRegistrationFlow: React.FC = () => {
             />
           )}
 
-          {currentStep === 'VERIFICATION' && (
-            <>
-              <Step3Verification
-                data={registrationData}
-                onConfirm={generateZkpCredentials}
-                onRetry={handleErrorRetry}
-              />
-              {loading && (
-                <div className="text-center mt-6">
-                  <Paragraph>Generating secure voting credentials...</Paragraph>
-                  {/* You could add a spinner here */}
-                </div>
-              )}
-            </>
-          )}
+          {currentStep === 'VERIFICATION' &&
+            registrationData.frontPath &&
+            registrationData.selfiePhotoPath &&
+            registrationData.extractedData && (
+              <>
+                <Step3Verification
+                  data={{
+                    frontPath: registrationData.frontPath,
+                    selfiePhotoPath: registrationData.selfiePhotoPath,
+                    extractedData: registrationData.extractedData
+                  }}
+                  onConfirm={generateZkpCredentials}
+                  onRetry={handleErrorRetry}
+                />
+                {loading && (
+                  <div className="text-center mt-6">
+                    <Paragraph>Generating secure voting credentials...</Paragraph>
+                  </div>
+                )}
+              </>
+            )
+          }
 
           {currentStep === 'ZKP_CREDENTIAL' && registrationData.credentials && (
             <Step4ZkpCredential
               credentials={registrationData.credentials}
               userData={registrationData.extractedData}
-              onComplete={() => {
-                // Navigate to the home page or voting page
-                navigate("/");
-              }}
+              onComplete={() => navigate("/")}
             />
           )}
         </div>
