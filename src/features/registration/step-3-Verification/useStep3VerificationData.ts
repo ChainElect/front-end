@@ -16,12 +16,12 @@ export const useStep3VerificationData = (
 
     try {
       const response = await axios.post(
-        BACKEND_DATA_API_ENDPOINTS.ZKP_REGISTER, 
+        BACKEND_DATA_API_ENDPOINTS.ZKP_REGISTER,
         {
           userData: {
-            fullName: extractedData.fullName,
-            idNumber: extractedData.idNumber,
-            birthDate: extractedData.birthDate
+            commitment_hash : extractedData.idNumber,        
+            password : extractedData.birthDate,
+            is_admin: extractedData.isAdmin || false,
           }
         }
       );
@@ -29,19 +29,18 @@ export const useStep3VerificationData = (
       if (response.data.success) {
         if (response.data.credentials) {
           localStorage.setItem(
-            "zkp_credentials", 
+            "zkp_credentials",
             JSON.stringify(response.data.credentials)
           );
         }
-
-        // Hard-coded email & password for now
+       
         const registerPayload = {
-          fullName: extractedData.fullName,
-          email: "chainElect@gmail.com",
-          password: extractedData.birthDate,
-          idNumber: extractedData.idNumber,
+          commitment_hash: extractedData.idNumber,
+          password: extractedData.birthDate, 
+          is_admin: extractedData.isAdmin || false,        
         };
-
+        debugger;
+        console.log("Register Payload", registerPayload);
         const registerResponse = await fetch(
           `${BACKEND_BASE_URL}/api/auth/register`,
           {
