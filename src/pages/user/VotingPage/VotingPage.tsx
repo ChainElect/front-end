@@ -7,8 +7,10 @@ import { ActionButton } from "@theme/src/components/buttons/ActionButton";
 import { SecondaryButton } from "@theme/src/components/buttons/SecondaryButton";
 import { VotePreparation } from "../../../components/voting/VotePreparation";
 import { VoteConfirmation } from "../../../components/voting/VoteConfirmation";
-import axios from "axios";
+import { ethers } from "ethers";
 import { FaExclamationTriangle, FaCheckCircle, FaLock } from "react-icons/fa";
+import { useWallets } from "@web3-onboard/react";
+import { ERC20_ABI, ERC20_ADDRESS } from "../../../utils/wallet/walletConstants"
 
 export const ZkpVotingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,26 +24,55 @@ export const ZkpVotingPage: React.FC = () => {
   const [step, setStep] = useState<"selection" | "preparation" | "confirmation" | "success">("selection");
   const [voteData, setVoteData] = useState<any>(null);
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const connectedWallets = useWallets();
 
   // Fetch election details
   useEffect(() => {
     const fetchElection = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/zkp/elections/${id}`);
-        if (response.data.success) {
-          setElection(response.data.data);
-          
-          // Start countdown if election end time exists
-          if (response.data.data.endTime) {
-            startCountdown(new Date(response.data.data.endTime).getTime());
-          }
-        } else {
-          setError("Failed to fetch election details");
+        const injectedProvider = connectedWallets[0]?.provider;
+        if (!injectedProvider) {
+          throw new Error("No wallet connected. Please connect your wallet first.");
         }
+
+        const provider = new ethers.providers.Web3Provider(injectedProvider);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          ERC20_ADDRESS,
+          ERC20_ABI,
+          signer
+        );
+
+        // Fetch election details from blockchain
+        const [electionDetails, parties] = await Promise.all([
+          contract.getElectionDetails(id),
+          contract.getElectionParties(id)
+        ]);
+
+        // Convert BigNumber to milliseconds timestamp
+        const endTime = electionDetails.endTime.mul(1000).toNumber();
+
+        // Format parties data
+        const formattedParties = parties.map((party: any, index: number) => ({
+          id: party.id.toString(),
+          name: party.name,
+          description: party.description || "No description available",
+        }));
+
+        setElection({
+          id,
+          name: electionDetails.name,
+          endTime,
+          parties: formattedParties
+        });
+
+        // Start countdown timer
+        startCountdown(endTime);
+
       } catch (error) {
         console.error("Error fetching election:", error);
-        setError("Error fetching election details. Please try again later.");
+        setError(error.message || "Failed to fetch election from blockchain.");
       } finally {
         setLoading(false);
       }
