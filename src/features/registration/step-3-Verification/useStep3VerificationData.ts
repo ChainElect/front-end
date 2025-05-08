@@ -39,8 +39,6 @@ export const useStep3VerificationData = (
           password: extractedData.birthDate, 
           is_admin: extractedData.isAdmin || false,        
         };
-        debugger;
-        console.log("Register Payload", registerPayload);
         const registerResponse = await fetch(
           `${BACKEND_BASE_URL}/api/auth/register`,
           {

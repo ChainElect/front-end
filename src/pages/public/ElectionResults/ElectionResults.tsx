@@ -48,7 +48,6 @@ export const ElectionResults = () => {
       const votes = parseInt(party.voteCount.toString(), 10);
       calculatedTotalVotes += votes;
 
-      console.log("Votes: ", calculatedTotalVotes);
         return {
           name: party.name,
           votes: votes,
@@ -57,7 +56,6 @@ export const ElectionResults = () => {
       });
 
       setParties(formattedParties);
-      console.log("Ivo: ", calculatedTotalVotes)
       setTotalVotes(calculatedTotalVotes);
       setLoading(false);
     } catch (err) {
