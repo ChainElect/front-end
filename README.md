@@ -1,70 +1,50 @@
-# Начало с Create React App
+# 🗳️ ChainElect Frontend – ZKP Voting dApp
 
-Този проект е създаден с [Create React App](https://github.com/facebook/create-react-app).
+This is the Web3 frontend for the ChainElect decentralized voting system, built with React and TypeScript. It connects to Ethereum wallets, manages user sessions, and submits ZK proofs to on-chain verifier contracts.
 
-## Налични скриптове
+---
 
-В директорията на проекта можете да стартирате:
+## 🌐 Features
 
-### `npm start`
+- 🔐 **Connect with Wallets** (MetaMask, WalletConnect, etc.)
+- 🧾 **Proof Submission** – Submit ZKP proofs to smart contracts
+- 📄 **Voting Interface** – View polls, cast anonymous votes
+- 📡 **Smart Contract Integration** – Call Solidity verifier contracts
+- ⚡ **Client-Side Validation** – Check public signals and Merkle proofs
 
-Стартира приложението в режим на разработка.\
-Отворете [http://localhost:3000](http://localhost:3000), за да го видите във вашия браузър.
+---
 
-Страницата ще се презареди, когато правите промени.\
-Може също да видите грешки от проверката (lint errors) в конзолата.
+## 🧱 Tech Stack
 
-### `npm test`
+- **React + TypeScript** – Frontend framework
+- **ethers.js** – Ethereum wallet & contract interaction
+- **wagmi / viem** – Web3 hooks & wallet management
+- **Tailwind CSS** – Styling
+- **ZK Components** – Inputs from backend & circuits
 
-Стартира тестовия изпълнител в интерактивен режим.\
-Вижте секцията за [стартиране на тестове](https://facebook.github.io/create-react-app/docs/running-tests) за повече информация.
+---
 
-### `npm run build`
+## 🗂️ Folder Structure
 
-Създава билд за продукция в папката `build`.\
-Приложението правилно обединява (bundle) React в продукционен режим и го оптимизира за най-добра производителност.
 
-Билдът е минимизиран и имената на файловете включват хешове.\
-Вашето приложение е готово за разгръщане!
+- [`components/`](https://github.com/ChainElect/front-end/tree/main/src/components) – UI elements like `ConnectButton`, `VoteCard`
+- [`pages/`](https://github.com/ChainElect/front-end/tree/main/src/pages) – Routes for voting, results, etc.
+- [`contracts/`](https://github.com/ChainElect/front-end/tree/main/src/contracts) – ABI and deployed addresses
+- [`hooks/`](https://github.com/ChainElect/front-end/tree/main/src/hooks) – Wallet + contract integration
 
-Вижте секцията за [разгръщане](https://facebook.github.io/create-react-app/docs/deployment) за повече информация.
+---
 
-### `npm run eject`
+## 🚀 Getting Started
 
-**Забележка: това е еднопосочна операция. Веднъж като използвате `eject`, не можете да се върнете назад!**
+### 🔧 Prerequisites
 
-Ако не сте доволни от избора на инструментите за билд и конфигурация, можете да изпълните `eject` по всяко време. Тази команда ще премахне зависимостта от основния пакет.
+- Node.js (v18+ recommended)
+- MetaMask or other Web3 wallet
 
-Вместо това, ще копира всички конфигурационни файлове и зависимости (webpack, Babel, ESLint и т.н.) директно във вашия проект, за да имате пълен контрол върху тях. Всички команди, освен `eject`, ще продължат да работят, но ще сочат към копираните скриптове, за да можете да ги модифицирате. На този етап ще сте на собствена отговорност.
+### 🔨 Install
 
-Не е задължително да използвате `eject`. Подбраните функции са подходящи за малки и средни проекти и не е необходимо да използвате тази функция, освен ако не сте готови за допълнителна конфигурация.
-
-## Научете повече
-
-Можете да научите повече в [документацията на Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
-
-За да научите React, вижте [документацията на React](https://reactjs.org/).
-
-### Разделяне на кода
-
-Тази секция е преместена тук: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Анализиране на размера на пакета
-
-Тази секция е преместена тук: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Създаване на прогресивно уеб приложение
-
-Тази секция е преместена тук: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Разширена конфигурация
-
-Тази секция е преместена тук: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Разгръщане
-
-Тази секция е преместена тук: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` не успява да минимизира
-
-Тази секция е преместена тук: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+git clone https://github.com/ChainElect/front-end.git
+cd front-end
+npm install
+cp .env.example .env
